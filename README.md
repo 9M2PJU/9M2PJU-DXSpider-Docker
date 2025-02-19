@@ -57,11 +57,11 @@ docker compose logs -f
 ## 🔄 Updating
 To update your DXSpider container:
 ```bash
-docker compose up --build
+docker compose down
 ```
-Then restart the container:
+Then rebuild the container:
 ```bash
-docker compose restart
+docker compose up --build -d
 ```
 
 ## 🤝 Contributing
