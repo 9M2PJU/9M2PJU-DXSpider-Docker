@@ -40,7 +40,7 @@
   - Pre-configured for optimal performance
   - Smart scaling based on available resources
   - Automatic port management
-  - 
+
 ## 🛠️ Installation
 
 ### Prerequisites
