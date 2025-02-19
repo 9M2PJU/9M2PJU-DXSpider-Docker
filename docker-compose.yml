@@ -40,7 +40,7 @@ services:
       - ./connect:/spider/connect:rw
       - ./motd:/spider/local_data/motd:rw
       - ./local_data:/spider/local_data:rw
-      - ./cmd_import:/spider/cmd_import:rw
+      - ./cmd:/spider/cmd:rw
       - ./msg:/spider/msg:rw  
     ports:
       - ${CLUSTER_PORT}:${CLUSTER_PORT}
