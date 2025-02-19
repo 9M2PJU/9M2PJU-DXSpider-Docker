@@ -1,63 +1,6 @@
 set/var $main::reqreg = 1
-
 set/var $Internet::allow = 1
 set/var $Internet::contest_host = "contest.dxtron.com"
-
-set/password iz2lsc-99 yydTh
-set/password g1fef-2 yGBFJW5FW23p
-
 load/forward
-
-set/spider f4bwt-3
-set/spider vk2az-2
-set/spider n6ws-6
-set/spider k4uj-3
-set/spider g6nhu-2
-set/spider wb3ffv-2
-set/spider iz2lsc-99
-set/spider pa4jj-3
-set/spider ve3zin-2
-set/spider n2wq-1
-set/spider pi4cc
-set/spider vk5gr-2
-set/spider s50dxs
-set/spider pa0esh-3
-set/spider n3bsq-1
-set/spider ed1zac-5
-set/spider f1fca-2
-set/spider dh1tw-2
-set/spider g1fef-2
-set/spider ea7jxh
-
-connect ea7jxh
-connect g1fef-2
-connect f1fca-2
-connect ed1zac-5
-connect f4bwt-3
-connect vk2az-2
-connect n6ws-6
-connect k4uj-3
-connect g6nhu-2
-connect wb3ffv-2
-connect iz2lsc-99
-connect pa4jj-3
-connect ve3zin-2
-connect n2wq-1
-connect pi4cc
-connect vk5gr-2
-connect s50dxs
-connect pa0esh-3
-connect n3bsq-1
-connect dh1tw-2
-
-set/dx
-set/wwv
-set/dxcq
-set/dxgrid
-set/dxitu
-set/announce
-set/wx
-set/rbn sk0mmr sk1mmr
-connect sk0mmr
-connect sk1mmr
-set/skimmer ft
+set/spider 9m2pju-2
+connect 9m2pju-2
