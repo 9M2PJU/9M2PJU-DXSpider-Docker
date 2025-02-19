@@ -1,5 +1,4 @@
 services:
-  dxspider:
     build:
       dockerfile: Dockerfile
       platforms:
