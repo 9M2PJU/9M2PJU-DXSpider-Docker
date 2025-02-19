@@ -26,7 +26,7 @@ cd 9M2PJU-DXSpider-Docker
 ```
 
 ### 2️⃣ Edit `.env` File
-Create a `.env` file in the root directory and configure your DXSpider settings:
+Edit `.env` file in the root directory and configure your DXSpider settings:
 ```bash
 nano .env
 ```
@@ -74,6 +74,4 @@ Pull requests are welcome! If you find a bug or have an improvement, feel free t
 
 ---
 Happy DXing! 🎙️
-
-73 from 9M2PJU
 
