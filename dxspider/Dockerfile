@@ -20,6 +20,8 @@ RUN apt-get update && apt-get install -y \
     libmysqlclient-dev \
     ttyd \
     wget \
+    curl \
+    && curl -L https://cpanmin.us | perl - App::cpanminus \
     && cpanm --no-wget Data::Structure::Util \
     && cpanm --no-wget \
         DB_File \
