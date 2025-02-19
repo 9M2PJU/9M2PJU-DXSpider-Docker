@@ -34,10 +34,10 @@ services:
       timeout: 60s
     restart: always
     volumes:
-      - ./dxspider/startup:/spider/scripts/startup:ro
-      - ./dxspider/crontab:/spider/local_cmd/crontab:ro
-      - ./dxspider/connect:/spider/connect
-      - ./dxspider/motd:/spider/data/motd:ro 
+      - startup:/spider/scripts/startup:ro
+      - crontab:/spider/local_cmd/crontab:ro
+      - connect:/spider/connect
+      - motd:/spider/data/motd:ro 
     ports:
       - ${CLUSTER_PORT}:${CLUSTER_PORT}
       - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
