@@ -31,9 +31,6 @@ services:
       start_period: 5s
       retries: 3
       timeout: 60s
-    depends_on:
-      spiderweb-db:
-        condition: service_healthy
     restart: always
     volumes:
       - ./dxspider/startup:/spider/scripts/startup:ro
