@@ -22,10 +22,9 @@
 
 ### Why Choose This Solution?
 
-- 🚀 **Zero-Configuration Deployment** - Up and running in minutes
+- 🚀 **Minimal-Configuration Deployment** - Up and running in minutes
 - 🔒 **Security First** - Hardened container configuration
-- 🔄 **Automatic Updates** - Stay current with ease
-- 💾 **Persistent Storage** - Never lose your valuable data
+- 🔄 **Easy Updates** - Stay current with ease
 - 🌍 **Global Community** - Join a worldwide network of operators
 
 ## ✨ Key Features
@@ -41,11 +40,15 @@
   - Pre-configured for optimal performance
   - Smart scaling based on available resources
   - Automatic port management
+  - 
+## 🛠️ Installation
 
-- **📊 Advanced Monitoring**
-  - Prometheus metrics endpoint
-  - Grafana dashboard templates
-  - Health check endpoints
+### Prerequisites
+
+- Docker Engine 20.10+
+- Docker Compose v2.0+
+- 512MB RAM minimum
+- 1GB storage space
 
 ## 🚀 Quick Start
 
@@ -59,15 +62,6 @@ cd 9M2PJU-DXSpider-Docker
 # Start DXSpider
 docker compose up -d
 ```
-
-## 🛠️ Installation
-
-### Prerequisites
-
-- Docker Engine 20.10+
-- Docker Compose v2.0+
-- 512MB RAM minimum
-- 1GB storage space
 
 ### Step-by-Step Guide
 
@@ -108,7 +102,7 @@ Port: 7300
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `DX_CALLSIGN` | Your station callsign | `NOCALL` |
+| `DX_CALLSIGN` | Your station callsign | `9M2PJU-10` |
 | `DX_PORT` | Listening port | `7300` |
 | `DX_LOCATION` | Station grid square | `JJ00aa` |
 
@@ -117,22 +111,9 @@ Port: 7300
 ### Updating the Container
 
 ```bash
-# Pull latest changes
-git pull
-
 # Rebuild and restart
 docker compose down
 docker compose up -d --build
-```
-
-### Backup & Restore
-
-```bash
-# Backup
-docker compose exec dxspider backup
-
-# Restore
-docker compose exec dxspider restore /backup/latest.tar.gz
 ```
 
 ## 🤝 Contributing
