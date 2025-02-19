@@ -18,8 +18,8 @@ RUN apt-get update \
     netcat-openbsd \
     perl-modules \
     libmariadb-dev-compat \
-    ttyd \
     wget \
+    curl \
     && cpanm --no-wget Data::Structure::Util \
     && cpanm --no-wget \
         DB_File \
@@ -50,6 +50,11 @@ RUN apt-get update \
         libncurses-dev \
         perl-modules \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install ttyd from GitHub
+RUN curl -L https://github.com/tsl0922/ttyd/releases/download/1.6.1/ttyd_1.6.1_amd64.deb -o ttyd.deb \
+    && dpkg -i ttyd.deb \
+    && rm ttyd.deb
 
 # Copy connection node files
 RUN rm -rf /spider/connect/*
