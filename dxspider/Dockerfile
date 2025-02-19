@@ -16,26 +16,27 @@ RUN apt-get update && apt-get install -y \
     perl \
     nano \
     netcat \
-    perl-db-file \
-    perl-digest-sha1 \
-    perl-io-socket-ssl \
-    perl-net-telnet \
-    perl-timedate \
-    perl-yaml-libyaml \
-    perl-test-simple \
-    perl-curses \
-    perl-app-cpanminus \
-    perl-mojolicious \
-    perl-math-round \
-    perl-json \
-    mysql-client \
+    perl-modules-5.34 \
     libmysqlclient-dev \
-    perl-dbd-mysql \
-    perl-dbi \
-    libnet-cidr-lite-perl \
     ttyd \
     wget \
     && cpanm --no-wget Data::Structure::Util \
+    && cpanm --no-wget \
+        DB_File \
+        Digest::SHA1 \
+        IO::Socket::SSL \
+        Net::Telnet \
+        Date::Calc \
+        YAML::LibYAML \
+        Test::Simple \
+        Curses \
+        App::cpanminus \
+        Mojolicious \
+        Math::Round \
+        JSON \
+        DBD::mysql \
+        DBI \
+        Net::CIDR::Lite \
     && adduser --disabled-password --uid ${SPIDER_UID} --home ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
     && git clone -b ${SPIDER_VERSION} ${SPIDER_GIT_REPOSITORY} ${SPIDER_INSTALL_DIR} \
@@ -47,8 +48,7 @@ RUN apt-get update && apt-get install -y \
     gcc \
     make \
     libncurses-dev \
-    perl-app-cpanminus \
-    perl-dev \
+    perl-modules-5.34 \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy connection node files - cleanup
