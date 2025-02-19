@@ -1,0 +1,792 @@
+1739972074^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1739972074^(cluster) DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972074^(cluster) Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972074^(cluster) Capabilities: ve7cc rbn
+1739972074^(*) loading prefixes ...
+1739972074^(*) US Database not loaded
+1739972074^(*) loading band data ...
+1739972074^(*) loading user file system ...
+1739972074^(*) starting listeners ...
+1739972074^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1739972074^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1739972074^(*) Starting Dupe system
+1739972074^(*) Read in Messages
+1739972074^(*) Read in Aliases
+1739972074^(*) Start Protocol Engines ...
+1739972074^(progress) CMD: 'load/forward ' by 9M2PJU-10 ip: 127.0.0.1 1mS
+1739972074^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 0mS
+1739972074^(connect) connect 3: timeout set to 60
+1739972074^(connect) connect 3: timeout set to 60
+1739972074^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1739972074^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1739972074^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 1mS
+1739972074^(*) Operation successful
+1739972074^(*) 9M2PJU-2 created as DXSpider style Node
+1739972074^(*) connection to 9M2PJU-2 started
+1739972074^(*) Start WWV system
+1739972074^(*) WWV read in last 0 records into cache in 0mS
+1739972074^(*) Start WCY system
+1739972074^(*) WCY read in last 0 records into cache 0mS
+1739972074^(*) Start Announce and Talk system
+1739972075^(*) AnnTalk: loaded last 1 announcements into cache in 275mS
+1739972075^(*) Starting DX Spot system
+1739972075^(*) Spot::init 2 files of spots read into cache in 0mS
+1739972075^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1739972075^(*)  at /spider/perl/DXSql.pm line 63.
+1739972075^(*) Reading existing Message/Bulletine headers ...
+1739972075^(*) load badmsg: Ok
+1739972075^(*) load forward: Ok
+1739972075^(*) load swop: Ok
+1739972075^(*) Reading cron jobs ...
+1739972075^(cron) DXCron::cread reading /spider/cmd/crontab
+1739972075^(cron) DXCron::cread: adding 2 0 * * * DXDebug::dbgclean()
+1739972075^(cron) DXCron::cread: adding 30 2 * * 3 run_cmd("export_users")
+1739972075^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1739972075^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1739972075^(*) Reading database descriptors ...
+1739972075^(*) Rtarting RBN ...
+1739972075^(*) RBN:check_cache '/spider/local_data/rbn_cache' spot cache not present
+1739972075^(*) Starting DXQsl system
+1739972075^(*) BadWords: Found new style badword.new file
+1739972076^(*) BadWords: 130 new style badwords read
+1739972076^(DXProt) DXCIDR::reload reload database
+1739972076^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972076^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972076^(*) Ooing local initialisations ...
+1739972076^(*) Orft we jolly well go ...
+1739972076^(*) Before Web::start_node
+1739972076^(connect) ExtMsg connected 3:172.18.0.2 to 175.139.56.227:7300
+1739972076^(connect) connect 3: login: 
+1739972076^(connect) connect 3: expecting: "login:" received: "login: "
+1739972076^(connect) connect 3: got: "login:" sending: "9m2pju-10"
+1739972076^(connect) connect 3: Hello 9M2PJU-10, this is 9M2PJU-2 in Kuala Lumpur, Malaysia%0D
+1739972076^(connect) running DXSpider V1.57 build 568%0D
+1739972076^(connect) Capabilities: ve7cc rbn%0D
+1739972076^(connect)          _   .-')               _ (`-.%0D
+1739972076^(connect)          ( '.( OO )_            ( (OO  )%0D
+1739972076^(connect)   .----.  ,--.   ,--.).-----.  _.`     \     ,--. ,--. ,--.%0D
+1739972076^(connect)  /  ,.  \ |   `.'   |/ ,-.   \(__...--'' .-')| ,| |  | |  |%0D
+1739972076^(connect) |  |  \  ||         |'-'  |  | |  /  | |( OO |(_| |  | | .-')%0D
+1739972076^(connect)  '  `-'  '|  |'.'|  |   .'  /  |  |_.' || `-'|  | |  |_|( OO )%0D
+1739972076^(connect)   `- /  ' |  |   |  | .'  /__  |  .___.',--. |  | |  | | `-' /%0D
+1739972076^(connect)    ,'  /  |  |   |  ||       | |  |     |  '-'  /('  '-'(_.-'%0D
+1739972076^(connect)   `---'   `--'   `--'`-------' `--'      `-----'   `-----'%0D
+1739972076^(connect) WELCOME TO THE 9M2PJU-2 DX SPIDER NODE!%0D
+1739972076^(connect) This node is a free, open, and community-driven service designed to provide real-time DX spotting information to amateur radio operators worldwide. Whether you're chasing DX, contesting, or simply exploring the bands, we're here to help you stay connected to the global ham radio community.%0D
+1739972076^(connect) ----%0D
+1739972076^(connect) IMPORTANT NOTICE %E2%80%93 USER REGISTRATION REQUIRED%0D
+1739972076^(connect) STARTING NOW, ALL USERS MUST REGISTER TO USE THE SPOT FUNCTION.%0D
+1739972076^(connect) This measure is implemented to counter spam attacks from irresponsible users and to maintain the quality of the service. Unregistered users will no longer be able to post DX spots.%0D
+1739972076^(connect) ----%0D
+1739972076^(connect) GUIDELINES FOR RESPONSIBLE USE:%0D
+1739972076^(connect) - RESPECT THE NETWORK: Avoid excessive traffic or spamming the node to ensure smooth operation for all users.%0D
+1739972076^(connect) - SHARE RESPONSIBLY: Only post accurate and relevant DX spots to maintain the quality of the service.%0D
+1739972076^(connect) - BE CONSIDERATE: This node is a shared resource. Let%E2%80%99s work together to keep it accessible and reliable for everyone.%0D
+1739972076^(connect) ----%0D
+1739972076^(connect) REGISTER NOW TO USE THE SPOT FUNCTION!%0D
+1739972076^(connect) To register and gain access, email me at 9m2pju@hamradio.my with your details. Registration is quick and ensures a better experience for all users.%0D
+1739972076^(connect) ----%0D
+1739972076^(connect) For more information and resources, visit https://hamradio.my.%0D
+1739972076^(connect) ----%0D
+1739972076^(connect) Thank you for using the 9M2PJU-2 DX Spider Node! We appreciate your cooperation in keeping this service secure and valuable for all amateur radio operators.%0D
+1739972076^(connect) #### IMPORTANT: REGISTRATION REQUIRED TO USE THE SPOT FUNCTION!%0D
+1739972076^(connect) #### Please email 9m2pju@hamradio.my to register today!%0D
+1739972076^(connect) Nodes: 17/385 Users [Loc/Clr]: 8/4366 Max: 16/6044 - Uptime:  1d 15h 43m%0D
+1739972076^(connect) Please enter your name, set/name <your name>%0D
+1739972076^(connect) Please enter your QTH, set/qth <your qth>%0D
+1739972076^(connect) Please enter your Home Node, set/homenode <your home DX Cluster>%0D
+1739972076^(connect) 9M2PJU-10 de 9M2PJU-2 19-Feb-2025 1335Z dxspider >%0D
+1739972076^(*) Msg: localhost_alias_ipv4 = '172.18.0.2'
+1739972076^(state) 9M2PJU-2 channel func  state 0 -> init
+1739972077^(msg) queue msg (0)
+1739972078^(connect) ExtMsg accept 4:127.0.0.1 from 127.0.0.1:48102
+1739972078^(connect) ExtMsg connect 4: login: 
+1739972078^(connect) connect 4: timeout set to 60
+1739972088^(connect) ExtMsg accept 5:127.0.0.1 from 127.0.0.1:43846
+1739972088^(connect) ExtMsg connect 5: login: 
+1739972088^(connect) connect 5: timeout set to 60
+1739972091^(connect) ExtMsg accept 6:172.18.0.2 from 172.18.0.1:51588
+1739972091^(connect) ExtMsg connect 6: login: 
+1739972091^(connect) connect 6: timeout set to 60
+1739972093^(connect) connect 6: 9m2pju
+1739972093^(state) 9M2PJU channel func  state 0 -> prompt
+1739972093^(DXCommand) 9M2PJU connected from 172.18.0.1 cols 80
+1739972093^(progress) CMD: 'forward/opernam 9M2PJU' by 9M2PJU-10 ip: 127.0.0.1 2mS
+1739972093^(progress) CMD: 'show/cluster ' by 9M2PJU ip: 172.18.0.1 0mS
+1739972096^(DXCommand) 9M2PJU disconnected
+1739972096^(progress) CMD: 'bye ' by 9M2PJU ip: 172.18.0.1 1mS
+1739972099^(connect) ExtMsg accept 7:127.0.0.1 from 127.0.0.1:33316
+1739972099^(connect) ExtMsg connect 7: login: 
+1739972099^(connect) connect 7: timeout set to 60
+1739972109^(connect) ExtMsg accept 8:127.0.0.1 from 127.0.0.1:33850
+1739972109^(connect) ExtMsg connect 8: login: 
+1739972109^(connect) connect 8: timeout set to 60
+1739972332^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1739972332^(cluster) DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972332^(cluster) Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972332^(cluster) Capabilities: ve7cc rbn
+1739972332^(*) loading prefixes ...
+1739972332^(*) US Database not loaded
+1739972332^(*) loading band data ...
+1739972332^(*) loading user file system ...
+1739972332^(*) starting listeners ...
+1739972332^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1739972332^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1739972332^(*) Starting Dupe system
+1739972332^(*) Read in Messages
+1739972332^(*) Read in Aliases
+1739972332^(*) Start Protocol Engines ...
+1739972332^(progress) CMD: 'load/forward ' by 9M2PJU-10 ip: 127.0.0.1 0mS
+1739972332^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 1mS
+1739972332^(connect) connect 3: timeout set to 60
+1739972332^(connect) connect 3: timeout set to 60
+1739972332^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1739972332^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1739972332^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 0mS
+1739972332^(*) Operation successful
+1739972332^(*) 9M2PJU-2 set as DXSpider style Node
+1739972332^(*) connection to 9M2PJU-2 started
+1739972332^(*) Start WWV system
+1739972332^(*) WWV read in last 0 records into cache in 0mS
+1739972332^(*) Start WCY system
+1739972332^(*) WCY read in last 0 records into cache 0mS
+1739972332^(*) Start Announce and Talk system
+1739972332^(*) AnnTalk: loaded last 1 announcements into cache in 276mS
+1739972332^(*) Starting DX Spot system
+1739972332^(*) Spot::init 2 files of spots read into cache in 1mS
+1739972332^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1739972332^(*)  at /spider/perl/DXSql.pm line 63.
+1739972332^(*) Reading existing Message/Bulletine headers ...
+1739972332^(*) load badmsg: Ok
+1739972332^(*) load forward: Ok
+1739972332^(*) load swop: Ok
+1739972332^(*) Reading cron jobs ...
+1739972332^(cron) DXCron::cread reading /spider/cmd/crontab
+1739972332^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1739972332^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1739972332^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1739972332^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1739972332^(*) Reading database descriptors ...
+1739972332^(*) Rtarting RBN ...
+1739972332^(*) RBN:check_cache '/spider/local_data/rbn_cache' spot cache not present
+1739972332^(*) Starting DXQsl system
+1739972332^(*) BadWords: Found new style badword.new file
+1739972333^(*) BadWords: 130 new style badwords read
+1739972333^(DXProt) DXCIDR::reload reload database
+1739972333^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972333^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972333^(*) Ooing local initialisations ...
+1739972333^(*) Orft we jolly well go ...
+1739972333^(*) Before Web::start_node
+1739972333^(connect) ExtMsg connected 3:172.18.0.2 to 175.139.56.227:7300
+1739972333^(connect) connect 3: login: 
+1739972333^(connect) connect 3: expecting: "login:" received: "login: "
+1739972333^(connect) connect 3: got: "login:" sending: "9m2pju-10"
+1739972333^(connect) connect 3: Hello 9M2PJU-10, this is 9M2PJU-2 in Kuala Lumpur, Malaysia%0D
+1739972333^(connect) running DXSpider V1.57 build 568%0D
+1739972333^(connect) Capabilities: ve7cc rbn%0D
+1739972333^(connect)          _   .-')               _ (`-.%0D
+1739972333^(connect)          ( '.( OO )_            ( (OO  )%0D
+1739972333^(connect)   .----.  ,--.   ,--.).-----.  _.`     \     ,--. ,--. ,--.%0D
+1739972333^(connect)  /  ,.  \ |   `.'   |/ ,-.   \(__...--'' .-')| ,| |  | |  |%0D
+1739972333^(connect) |  |  \  ||         |'-'  |  | |  /  | |( OO |(_| |  | | .-')%0D
+1739972333^(connect)  '  `-'  '|  |'.'|  |   .'  /  |  |_.' || `-'|  | |  |_|( OO )%0D
+1739972333^(connect)   `- /  ' |  |   |  | .'  /__  |  .___.',--. |  | |  | | `-' /%0D
+1739972333^(connect)    ,'  /  |  |   |  ||       | |  |     |  '-'  /('  '-'(_.-'%0D
+1739972333^(connect)   `---'   `--'   `--'`-------' `--'      `-----'   `-----'%0D
+1739972333^(connect) WELCOME TO THE 9M2PJU-2 DX SPIDER NODE!%0D
+1739972333^(connect) This node is a free, open, and community-driven service designed to provide real-time DX spotting information to amateur radio operators worldwide. Whether you're chasing DX, contesting, or simply exploring the bands, we're here to help you stay connected to the global ham radio community.%0D
+1739972333^(connect) ----%0D
+1739972333^(connect) IMPORTANT NOTICE %E2%80%93 USER REGISTRATION REQUIRED%0D
+1739972333^(connect) STARTING NOW, ALL USERS MUST REGISTER TO USE THE SPOT FUNCTION.%0D
+1739972333^(connect) This measure is implemented to counter spam attacks from irresponsible users and to maintain the quality of the service. Unregistered users will no longer be able to post DX spots.%0D
+1739972333^(connect) ----%0D
+1739972333^(connect) GUIDELINES FOR RESPONSIBLE USE:%0D
+1739972333^(connect) - RESPECT THE NETWORK: Avoid excessive traffic or spamming the node to ensure smooth operation for all users.%0D
+1739972333^(connect) - SHARE RESPONSIBLY: Only post accurate and relevant DX spots to maintain the quality of the service.%0D
+1739972333^(connect) - BE CONSIDERATE: This node is a shared resource. Let%E2%80%99s work together to keep it accessible and reliable for everyone.%0D
+1739972333^(connect) ----%0D
+1739972333^(connect) REGISTER NOW TO USE THE SPOT FUNCTION!%0D
+1739972333^(connect) To register and gain access, email me at 9m2pju@hamradio.my with your details. Registration is quick and ensures a better experience for all users.%0D
+1739972333^(connect) ----%0D
+1739972333^(connect) For more information and resources, visit https://hamradio.my.%0D
+1739972333^(connect) ----%0D
+1739972333^(connect) Thank you for using the 9M2PJU-2 DX Spider Node! We appreciate your cooperation in keeping this service secure and valuable for all amateur radio operators.%0D
+1739972333^(connect) #### IMPORTANT: REGISTRATION REQUIRED TO USE THE SPOT FUNCTION!%0D
+1739972333^(connect) #### Please email 9m2pju@hamradio.my to register today!%0D
+1739972333^(connect) Nodes: 17/384 Users [Loc/Clr]: 9/4400 Max: 16/6044 - Uptime:  1d 15h 47m%0D
+1739972333^(connect) Please enter your name, set/name <your name>%0D
+1739972333^(connect) Please enter your QTH, set/qth <your qth>%0D
+1739972333^(connect) Please enter your Home Node, set/homenode <your home DX Cluster>%0D
+1739972333^(connect) 9M2PJU-10 de 9M2PJU-2 19-Feb-2025 1339Z dxspider >%0D
+1739972333^(*) Msg: localhost_alias_ipv4 = '172.18.0.2'
+1739972333^(state) 9M2PJU-2 channel func  state 0 -> init
+1739972334^(msg) queue msg (0)
+1739972336^(connect) ExtMsg accept 4:127.0.0.1 from 127.0.0.1:50030
+1739972336^(connect) ExtMsg connect 4: login: 
+1739972336^(connect) connect 4: timeout set to 60
+1739972346^(connect) ExtMsg accept 5:127.0.0.1 from 127.0.0.1:42108
+1739972346^(connect) ExtMsg connect 5: login: 
+1739972346^(connect) connect 5: timeout set to 60
+1739972356^(connect) ExtMsg accept 6:127.0.0.1 from 127.0.0.1:48212
+1739972356^(connect) ExtMsg connect 6: login: 
+1739972356^(connect) connect 6: timeout set to 60
+1739972367^(connect) ExtMsg accept 7:127.0.0.1 from 127.0.0.1:57242
+1739972367^(connect) ExtMsg connect 7: login: 
+1739972367^(connect) connect 7: timeout set to 60
+1739972377^(connect) ExtMsg accept 8:127.0.0.1 from 127.0.0.1:48294
+1739972377^(connect) ExtMsg connect 8: login: 
+1739972377^(connect) connect 8: timeout set to 60
+1739972387^(connect) ExtMsg accept 9:127.0.0.1 from 127.0.0.1:54600
+1739972387^(connect) ExtMsg connect 9: login: 
+1739972387^(connect) connect 9: timeout set to 60
+1739972393^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1739972394^(msg) queue msg (0)
+1739972395^(connect) connect 4: timed out after 60 seconds
+1739972396^(connect) ExtMsg accept 10:172.18.0.2 from 172.18.0.1:35194
+1739972396^(connect) ExtMsg connect 10: login: 
+1739972396^(connect) connect 10: timeout set to 60
+1739972396^(connect) connect 4: timed out after 60 seconds
+1739972397^(connect) ExtMsg accept 11:127.0.0.1 from 127.0.0.1:45224
+1739972397^(connect) ExtMsg connect 11: login: 
+1739972397^(connect) connect 11: timeout set to 60
+1739972398^(connect) connect 10: 9m2pju
+1739972398^(state) 9M2PJU channel func  state 0 -> prompt
+1739972398^(DXCommand) 9M2PJU connected from 172.18.0.1 cols 80
+1739972398^(progress) CMD: 'forward/opernam 9M2PJU' by 9M2PJU-10 ip: 127.0.0.1 0mS
+1739972398^(progress) CMD: 'show/cluster ' by 9M2PJU ip: 172.18.0.1 0mS
+1739972399^(progress) CMD: 'who ' by 9M2PJU ip: 172.18.0.1 1mS
+1739972402^(DXCommand) 9M2PJU disconnected
+1739972402^(progress) CMD: 'bye ' by 9M2PJU ip: 172.18.0.1 3mS
+1739972405^(connect) connect 5: timed out after 60 seconds
+1739972406^(connect) connect 5: timed out after 60 seconds
+1739972407^(connect) ExtMsg accept 12:127.0.0.1 from 127.0.0.1:39464
+1739972407^(connect) ExtMsg connect 12: login: 
+1739972407^(connect) connect 12: timeout set to 60
+1739972416^(connect) connect 6: timed out after 60 seconds
+1739972417^(connect) ExtMsg accept 13:127.0.0.1 from 127.0.0.1:52144
+1739972417^(connect) ExtMsg connect 13: login: 
+1739972417^(connect) connect 13: timeout set to 60
+1739972417^(connect) connect 6: timed out after 60 seconds
+1739972426^(connect) connect 7: timed out after 60 seconds
+1739972427^(connect) ExtMsg accept 14:127.0.0.1 from 127.0.0.1:41416
+1739972427^(connect) ExtMsg connect 14: login: 
+1739972427^(connect) connect 14: timeout set to 60
+1739972427^(connect) connect 7: timed out after 60 seconds
+1739972436^(connect) connect 8: timed out after 60 seconds
+1739972437^(connect) ExtMsg accept 15:127.0.0.1 from 127.0.0.1:60008
+1739972437^(connect) ExtMsg connect 15: login: 
+1739972437^(connect) connect 15: timeout set to 60
+1739972437^(connect) connect 8: timed out after 60 seconds
+1739972446^(connect) connect 9: timed out after 60 seconds
+1739972447^(connect) connect 9: timed out after 60 seconds
+1739972448^(connect) ExtMsg accept 16:127.0.0.1 from 127.0.0.1:56428
+1739972448^(connect) ExtMsg connect 16: login: 
+1739972448^(connect) connect 16: timeout set to 60
+1739972453^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 0 mS
+1739972454^(msg) queue msg (0)
+1739972456^(connect) connect 11: timed out after 60 seconds
+1739972457^(connect) connect 11: timed out after 60 seconds
+1739972458^(connect) ExtMsg accept 17:127.0.0.1 from 127.0.0.1:44310
+1739972458^(connect) ExtMsg connect 17: login: 
+1739972458^(connect) connect 17: timeout set to 60
+1739972466^(connect) connect 12: timed out after 60 seconds
+1739972467^(connect) connect 12: timed out after 60 seconds
+1739972468^(connect) ExtMsg accept 18:127.0.0.1 from 127.0.0.1:38306
+1739972468^(connect) ExtMsg connect 18: login: 
+1739972468^(connect) connect 18: timeout set to 60
+1739972476^(connect) connect 13: timed out after 60 seconds
+1739972477^(connect) connect 13: timed out after 60 seconds
+1739972478^(connect) ExtMsg accept 19:127.0.0.1 from 127.0.0.1:36516
+1739972478^(connect) ExtMsg connect 19: login: 
+1739972478^(connect) connect 19: timeout set to 60
+1739972486^(connect) connect 14: timed out after 60 seconds
+1739972497^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1739972497^(cluster) DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972497^(cluster) Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972497^(cluster) Capabilities: ve7cc rbn
+1739972497^(*) loading prefixes ...
+1739972497^(*) US Database not loaded
+1739972497^(*) loading band data ...
+1739972497^(*) loading user file system ...
+1739972497^(*) starting listeners ...
+1739972497^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1739972497^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1739972497^(*) Starting Dupe system
+1739972497^(*) Read in Messages
+1739972497^(*) Read in Aliases
+1739972497^(*) Start Protocol Engines ...
+1739972497^(progress) CMD: 'load/forward ' by 9M2PJU-10 ip: 127.0.0.1 1mS
+1739972497^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 1mS
+1739972497^(connect) connect 3: timeout set to 60
+1739972497^(connect) connect 3: timeout set to 60
+1739972497^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1739972497^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1739972497^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 0mS
+1739972497^(*) Operation successful
+1739972497^(*) 9M2PJU-2 set as DXSpider style Node
+1739972497^(*) connection to 9M2PJU-2 started
+1739972497^(*) Start WWV system
+1739972497^(*) WWV read in last 0 records into cache in 0mS
+1739972497^(*) Start WCY system
+1739972497^(*) WCY read in last 0 records into cache 0mS
+1739972497^(*) Start Announce and Talk system
+1739972497^(*) AnnTalk: loaded last 1 announcements into cache in 226mS
+1739972497^(*) Starting DX Spot system
+1739972497^(*) Spot::init 2 files of spots read into cache in 0mS
+1739972497^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1739972497^(*)  at /spider/perl/DXSql.pm line 63.
+1739972497^(*) Reading existing Message/Bulletine headers ...
+1739972497^(*) load badmsg: Ok
+1739972497^(*) load forward: Ok
+1739972497^(*) load swop: Ok
+1739972497^(*) Reading cron jobs ...
+1739972497^(cron) DXCron::cread reading /spider/cmd/crontab
+1739972497^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1739972497^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1739972497^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1739972497^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1739972497^(*) Reading database descriptors ...
+1739972497^(*) Rtarting RBN ...
+1739972497^(*) RBN:check_cache '/spider/local_data/rbn_cache' spot cache exists, created  44s ago and not too old
+1739972497^(*) RBN:check_cache cache read size 13
+1739972497^(*) RBN:check_cache spot cache restored
+1739972497^(*) Starting DXQsl system
+1739972497^(*) BadWords: Found new style badword.new file
+1739972498^(*) BadWords: 130 new style badwords read
+1739972498^(DXProt) DXCIDR::reload reload database
+1739972498^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972498^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972498^(*) Ooing local initialisations ...
+1739972498^(*) Orft we jolly well go ...
+1739972498^(*) Before Web::start_node
+1739972498^(connect) ExtMsg connected 3:172.18.0.2 to 175.139.56.227:7300
+1739972498^(connect) connect 3: login: 
+1739972498^(connect) connect 3: expecting: "login:" received: "login: "
+1739972498^(connect) connect 3: got: "login:" sending: "9m2pju-10"
+1739972498^(connect) connect 3: Hello 9M2PJU-10, this is 9M2PJU-2 in Kuala Lumpur, Malaysia%0D
+1739972498^(connect) running DXSpider V1.57 build 568%0D
+1739972498^(connect) Capabilities: ve7cc rbn%0D
+1739972498^(connect)          _   .-')               _ (`-.%0D
+1739972498^(connect)          ( '.( OO )_            ( (OO  )%0D
+1739972498^(connect)   .----.  ,--.   ,--.).-----.  _.`     \     ,--. ,--. ,--.%0D
+1739972498^(connect)  /  ,.  \ |   `.'   |/ ,-.   \(__...--'' .-')| ,| |  | |  |%0D
+1739972498^(connect) |  |  \  ||         |'-'  |  | |  /  | |( OO |(_| |  | | .-')%0D
+1739972498^(connect)  '  `-'  '|  |'.'|  |   .'  /  |  |_.' || `-'|  | |  |_|( OO )%0D
+1739972498^(connect)   `- /  ' |  |   |  | .'  /__  |  .___.',--. |  | |  | | `-' /%0D
+1739972498^(connect)    ,'  /  |  |   |  ||       | |  |     |  '-'  /('  '-'(_.-'%0D
+1739972498^(connect)   `---'   `--'   `--'`-------' `--'      `-----'   `-----'%0D
+1739972498^(connect) WELCOME TO THE 9M2PJU-2 DX SPIDER NODE!%0D
+1739972498^(connect) This node is a free, open, and community-driven service designed to provide real-time DX spotting information to amateur radio operators worldwide. Whether you're chasing DX, contesting, or simply exploring the bands, we're here to help you stay connected to the global ham radio community.%0D
+1739972498^(connect) ----%0D
+1739972498^(connect) IMPORTANT NOTICE %E2%80%93 USER REGISTRATION REQUIRED%0D
+1739972498^(connect) STARTING NOW, ALL USERS MUST REGISTER TO USE THE SPOT FUNCTION.%0D
+1739972498^(connect) This measure is implemented to counter spam attacks from irresponsible users and to maintain the quality of the service. Unregistered users will no longer be able to post DX spots.%0D
+1739972498^(connect) ----%0D
+1739972498^(connect) GUIDELINES FOR RESPONSIBLE USE:%0D
+1739972498^(connect) - RESPECT THE NETWORK: Avoid excessive traffic or spamming the node to ensure smooth operation for all users.%0D
+1739972498^(connect) - SHARE RESPONSIBLY: Only post accurate and relevant DX spots to maintain the quality of the service.%0D
+1739972498^(connect) - BE CONSIDERATE: This node is a shared resource. Let%E2%80%99s work together to keep it accessible and reliable for everyone.%0D
+1739972498^(connect) ----%0D
+1739972498^(connect) REGISTER NOW TO USE THE SPOT FUNCTION!%0D
+1739972498^(connect) To register and gain access, email me at 9m2pju@hamradio.my with your details. Registration is quick and ensures a better experience for all users.%0D
+1739972498^(connect) ----%0D
+1739972498^(connect) For more information and resources, visit https://hamradio.my.%0D
+1739972498^(connect) ----%0D
+1739972498^(connect) Thank you for using the 9M2PJU-2 DX Spider Node! We appreciate your cooperation in keeping this service secure and valuable for all amateur radio operators.%0D
+1739972498^(connect) #### IMPORTANT: REGISTRATION REQUIRED TO USE THE SPOT FUNCTION!%0D
+1739972498^(connect) #### Please email 9m2pju@hamradio.my to register today!%0D
+1739972498^(connect) Nodes: 17/383 Users [Loc/Clr]: 9/4433 Max: 16/6044 - Uptime:  1d 15h 50m%0D
+1739972498^(connect) Please enter your name, set/name <your name>%0D
+1739972498^(connect) Please enter your QTH, set/qth <your qth>%0D
+1739972498^(connect) Please enter your Home Node, set/homenode <your home DX Cluster>%0D
+1739972498^(connect) 9M2PJU-10 de 9M2PJU-2 19-Feb-2025 1342Z dxspider >%0D
+1739972498^(*) Msg: localhost_alias_ipv4 = '172.18.0.2'
+1739972498^(state) 9M2PJU-2 channel func  state 0 -> init
+1739972499^(msg) queue msg (0)
+1739972501^(connect) ExtMsg accept 4:127.0.0.1 from 127.0.0.1:36322
+1739972501^(connect) ExtMsg connect 4: login: 
+1739972501^(connect) connect 4: timeout set to 60
+1739972511^(connect) ExtMsg accept 5:127.0.0.1 from 127.0.0.1:45186
+1739972511^(connect) ExtMsg connect 5: login: 
+1739972511^(connect) connect 5: timeout set to 60
+1739972522^(connect) ExtMsg accept 6:127.0.0.1 from 127.0.0.1:41072
+1739972522^(connect) ExtMsg connect 6: login: 
+1739972522^(connect) connect 6: timeout set to 60
+1739972532^(connect) ExtMsg accept 7:127.0.0.1 from 127.0.0.1:45210
+1739972532^(connect) ExtMsg connect 7: login: 
+1739972532^(connect) connect 7: timeout set to 60
+1739972542^(connect) ExtMsg accept 8:127.0.0.1 from 127.0.0.1:46934
+1739972542^(connect) ExtMsg connect 8: login: 
+1739972542^(connect) connect 8: timeout set to 60
+1739972552^(connect) ExtMsg accept 9:127.0.0.1 from 127.0.0.1:55924
+1739972552^(connect) ExtMsg connect 9: login: 
+1739972552^(connect) connect 9: timeout set to 60
+1739972558^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 0 mS
+1739972647^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1739972647^(cluster) DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972647^(cluster) Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972647^(cluster) Capabilities: ve7cc rbn
+1739972647^(*) loading prefixes ...
+1739972647^(*) US Database not loaded
+1739972647^(*) loading band data ...
+1739972647^(*) loading user file system ...
+1739972647^(*) starting listeners ...
+1739972647^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1739972647^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1739972647^(*) Starting Dupe system
+1739972647^(*) Read in Messages
+1739972647^(*) Read in Aliases
+1739972647^(*) Start Protocol Engines ...
+1739972647^(progress) CMD: 'load/forward ' by 9M2PJU-10 ip: 127.0.0.1 0mS
+1739972647^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 1mS
+1739972647^(connect) connect 3: timeout set to 60
+1739972647^(connect) connect 3: timeout set to 60
+1739972647^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1739972647^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1739972647^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 1mS
+1739972647^(*) Operation successful
+1739972647^(*) 9M2PJU-2 set as DXSpider style Node
+1739972647^(*) connection to 9M2PJU-2 started
+1739972647^(*) Start WWV system
+1739972647^(*) WWV read in last 0 records into cache in 0mS
+1739972647^(*) Start WCY system
+1739972647^(*) WCY read in last 0 records into cache 0mS
+1739972647^(*) Start Announce and Talk system
+1739972647^(*) AnnTalk: loaded last 1 announcements into cache in 187mS
+1739972647^(*) Starting DX Spot system
+1739972647^(*) Spot::init 2 files of spots read into cache in 1mS
+1739972647^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1739972647^(*)  at /spider/perl/DXSql.pm line 63.
+1739972647^(*) Reading existing Message/Bulletine headers ...
+1739972647^(*) load badmsg: Ok
+1739972647^(*) load forward: Ok
+1739972647^(*) load swop: Ok
+1739972647^(*) Reading cron jobs ...
+1739972647^(cron) DXCron::cread reading /spider/cmd/crontab
+1739972647^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1739972647^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1739972647^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1739972647^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1739972647^(*) Reading database descriptors ...
+1739972647^(*) Rtarting RBN ...
+1739972647^(*) RBN:check_cache '/spider/local_data/rbn_cache' spot cache exists, created  1m 29s ago and not too old
+1739972647^(*) RBN:check_cache cache read size 13
+1739972647^(*) RBN:check_cache spot cache restored
+1739972647^(*) Starting DXQsl system
+1739972647^(*) BadWords: Found new style badword.new file
+1739972648^(*) BadWords: 130 new style badwords read
+1739972648^(DXProt) DXCIDR::reload reload database
+1739972648^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972648^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972648^(*) Ooing local initialisations ...
+1739972648^(*) Orft we jolly well go ...
+1739972648^(*) Before Web::start_node
+1739972648^(connect) ExtMsg connected 3:172.18.0.2 to 175.139.56.227:7300
+1739972648^(connect) connect 3: login: 
+1739972648^(connect) connect 3: expecting: "login:" received: "login: "
+1739972648^(connect) connect 3: got: "login:" sending: "9m2pju-10"
+1739972648^(connect) connect 3: Hello 9M2PJU-10, this is 9M2PJU-2 in Kuala Lumpur, Malaysia%0D
+1739972648^(connect) running DXSpider V1.57 build 568%0D
+1739972648^(connect) Capabilities: ve7cc rbn%0D
+1739972648^(connect)          _   .-')               _ (`-.%0D
+1739972648^(connect)          ( '.( OO )_            ( (OO  )%0D
+1739972648^(connect)   .----.  ,--.   ,--.).-----.  _.`     \     ,--. ,--. ,--.%0D
+1739972648^(connect)  /  ,.  \ |   `.'   |/ ,-.   \(__...--'' .-')| ,| |  | |  |%0D
+1739972648^(connect) |  |  \  ||         |'-'  |  | |  /  | |( OO |(_| |  | | .-')%0D
+1739972648^(connect)  '  `-'  '|  |'.'|  |   .'  /  |  |_.' || `-'|  | |  |_|( OO )%0D
+1739972648^(connect)   `- /  ' |  |   |  | .'  /__  |  .___.',--. |  | |  | | `-' /%0D
+1739972648^(connect)    ,'  /  |  |   |  ||       | |  |     |  '-'  /('  '-'(_.-'%0D
+1739972648^(connect)   `---'   `--'   `--'`-------' `--'      `-----'   `-----'%0D
+1739972648^(connect) WELCOME TO THE 9M2PJU-2 DX SPIDER NODE!%0D
+1739972648^(connect) This node is a free, open, and community-driven service designed to provide real-time DX spotting information to amateur radio operators worldwide. Whether you're chasing DX, contesting, or simply exploring the bands, we're here to help you stay connected to the global ham radio community.%0D
+1739972648^(connect) ----%0D
+1739972648^(connect) IMPORTANT NOTICE %E2%80%93 USER REGISTRATION REQUIRED%0D
+1739972648^(connect) STARTING NOW, ALL USERS MUST REGISTER TO USE THE SPOT FUNCTION.%0D
+1739972648^(connect) This measure is implemented to counter spam attacks from irresponsible users and to maintain the quality of the service. Unregistered users will no longer be able to post DX spots.%0D
+1739972648^(connect) ----%0D
+1739972648^(connect) GUIDELINES FOR RESPONSIBLE USE:%0D
+1739972648^(connect) - RESPECT THE NETWORK: Avoid excessive traffic or spamming the node to ensure smooth operation for all users.%0D
+1739972648^(connect) - SHARE RESPONSIBLY: Only post accurate and relevant DX spots to maintain the quality of the service.%0D
+1739972648^(connect) - BE CONSIDERATE: This node is a shared resource. Let%E2%80%99s work together to keep it accessible and reliable for everyone.%0D
+1739972648^(connect) ----%0D
+1739972648^(connect) REGISTER NOW TO USE THE SPOT FUNCTION!%0D
+1739972648^(connect) To register and gain access, email me at 9m2pju@hamradio.my with your details. Registration is quick and ensures a better experience for all users.%0D
+1739972648^(connect) ----%0D
+1739972648^(connect) For more information and resources, visit https://hamradio.my.%0D
+1739972648^(connect) ----%0D
+1739972648^(connect) Thank you for using the 9M2PJU-2 DX Spider Node! We appreciate your cooperation in keeping this service secure and valuable for all amateur radio operators.%0D
+1739972648^(connect) #### IMPORTANT: REGISTRATION REQUIRED TO USE THE SPOT FUNCTION!%0D
+1739972648^(connect) #### Please email 9m2pju@hamradio.my to register today!%0D
+1739972648^(connect) Nodes: 17/383 Users [Loc/Clr]: 9/4438 Max: 16/6044 - Uptime:  1d 15h 52m%0D
+1739972648^(connect) Please enter your name, set/name <your name>%0D
+1739972648^(connect) Please enter your QTH, set/qth <your qth>%0D
+1739972648^(connect) Please enter your Home Node, set/homenode <your home DX Cluster>%0D
+1739972648^(connect) 9M2PJU-10 de 9M2PJU-2 19-Feb-2025 1344Z dxspider >%0D
+1739972648^(*) Msg: localhost_alias_ipv4 = '172.18.0.2'
+1739972648^(state) 9M2PJU-2 channel func  state 0 -> init
+1739972649^(msg) queue msg (0)
+1739972651^(connect) ExtMsg accept 4:127.0.0.1 from 127.0.0.1:45190
+1739972651^(connect) ExtMsg connect 4: login: 
+1739972651^(connect) connect 4: timeout set to 60
+1739972661^(connect) ExtMsg accept 5:127.0.0.1 from 127.0.0.1:37212
+1739972661^(connect) ExtMsg connect 5: login: 
+1739972661^(connect) connect 5: timeout set to 60
+1739972672^(connect) ExtMsg accept 6:127.0.0.1 from 127.0.0.1:34482
+1739972672^(connect) ExtMsg connect 6: login: 
+1739972672^(connect) connect 6: timeout set to 60
+1739972682^(connect) ExtMsg accept 7:127.0.0.1 from 127.0.0.1:52532
+1739972682^(connect) ExtMsg connect 7: login: 
+1739972682^(connect) connect 7: timeout set to 60
+1739972692^(connect) ExtMsg accept 8:127.0.0.1 from 127.0.0.1:38974
+1739972692^(connect) ExtMsg connect 8: login: 
+1739972692^(connect) connect 8: timeout set to 60
+1739972702^(connect) ExtMsg accept 9:127.0.0.1 from 127.0.0.1:53254
+1739972702^(connect) ExtMsg connect 9: login: 
+1739972702^(connect) connect 9: timeout set to 60
+1739972708^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1739972709^(msg) queue msg (0)
+1739972711^(connect) connect 4: timed out after 60 seconds
+1739972712^(connect) ExtMsg accept 10:127.0.0.1 from 127.0.0.1:43916
+1739972712^(connect) ExtMsg connect 10: login: 
+1739972712^(connect) connect 10: timeout set to 60
+1739972712^(connect) connect 4: timed out after 60 seconds
+1739972721^(connect) connect 5: timed out after 60 seconds
+1739972722^(connect) connect 5: timed out after 60 seconds
+1739972722^(connect) ExtMsg accept 11:127.0.0.1 from 127.0.0.1:46954
+1739972722^(connect) ExtMsg connect 11: login: 
+1739972722^(connect) connect 11: timeout set to 60
+1739972731^(connect) connect 6: timed out after 60 seconds
+1739972732^(connect) connect 6: timed out after 60 seconds
+1739972733^(connect) ExtMsg accept 12:127.0.0.1 from 127.0.0.1:60714
+1739972733^(connect) ExtMsg connect 12: login: 
+1739972733^(connect) connect 12: timeout set to 60
+1739972741^(connect) connect 7: timed out after 60 seconds
+1739972742^(connect) connect 7: timed out after 60 seconds
+1739972743^(connect) ExtMsg accept 13:127.0.0.1 from 127.0.0.1:56930
+1739972743^(connect) ExtMsg connect 13: login: 
+1739972743^(connect) connect 13: timeout set to 60
+1739972751^(connect) connect 8: timed out after 60 seconds
+1739972752^(connect) connect 8: timed out after 60 seconds
+1739972753^(connect) ExtMsg accept 14:127.0.0.1 from 127.0.0.1:47848
+1739972753^(connect) ExtMsg connect 14: login: 
+1739972753^(connect) connect 14: timeout set to 60
+1739972860^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1739972860^(cluster) DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972860^(cluster) Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972860^(cluster) Capabilities: ve7cc rbn
+1739972860^(*) loading prefixes ...
+1739972860^(*) US Database not loaded
+1739972860^(*) loading band data ...
+1739972860^(*) loading user file system ...
+1739972860^(*) starting listeners ...
+1739972860^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1739972860^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1739972860^(*) Starting Dupe system
+1739972860^(*) Read in Messages
+1739972860^(*) Read in Aliases
+1739972860^(*) Start Protocol Engines ...
+1739972860^(progress) CMD: 'load/forward ' by 9M2PJU-10 ip: 127.0.0.1 0mS
+1739972860^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 0mS
+1739972860^(connect) connect 3: timeout set to 60
+1739972860^(connect) connect 3: timeout set to 60
+1739972860^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1739972860^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1739972860^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-10 ip: 127.0.0.1 1mS
+1739972860^(*) Operation successful
+1739972860^(*) 9M2PJU-2 set as DXSpider style Node
+1739972860^(*) connection to 9M2PJU-2 started
+1739972860^(*) Start WWV system
+1739972860^(*) WWV read in last 0 records into cache in 0mS
+1739972860^(*) Start WCY system
+1739972860^(*) WCY read in last 0 records into cache 0mS
+1739972860^(*) Start Announce and Talk system
+1739972861^(*) AnnTalk: loaded last 1 announcements into cache in 212mS
+1739972861^(*) Starting DX Spot system
+1739972861^(*) Spot::init 2 files of spots read into cache in 0mS
+1739972861^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1739972861^(*)  at /spider/perl/DXSql.pm line 63.
+1739972861^(*) Reading existing Message/Bulletine headers ...
+1739972861^(*) load badmsg: Ok
+1739972861^(*) load forward: Ok
+1739972861^(*) load swop: Ok
+1739972861^(*) Reading cron jobs ...
+1739972861^(cron) DXCron::cread reading /spider/cmd/crontab
+1739972861^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1739972861^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1739972861^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1739972861^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1739972861^(*) Reading database descriptors ...
+1739972861^(*) Rtarting RBN ...
+1739972861^(*) RBN:check_cache '/spider/local_data/rbn_cache' spot cache exists, created  2m 32s ago and not too old
+1739972861^(*) RBN:check_cache cache read size 13
+1739972861^(*) RBN:check_cache spot cache restored
+1739972861^(*) Starting DXQsl system
+1739972861^(*) BadWords: Found new style badword.new file
+1739972861^(*) BadWords: 130 new style badwords read
+1739972861^(DXProt) DXCIDR::reload reload database
+1739972861^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972861^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972861^(*) Ooing local initialisations ...
+1739972861^(*) Orft we jolly well go ...
+1739972861^(*) Before Web::start_node
+1739972861^(connect) ExtMsg connected 3:172.18.0.2 to 175.139.56.227:7300
+1739972861^(connect) connect 3: login: 
+1739972861^(connect) connect 3: expecting: "login:" received: "login: "
+1739972861^(connect) connect 3: got: "login:" sending: "9m2pju-10"
+1739972862^(connect) connect 3: Hello 9M2PJU-10, this is 9M2PJU-2 in Kuala Lumpur, Malaysia%0D
+1739972862^(connect) running DXSpider V1.57 build 568%0D
+1739972862^(connect) Capabilities: ve7cc rbn%0D
+1739972862^(connect)          _   .-')               _ (`-.%0D
+1739972862^(connect)          ( '.( OO )_            ( (OO  )%0D
+1739972862^(connect)   .----.  ,--.   ,--.).-----.  _.`     \     ,--. ,--. ,--.%0D
+1739972862^(connect)  /  ,.  \ |   `.'   |/ ,-.   \(__...--'' .-')| ,| |  | |  |%0D
+1739972862^(connect) |  |  \  ||         |'-'  |  | |  /  | |( OO |(_| |  | | .-')%0D
+1739972862^(connect)  '  `-'  '|  |'.'|  |   .'  /  |  |_.' || `-'|  | |  |_|( OO )%0D
+1739972862^(connect)   `- /  ' |  |   |  | .'  /__  |  .___.',--. |  | |  | | `-' /%0D
+1739972862^(connect)    ,'  /  |  |   |  ||       | |  |     |  '-'  /('  '-'(_.-'%0D
+1739972862^(connect)   `---'   `--'   `--'`-------' `--'      `-----'   `-----'%0D
+1739972862^(connect) WELCOME TO THE 9M2PJU-2 DX SPIDER NODE!%0D
+1739972862^(connect) This node is a free, open, and community-driven service designed to provide real-time DX spotting information to amateur radio operators worldwide. Whether you're chasing DX, contesting, or simply exploring the bands, we're here to help you stay connected to the global ham radio community.%0D
+1739972862^(connect) ----%0D
+1739972862^(connect) IMPORTANT NOTICE %E2%80%93 USER REGISTRATION REQUIRED%0D
+1739972862^(connect) STARTING NOW, ALL USERS MUST REGISTER TO USE THE SPOT FUNCTION.%0D
+1739972862^(connect) This measure is implemented to counter spam attacks from irresponsible users and to maintain the quality of the service. Unregistered users will no longer be able to post DX spots.%0D
+1739972862^(connect) ----%0D
+1739972862^(connect) GUIDELINES FOR RESPONSIBLE USE:%0D
+1739972862^(connect) - RESPECT THE NETWORK: Avoid excessive traffic or spamming the node to ensure smooth operation for all users.%0D
+1739972862^(connect) - SHARE RESPONSIBLY: Only post accurate and relevant DX spots to maintain the quality of the service.%0D
+1739972862^(connect) - BE CONSIDERATE: This node is a shared resource. Let%E2%80%99s work together to keep it accessible and reliable for everyone.%0D
+1739972862^(connect) ----%0D
+1739972862^(connect) REGISTER NOW TO USE THE SPOT FUNCTION!%0D
+1739972862^(connect) To register and gain access, email me at 9m2pju@hamradio.my with your details. Registration is quick and ensures a better experience for all users.%0D
+1739972862^(connect) ----%0D
+1739972862^(connect) For more information and resources, visit https://hamradio.my.%0D
+1739972862^(connect) ----%0D
+1739972862^(connect) Thank you for using the 9M2PJU-2 DX Spider Node! We appreciate your cooperation in keeping this service secure and valuable for all amateur radio operators.%0D
+1739972862^(connect) #### IMPORTANT: REGISTRATION REQUIRED TO USE THE SPOT FUNCTION!%0D
+1739972862^(connect) #### Please email 9m2pju@hamradio.my to register today!%0D
+1739972862^(connect) Nodes: 17/381 Users [Loc/Clr]: 9/4448 Max: 16/6044 - Uptime:  1d 15h 56m%0D
+1739972862^(connect) Please enter your name, set/name <your name>%0D
+1739972862^(connect) Please enter your QTH, set/qth <your qth>%0D
+1739972862^(connect) Please enter your Home Node, set/homenode <your home DX Cluster>%0D
+1739972862^(connect) 9M2PJU-10 de 9M2PJU-2 19-Feb-2025 1348Z dxspider >%0D
+1739972862^(*) Msg: localhost_alias_ipv4 = '172.18.0.2'
+1739972862^(state) 9M2PJU-2 channel func  state 0 -> init
+1739972862^(msg) queue msg (0)
+1739972864^(connect) ExtMsg accept 4:127.0.0.1 from 127.0.0.1:41186
+1739972864^(connect) ExtMsg connect 4: login: 
+1739972864^(connect) connect 4: timeout set to 60
+1739972875^(connect) ExtMsg accept 5:127.0.0.1 from 127.0.0.1:46276
+1739972875^(connect) ExtMsg connect 5: login: 
+1739972875^(connect) connect 5: timeout set to 60
+1739972885^(connect) ExtMsg accept 6:127.0.0.1 from 127.0.0.1:50072
+1739972885^(connect) ExtMsg connect 6: login: 
+1739972885^(connect) connect 6: timeout set to 60
+1739972895^(connect) ExtMsg accept 7:127.0.0.1 from 127.0.0.1:57136
+1739972895^(connect) ExtMsg connect 7: login: 
+1739972895^(connect) connect 7: timeout set to 60
+1739972905^(connect) ExtMsg accept 8:127.0.0.1 from 127.0.0.1:37086
+1739972905^(connect) ExtMsg connect 8: login: 
+1739972905^(connect) connect 8: timeout set to 60
+1739972915^(connect) ExtMsg accept 9:127.0.0.1 from 127.0.0.1:37906
+1739972915^(connect) ExtMsg connect 9: login: 
+1739972915^(connect) connect 9: timeout set to 60
+1739972921^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 0 mS
+1739972922^(msg) queue msg (0)
+1739972923^(connect) connect 4: timed out after 60 seconds
+1739972924^(connect) connect 4: timed out after 60 seconds
+1739972926^(connect) ExtMsg accept 10:127.0.0.1 from 127.0.0.1:39230
+1739972926^(connect) ExtMsg connect 10: login: 
+1739972926^(connect) connect 10: timeout set to 60
+1739972934^(connect) connect 5: timed out after 60 seconds
+1739972935^(connect) connect 5: timed out after 60 seconds
+1739972936^(connect) ExtMsg accept 11:127.0.0.1 from 127.0.0.1:36478
+1739972936^(connect) ExtMsg connect 11: login: 
+1739972936^(connect) connect 11: timeout set to 60
+1739972944^(connect) connect 6: timed out after 60 seconds
+1739972945^(connect) connect 6: timed out after 60 seconds
+1739972946^(connect) ExtMsg accept 12:127.0.0.1 from 127.0.0.1:40212
+1739972946^(connect) ExtMsg connect 12: login: 
+1739972946^(connect) connect 12: timeout set to 60
+1739972954^(connect) connect 7: timed out after 60 seconds
+1739972955^(connect) connect 7: timed out after 60 seconds
+1739972956^(connect) ExtMsg accept 13:127.0.0.1 from 127.0.0.1:54624
+1739972956^(connect) ExtMsg connect 13: login: 
+1739972956^(connect) connect 13: timeout set to 60
+1739972964^(connect) connect 8: timed out after 60 seconds
+1739972965^(connect) connect 8: timed out after 60 seconds
+1739972966^(connect) ExtMsg accept 14:127.0.0.1 from 127.0.0.1:38754
+1739972966^(connect) ExtMsg connect 14: login: 
+1739972966^(connect) connect 14: timeout set to 60
+1739972974^(connect) connect 9: timed out after 60 seconds
+1739972975^(connect) connect 9: timed out after 60 seconds
+1739972976^(connect) ExtMsg accept 15:127.0.0.1 from 127.0.0.1:49572
+1739972976^(connect) ExtMsg connect 15: login: 
+1739972976^(connect) connect 15: timeout set to 60
+1739972981^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1739972982^(msg) queue msg (0)
+1739972985^(connect) connect 10: timed out after 60 seconds
+1739972986^(connect) connect 10: timed out after 60 seconds
+1739972987^(connect) ExtMsg accept 16:127.0.0.1 from 127.0.0.1:55804
+1739972987^(connect) ExtMsg connect 16: login: 
+1739972987^(connect) connect 16: timeout set to 60
+1739972995^(connect) connect 11: timed out after 60 seconds
+1739972996^(connect) connect 11: timed out after 60 seconds
+1739972997^(connect) ExtMsg accept 17:127.0.0.1 from 127.0.0.1:43714
+1739972997^(connect) ExtMsg connect 17: login: 
+1739972997^(connect) connect 17: timeout set to 60
+1739973006^(connect) connect 12: timed out after 60 seconds
+1739973007^(connect) connect 12: timed out after 60 seconds
+1739973007^(connect) ExtMsg accept 18:127.0.0.1 from 127.0.0.1:39018
+1739973007^(connect) ExtMsg connect 18: login: 
+1739973007^(connect) connect 18: timeout set to 60
+1739973016^(connect) connect 13: timed out after 60 seconds
+1739973017^(connect) connect 13: timed out after 60 seconds
+1739973017^(connect) ExtMsg accept 19:127.0.0.1 from 127.0.0.1:47166
+1739973017^(connect) ExtMsg connect 19: login: 
+1739973017^(connect) connect 19: timeout set to 60
+1739973026^(connect) connect 14: timed out after 60 seconds
+1739973027^(connect) connect 14: timed out after 60 seconds
+1739973027^(connect) ExtMsg accept 20:127.0.0.1 from 127.0.0.1:39610
+1739973027^(connect) ExtMsg connect 20: login: 
+1739973027^(connect) connect 20: timeout set to 60
+1739973036^(connect) connect 15: timed out after 60 seconds
+1739973037^(connect) connect 15: timed out after 60 seconds
+1739973037^(connect) ExtMsg accept 21:127.0.0.1 from 127.0.0.1:57848
+1739973037^(connect) ExtMsg connect 21: login: 
+1739973037^(connect) connect 21: timeout set to 60
+1739973041^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1739973042^(msg) queue msg (0)
+1739973047^(connect) connect 16: timed out after 60 seconds
+1739973048^(connect) connect 16: timed out after 60 seconds
+1739973048^(connect) ExtMsg accept 22:127.0.0.1 from 127.0.0.1:34152
+1739973048^(connect) ExtMsg connect 22: login: 
+1739973048^(connect) connect 22: timeout set to 60
+1739973057^(connect) connect 17: timed out after 60 seconds
+1739973058^(connect) connect 17: timed out after 60 seconds
+1739973058^(connect) ExtMsg accept 23:127.0.0.1 from 127.0.0.1:51544
+1739973058^(connect) ExtMsg connect 23: login: 
+1739973058^(connect) connect 23: timeout set to 60
+1739973067^(connect) connect 18: timed out after 60 seconds
+1739973068^(connect) connect 18: timed out after 60 seconds
+1739973068^(connect) ExtMsg accept 24:127.0.0.1 from 127.0.0.1:52542
+1739973068^(connect) ExtMsg connect 24: login: 
+1739973068^(connect) connect 24: timeout set to 60
+1739973077^(connect) connect 19: timed out after 60 seconds
+1739973078^(connect) connect 19: timed out after 60 seconds
+1739973078^(connect) ExtMsg accept 25:127.0.0.1 from 127.0.0.1:57542
+1739973078^(connect) ExtMsg connect 25: login: 
+1739973078^(connect) connect 25: timeout set to 60
+1739973087^(connect) connect 20: timed out after 60 seconds
+1739973088^(connect) connect 20: timed out after 60 seconds
+1739973089^(connect) ExtMsg accept 26:127.0.0.1 from 127.0.0.1:49678
+1739973089^(connect) ExtMsg connect 26: login: 
+1739973089^(connect) connect 26: timeout set to 60
+1739973097^(connect) connect 21: timed out after 60 seconds
+1739973098^(connect) connect 21: timed out after 60 seconds
+1739973099^(connect) ExtMsg accept 27:127.0.0.1 from 127.0.0.1:42554
+1739973099^(connect) ExtMsg connect 27: login: 
+1739973099^(connect) connect 27: timeout set to 60
+1739973101^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1739973102^(msg) queue msg (0)

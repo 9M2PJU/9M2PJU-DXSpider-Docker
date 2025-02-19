@@ -1,0 +1,41 @@
+1739972074^cluster^DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972074^cluster^Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972074^cluster^Capabilities: ve7cc rbn
+1739972076^DXProt^DXCIDR::reload reload database
+1739972076^DXProt^DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972076^DXProt^DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972076^DXProt^9M2PJU-2 connected from 175.139.56.227
+1739972093^DXProt^PC92A 9M2PJU -> 172.18.0.1 on 9M2PJU-10
+1739972093^DXCommand^9M2PJU connected from 172.18.0.1 cols 80
+1739972096^DXCommand^9M2PJU disconnected
+1739972332^cluster^DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972332^cluster^Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972332^cluster^Capabilities: ve7cc rbn
+1739972333^DXProt^DXCIDR::reload reload database
+1739972333^DXProt^DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972333^DXProt^DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972333^DXProt^9M2PJU-2 connected from 175.139.56.227
+1739972398^DXProt^PC92A 9M2PJU -> 172.18.0.1 on 9M2PJU-10
+1739972398^DXCommand^9M2PJU connected from 172.18.0.1 cols 80
+1739972402^DXCommand^9M2PJU disconnected
+1739972497^cluster^DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972497^cluster^Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972497^cluster^Capabilities: ve7cc rbn
+1739972498^DXProt^DXCIDR::reload reload database
+1739972498^DXProt^DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972498^DXProt^DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972498^DXProt^9M2PJU-2 connected from 175.139.56.227
+1739972647^cluster^DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972647^cluster^Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972647^cluster^Capabilities: ve7cc rbn
+1739972648^DXProt^DXCIDR::reload reload database
+1739972648^DXProt^DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972648^DXProt^DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972648^DXProt^9M2PJU-2 connected from 175.139.56.227
+1739972860^cluster^DXSpider v1.57 build 568 (git: mojo/0920a333[r]) using perl v5.38.3 on linux started
+1739972860^cluster^Copyright (c) 1998-2025 Dirk Koopman G1TLH
+1739972860^cluster^Capabilities: ve7cc rbn
+1739972861^DXProt^DXCIDR::reload reload database
+1739972861^DXProt^DXCIDR::reload: badip.local read containing 0 ip addresses
+1739972861^DXProt^DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1739972862^DXProt^9M2PJU-2 connected from 175.139.56.227
