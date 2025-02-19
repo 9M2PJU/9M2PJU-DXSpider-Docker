@@ -47,8 +47,6 @@
 
 - Docker Engine 20.10+
 - Docker Compose v2.0+
-- 512MB RAM minimum
-- 1GB storage space
 
 ## 🚀 Quick Start
 
