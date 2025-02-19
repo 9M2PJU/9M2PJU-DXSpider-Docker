@@ -56,9 +56,6 @@ git clone https://github.com/9M2PJU/9M2PJU-DXSpider-Docker.git
 
 # Navigate to the directory
 cd 9M2PJU-DXSpider-Docker
-
-# Start DXSpider
-docker compose up -d
 ```
 
 ### Step-by-Step Guide
