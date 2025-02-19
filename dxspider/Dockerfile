@@ -16,7 +16,6 @@ RUN apk update && apk add --no-cache \
     perl \
     nano \
     netcat-openbsd \
-    perl-modules \
     mariadb-dev \
     wget \
     curl \
