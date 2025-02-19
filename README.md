@@ -102,9 +102,8 @@ Port: 7300
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `DX_CALLSIGN` | Your station callsign | `9M2PJU-10` |
+| `DX_CALLSIGN` | Your node callsign | `9M2PJU-10` |
 | `DX_PORT` | Listening port | `7300` |
-| `DX_LOCATION` | Station grid square | `JJ00aa` |
 
 ## 🔄 Updates & Maintenance
 
