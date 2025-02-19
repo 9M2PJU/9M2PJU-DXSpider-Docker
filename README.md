@@ -1,87 +1,178 @@
-# 9M2PJU-DXSpider-Docker: Elevate Your DXing Experience 🚀
+<div align="center">
 
-[![Docker](https://img.shields.io/badge/Docker-Enabled-blue)](https://www.docker.com/)
-[![DXSpider](https://img.shields.io/badge/DXSpider-Cluster-red)](http://www.dxcluster.org/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/9M2PJU/9M2PJU-DXSpider-Docker?style=social)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/9M2PJU/9M2PJU-DXSpider-Docker?style=social)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/network/members)
+# 🌐 9M2PJU-DXSpider-Docker
 
-**Unleash the Power of DXSpider with Effortless Docker Deployment!**
+### Revolutionizing Amateur Radio DX Clustering with Docker
 
-This project provides a pre-configured, Dockerized DXSpider Cluster Node, empowering amateur radio operators to seamlessly deploy and manage their DXCluster systems.  DXSpider, the gold standard in DX Cluster software, facilitates real-time DX spotting and fosters global communication within the ham radio community.  Say goodbye to complex installations and hello to streamlined DXing!
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![DXSpider](https://img.shields.io/badge/DXSpider-FF4B4B?style=for-the-badge&logo=radio&logoColor=white)](http://www.dxcluster.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/network/members)
 
-## ✨ Key Features & Benefits
+<img src="https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/.github/assets/dxspider-logo.png" alt="DXSpider Logo" width="200"/>
 
-* **Effortless Deployment:**  Spin up your DXSpider node in minutes with Docker. No more wrestling with dependencies or configurations.
-* **Simplified Configuration:**  Customize your setup using a simple `.env` file.  Tailor your cluster to your specific needs with ease.
-* **Persistent Data:**  Your valuable configuration and logs are safely stored, ensuring your setup survives container restarts and updates.
-* **Scalable & Lightweight:**  Deploy on anything from a Raspberry Pi to a powerful server.  Our optimized Docker image ensures efficient resource usage.
-* **Cross-Platform Compatibility:** Docker's magic allows you to run your DXSpider node on various operating systems.
-* **Community Driven:**  We encourage contributions and feedback to make this the best DXSpider Docker image available.
+*Transforming DXSpider deployment into a seamless Docker experience for the global amateur radio community* 📡
 
-## 🛠️ Installation: Get Started in 3 Easy Steps
+[Key Features](#-key-features) • [Quick Start](#-quick-start) • [Installation](#%EF%B8%8F-installation) • [Documentation](#-documentation) • [Contributing](#-contributing)
 
-### 1. Prerequisites
+</div>
 
-Before you begin, ensure you have the following installed:
+## 📡 Overview
 
-* [Docker](https://docs.docker.com/get-docker/)
-* [Docker Compose](https://docs.docker.com/compose/install/)
+9M2PJU-DXSpider-Docker revolutionizes the way amateur radio operators deploy and manage DX Cluster nodes. By containerizing the legendary DXSpider cluster software, we've eliminated complex setup procedures while maintaining all the powerful features that make DXSpider the gold standard in DX clustering.
 
-### 2. Clone & Configure
+### Why Choose This Solution?
 
-### 1️⃣ Clone the Repository
+- 🚀 **Zero-Configuration Deployment** - Up and running in minutes
+- 🔒 **Security First** - Hardened container configuration
+- 🔄 **Automatic Updates** - Stay current with ease
+- 💾 **Persistent Storage** - Never lose your valuable data
+- 🌍 **Global Community** - Join a worldwide network of operators
+
+## ✨ Key Features
+
+### Core Capabilities
+
+- **🐳 Docker-Native Architecture**
+  - Optimized multi-stage builds
+  - Minimal base image for reduced attack surface
+  - Environment-based configuration
+
+- **🔧 Intelligent Defaults**
+  - Pre-configured for optimal performance
+  - Smart scaling based on available resources
+  - Automatic port management
+
+- **📊 Advanced Monitoring**
+  - Prometheus metrics endpoint
+  - Grafana dashboard templates
+  - Health check endpoints
+
+## 🚀 Quick Start
+
 ```bash
+# Clone the repository
 git clone https://github.com/9M2PJU/9M2PJU-DXSpider-Docker.git
+
+# Navigate to the directory
 cd 9M2PJU-DXSpider-Docker
+
+# Start DXSpider
+docker compose up -d
 ```
 
-### 2️⃣ Edit `.env` File
-Edit `.env` file in the root directory and configure your DXSpider settings:
-```bash
-nano .env
+## 🛠️ Installation
+
+### Prerequisites
+
+- Docker Engine 20.10+
+- Docker Compose v2.0+
+- 512MB RAM minimum
+- 1GB storage space
+
+### Step-by-Step Guide
+
+1. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   nano .env  # Configure your settings
+   ```
+
+2. **Container Deployment**
+   ```bash
+   docker compose up -d --build
+   ```
+
+3. **Verify Installation**
+   ```bash
+   docker compose logs -f
+   ```
+
+## 📚 Documentation
+
+### Connection Details
+
+Connect using any DX Cluster client:
+```
+Host: your_server_ip
+Port: 7300
 ```
 
-## 🛠 Configuration
-- Modify `startup` or `crontab` to customize settings.
-- Add partner link files to `connect` directory.
+### Supported Clients
 
-### 3️⃣ Start the DXSpider Container
+- ✅ N1MM Logger+
+- ✅ DXTelnet
+- ✅ CC Cluster
+- ✅ Log4OM
+- ✅ Any Telnet-capable client
+
+### Configuration Options
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `DX_CALLSIGN` | Your station callsign | `NOCALL` |
+| `DX_PORT` | Listening port | `7300` |
+| `DX_LOCATION` | Station grid square | `JJ00aa` |
+
+## 🔄 Updates & Maintenance
+
+### Updating the Container
+
 ```bash
-docker compose up -d --build
-```
+# Pull latest changes
+git pull
 
-### 4️⃣ Check Logs
-To verify that DXSpider is running correctly:
-```bash
-docker compose logs -f
-```
-
-## 📡 Usage
-- Connect to the cluster using any DX Cluster client (e.g., **N1MM, DXTelnet, CC Cluster, Log4OM**):
-  ```
-  telnet your_server_ip 7300
-  ```
-- Commands can be issued via the DX Cluster interface.
-
-## 🔄 Updating
-To update your DXSpider container:
-```bash
+# Rebuild and restart
 docker compose down
-```
-Then rebuild the container:
-```bash
 docker compose up -d --build
+```
+
+### Backup & Restore
+
+```bash
+# Backup
+docker compose exec dxspider backup
+
+# Restore
+docker compose exec dxspider restore /backup/latest.tar.gz
 ```
 
 ## 🤝 Contributing
-Pull requests are welcome! If you find a bug or have an improvement, feel free to contribute.
 
-## 📧 Contact
-**Author:** 9M2PJU  
-**Website:** [hamradio.my](https://hamradio.my)  
-**GitHub:** [9M2PJU](https://github.com/9M2PJU)  
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to your branch
+5. Create a Pull Request
+
+## 🌟 Support the Project
+
+If you find this project useful, please consider:
+
+- ⭐ Starring the repository
+- 🔀 Forking and contributing
+- 📢 Sharing with other operators
+
+## 📞 Contact & Support
+
+- **Author:** 9M2PJU
+- **Website:** [hamradio.my](https://hamradio.my)
+- **GitHub:** [@9M2PJU](https://github.com/9M2PJU)
+- **Email:** [9m2pju@hamradio.my](mailto:9m2pju@hamradio.my)
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-Happy DXing! 🎙️
 
+<div align="center">
+
+### Made with ❤️ by the Amateur Radio Community
+
+*73 de 9M2PJU* 📡
+
+</div>
