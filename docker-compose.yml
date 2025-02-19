@@ -1,5 +1,4 @@
 services:
-  dxspider:
     build:
       context: ./dxspider
       dockerfile: Dockerfile
