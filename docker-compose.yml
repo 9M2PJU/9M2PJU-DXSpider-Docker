@@ -5,9 +5,9 @@ services:
       dockerfile: Dockerfile
       platforms:
         - "linux/amd64"
+        - "linux/arm64"
       args:
         - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH}
-        - SPIDER_USERNAME=${CLUSTER_DB_USER}
     privileged: true
     environment:
       - SPIDER_INSTALL_DIR=/spider
@@ -38,9 +38,6 @@ services:
     ports:
       - ${CLUSTER_PORT}:${CLUSTER_PORT}
       - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
-    expose:
-      - ${CLUSTER_PORT}
-      - ${CLUSTER_SYSOP_PORT}
     logging:
       driver: "json-file"
       options:
