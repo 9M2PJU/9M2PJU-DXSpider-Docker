@@ -1,4 +1,4 @@
-FROM alpine
+FROM ubuntu:22.04
 
 ARG SPIDER_GIT_REPOSITORY=git://scm.dxcluster.org/scm/spider
 # SPIDER_VERSION can be "mojo" or "master"
@@ -8,60 +8,48 @@ ARG SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR:-/spider}
 ARG SPIDER_USERNAME=${SPIDER_USERNAME:-sysop}
 ARG SPIDER_UID=${SPIDER_UID:-1000}
 
-
-RUN apk update \
-    && apk add \
+RUN apt-get update && apt-get install -y \
     gcc \
-    git \ 
+    git \
     make \
-    musl-dev \
-    ncurses-dev \
-    perl-app-cpanminus \
-    perl-dev \
+    libncurses-dev \
+    perl \
     nano \
-    netcat-openbsd \
-    perl-db_file \
-    perl-dev \
+    netcat \
+    perl-db-file \
     perl-digest-sha1 \
     perl-io-socket-ssl \
-    perl-net-telnet \ 
+    perl-net-telnet \
     perl-timedate \
     perl-yaml-libyaml \
-    perl-test-simple \ 
-    perl-curses \ 
+    perl-test-simple \
+    perl-curses \
     perl-app-cpanminus \
     perl-mojolicious \
     perl-math-round \
     perl-json \
     mysql-client \
-    mysql-dev \
-    perl-dbd-mysql \ 
-    perl-dbi musl \ 
-    perl-net-cidr-lite \
-    make \
-    musl-dev \
-    ncurses-dev \
-    mysql-dev \
-    gcc \
+    libmysqlclient-dev \
+    perl-dbd-mysql \
+    perl-dbi \
+    libnet-cidr-lite-perl \
     ttyd \
     wget \
     && cpanm --no-wget Data::Structure::Util \
-    && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
+    && adduser --disabled-password --uid ${SPIDER_UID} --home ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
     && git clone -b ${SPIDER_VERSION} ${SPIDER_GIT_REPOSITORY} ${SPIDER_INSTALL_DIR} \
     && mkdir -p ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_cmd ${SPIDER_INSTALL_DIR}/local_data \
-    && find ${SPIDER_INSTALL_DIR}/. -type d -exec chmod 2775 {} \; \ 
+    && find ${SPIDER_INSTALL_DIR}/. -type d -exec chmod 2775 {} \; \
     && find ${SPIDER_INSTALL_DIR}/. -type f -name '*.pl' -exec chmod 775 {} \; \
     && (cd ${SPIDER_INSTALL_DIR}/src && make) \
-    && apk del --purge \
+    && apt-get remove --purge -y \
     gcc \
     make \
-    musl-dev \
-    ncurses-dev \
+    libncurses-dev \
     perl-app-cpanminus \
     perl-dev \
-    && rm -rf /var/cache/apk/*
-
+    && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy connection node files - cleanup
 RUN rm -rf /spider/connect/*
