@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.20
 
 
 ARG SPIDER_GIT_REPOSITORY=git://scm.dxcluster.org/scm/spider
