@@ -32,13 +32,12 @@ nano .env
 ```
 
 ## 🛠 Configuration
-- Modify `dxspider/startup` or `dxspider/crontab` to customize settings.
-- Add partner link files to `dxspider/connect` directory.
-- Ports can be mapped in `docker-compose.yml` to suit your network.
+- Modify `startup` or `crontab` to customize settings.
+- Add partner link files to `connect` directory.
 
 ### 3️⃣ Start the DXSpider Container
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
 ### 4️⃣ Check Logs
@@ -61,7 +60,7 @@ docker compose down
 ```
 Then rebuild the container:
 ```bash
-docker compose up --build -d
+docker compose up -d --build
 ```
 
 ## 🤝 Contributing
