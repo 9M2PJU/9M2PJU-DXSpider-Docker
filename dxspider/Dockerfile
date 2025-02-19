@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM alpine:latest
 
 # ARGs for configuration
 ARG SPIDER_GIT_REPOSITORY=git://scm.dxcluster.org/scm/spider
@@ -8,18 +8,20 @@ ARG SPIDER_USERNAME=${SPIDER_USERNAME:-sysop}
 ARG SPIDER_UID=${SPIDER_UID:-1000}
 
 # Install necessary packages and cpanm
-RUN apt-get update && apt-get install -y \
+RUN apk update && apk add --no-cache \
     gcc \
     git \
     make \
-    libncurses-dev \
+    ncurses-dev \
     perl \
     nano \
     netcat-openbsd \
     perl-modules \
-    libmariadb-dev-compat \
+    mariadb-dev \
     wget \
     curl \
+    musl-dev \
+    perl-dev \
     && curl -L https://cpanmin.us | perl - App::cpanminus \
     && cpanm --no-wget Data::Structure::Util \
     && cpanm --no-wget \
@@ -38,7 +40,7 @@ RUN apt-get update && apt-get install -y \
         DBD::mysql \
         DBI \
         Net::CIDR::Lite \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && apk del .build-deps
 
 # Add user and set up git config
 RUN adduser --disabled-password --uid ${SPIDER_UID} --home ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
@@ -52,17 +54,17 @@ RUN git clone -b ${SPIDER_VERSION} ${SPIDER_GIT_REPOSITORY} ${SPIDER_INSTALL_DIR
     && (cd ${SPIDER_INSTALL_DIR}/src && make)
 
 # Clean up unnecessary packages and dependencies
-RUN apt-get remove --purge -y \
+RUN apk del \
         gcc \
         make \
-        libncurses-dev \
-        perl-modules \
-    && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+        ncurses-dev \
+        perl-dev \
+    && rm -rf /var/cache/apk/*
 
 # Install ttyd from GitHub
-RUN curl -L https://github.com/tsl0922/ttyd/releases/download/1.6.1/ttyd_1.6.1_amd64.deb -o ttyd.deb \
-    && dpkg -i ttyd.deb \
-    && rm ttyd.deb
+RUN curl -L https://github.com/tsl0922/ttyd/releases/download/1.6.1/ttyd_1.6.1_amd64.apk -o ttyd.apk \
+    && apk add --no-cache --allow-untrusted ttyd.apk \
+    && rm ttyd.apk
 
 # Copy necessary files
 COPY ./connect /spider/connect/
