@@ -35,10 +35,10 @@ services:
       timeout: 60s
     restart: always
     volumes:
-      - ./startup:/spider/scripts/startup
-      - ./crontab:/spider/local_cmd/crontab
-      - ./connect:/spider/connect
-      - ./motd:/spider/local_data/motd
+      - ./startup:/spider/scripts/startup:rw
+      - ./crontab:/spider/local_cmd/crontab:rw
+      - ./connect:/spider/connect:rw
+      - ./motd:/spider/local_data/motd:rw
     ports:
       - ${CLUSTER_PORT}:${CLUSTER_PORT}
       - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
