@@ -1,7 +1,6 @@
 FROM debian:stable
 
 ARG SPIDER_GIT_REPOSITORY=git://scm.dxcluster.org/scm/spider
-# SPIDER_VERSION can be "mojo" or "master"
 ARG SPIDER_VERSION=mojo
 
 ARG SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR:-/spider}
@@ -16,9 +15,9 @@ RUN apt-get update \
     libncurses-dev \
     perl \
     nano \
-    netcat \
+    netcat-openbsd \
     perl-modules \
-    libmysqlclient-dev \
+    libmariadb-dev-compat \
     ttyd \
     wget \
     && cpanm --no-wget Data::Structure::Util \
@@ -52,7 +51,7 @@ RUN apt-get update \
         perl-modules \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy connection node files - cleanup
+# Copy connection node files
 RUN rm -rf /spider/connect/*
 
 # Copy node connection files over
@@ -67,12 +66,12 @@ COPY startup ${SPIDER_INSTALL_DIR}/scripts
 # Copy crontab
 COPY crontab ${SPIDER_INSTALL_DIR}/local_cmd
 
-# Permissions for spider 
+# Permissions for spider
 RUN chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR}/.
 
 USER ${SPIDER_UID}
 
-# COPY entrypoint.sh file
+# Copy entrypoint.sh file
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
