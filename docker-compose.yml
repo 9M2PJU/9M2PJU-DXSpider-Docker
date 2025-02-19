@@ -1,45 +1,44 @@
 services:
-    build:
-      context: ./dxspider
-      dockerfile: Dockerfile
-      platforms:
-        - "linux/amd64"
-        - "linux/arm64"
-      args:
-        - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH}
-    privileged: true
-    environment:
-      - SPIDER_INSTALL_DIR=/spider
-      - CLUSTER_CALLSIGN=${CLUSTER_CALLSIGN}
-      - CLUSTER_LOCATOR=${CLUSTER_LOCATOR}
-      - CLUSTER_QTH=${CLUSTER_QTH}
-      - CLUSTER_SYSOP_NAME=${CLUSTER_SYSOP_NAME}
-      - CLUSTER_SYSOP_CALLSIGN=${CLUSTER_SYSOP_CALLSIGN}
-      - CLUSTER_SYSOP_EMAIL=${CLUSTER_SYSOP_EMAIL}
-      - CLUSTER_SYSOP_BBS_ADDRESS=${CLUSTER_SYSOP_BBS_ADDRESS}
-      - CLUSTER_LATITUDE=${CLUSTER_LATITUDE}
-      - CLUSTER_LONGITUDE=${CLUSTER_LONGITUDE}
-      - CLUSTER_SYSOP_PORT=${CLUSTER_SYSOP_PORT}
-    healthcheck:
-      test: ["CMD", "nc", "-z", "-v", "localhost", "${CLUSTER_PORT}"]
-      interval: 10s
-      start_period: 5s
-      retries: 3
-      timeout: 60s
-    restart: always
-    volumes:
-      - ./dxspider/startup:/spider/scripts/startup:ro
-      - ./dxspider/crontab:/spider/local_cmd/crontab:ro
-      - ./dxspider/connect:/spider/connect
-      - ./dxspider/motd:/spider/data/motd:ro 
-      - cluster_scripts_data:/spider/scripts
-      - cluster_local_data_data:/spider/local_data
-    ports:
-      - ${CLUSTER_PORT}:${CLUSTER_PORT}
-      - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
-
+  build:
+    context: ./dxspider
+    dockerfile: Dockerfile
+    platforms:
+      - "linux/amd64"
+      - "linux/arm64"
+    args:
+      - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH}
+  privileged: true
+  environment:
+    SPIDER_INSTALL_DIR: /spider
+    CLUSTER_CALLSIGN: ${CLUSTER_CALLSIGN}
+    CLUSTER_LOCATOR: ${CLUSTER_LOCATOR}
+    CLUSTER_QTH: ${CLUSTER_QTH}
+    CLUSTER_SYSOP_NAME: ${CLUSTER_SYSOP_NAME}
+    CLUSTER_SYSOP_CALLSIGN: ${CLUSTER_SYSOP_CALLSIGN}
+    CLUSTER_SYSOP_EMAIL: ${CLUSTER_SYSOP_EMAIL}
+    CLUSTER_SYSOP_BBS_ADDRESS: ${CLUSTER_SYSOP_BBS_ADDRESS}
+    CLUSTER_LATITUDE: ${CLUSTER_LATITUDE}
+    CLUSTER_LONGITUDE: ${CLUSTER_LONGITUDE}
+    CLUSTER_SYSOP_PORT: ${CLUSTER_SYSOP_PORT}
+  healthcheck:
+    test: ["CMD", "nc", "-z", "-v", "localhost", "${CLUSTER_PORT}"]
+    interval: 10s
+    start_period: 5s
+    retries: 3
+    timeout: 60s
+  restart: always
+  volumes:
+    - ./dxspider/startup:/spider/scripts/startup:ro
+    - ./dxspider/crontab:/spider/local_cmd/crontab:ro
+    - ./dxspider/connect:/spider/connect
+    - ./dxspider/motd:/spider/data/motd:ro 
+    - cluster_scripts_data:/spider/scripts
+    - cluster_local_data_data:/spider/local_data
+  ports:
+    - ${CLUSTER_PORT}:${CLUSTER_PORT}
+    - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "200k"
+      max-file: "10"
