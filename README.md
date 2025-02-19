@@ -69,13 +69,23 @@ docker compose up -d
    ```bash
    nano .env  # Configure your settings
    ```
+2. **Cron, startup**
+   ```bash
+   nano startup  # Configure your startup
+   nano crontab # Configure cron
+   ```
+3. **Partner links**
+   ```bash
+   touch connect/9m2pju-2
+   nano connect/9m2pju-2
+   ```
 
-2. **Container Deployment**
+3. **Container Deployment**
    ```bash
    docker compose up -d --build
    ```
 
-3. **Verify Installation**
+4. **Verify Installation**
    ```bash
    docker compose logs -f
    ```
