@@ -1,4 +1,4 @@
-FROM ghcr.io/ubuntu:22.04
+FROM debian:stable
 
 ARG SPIDER_GIT_REPOSITORY=git://scm.dxcluster.org/scm/spider
 # SPIDER_VERSION can be "mojo" or "master"
@@ -17,7 +17,7 @@ RUN apt-get update \
     perl \
     nano \
     netcat \
-    perl-modules-5.34 \
+    perl-modules \
     libmysqlclient-dev \
     ttyd \
     wget \
@@ -49,7 +49,7 @@ RUN apt-get update \
         gcc \
         make \
         libncurses-dev \
-        perl-modules-5.34 \
+        perl-modules \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy connection node files - cleanup
