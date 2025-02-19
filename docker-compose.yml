@@ -4,6 +4,7 @@ services:
       dockerfile: Dockerfile
       platforms:
         - "linux/arm64"
+        - "linux/amd64"
       args:
         - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH}
         - SPIDER_USERNAME=${CLUSTER_DB_USER}
