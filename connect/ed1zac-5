@@ -1,3 +1,0 @@
-timeout 15
-connect telnet dx.ed1zac.net 8000
-'login:' '9m2pju-2'

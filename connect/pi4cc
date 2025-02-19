@@ -1,4 +1,0 @@
-timeout 60
-connect telnet dxc.pi4cc.nl 8000
-'login' '9m2pju-2'
-'password:' 'R1r2A3Ga#'
