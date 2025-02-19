@@ -27,14 +27,12 @@ services:
       start_period: 5s
       retries: 3
       timeout: 60s
-    restart: always  # Correct format for the restart option
+    restart: always
     volumes:
       - ./dxspider/startup:/spider/scripts/startup:ro
       - ./dxspider/crontab:/spider/local_cmd/crontab:ro
       - ./dxspider/connect:/spider/connect
       - ./dxspider/motd:/spider/data/motd:ro 
-      - cluster_scripts_data:/spider/scripts
-      - cluster_local_data_data:/spider/local_data
     ports:
       - ${CLUSTER_PORT}:${CLUSTER_PORT}
       - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
