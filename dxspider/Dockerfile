@@ -1,14 +1,14 @@
 FROM debian:stable
 
+# ARGs for configuration
 ARG SPIDER_GIT_REPOSITORY=git://scm.dxcluster.org/scm/spider
 ARG SPIDER_VERSION=mojo
-
 ARG SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR:-/spider}
 ARG SPIDER_USERNAME=${SPIDER_USERNAME:-sysop}
 ARG SPIDER_UID=${SPIDER_UID:-1000}
 
-RUN apt-get update \
-    && apt-get install -y \
+# Install necessary packages and cpanm
+RUN apt-get update && apt-get install -y \
     gcc \
     git \
     make \
@@ -20,6 +20,7 @@ RUN apt-get update \
     libmariadb-dev-compat \
     wget \
     curl \
+    && curl -L https://cpanmin.us | perl - App::cpanminus \
     && cpanm --no-wget Data::Structure::Util \
     && cpanm --no-wget \
         DB_File \
@@ -37,14 +38,21 @@ RUN apt-get update \
         DBD::mysql \
         DBI \
         Net::CIDR::Lite \
-    && adduser --disabled-password --uid ${SPIDER_UID} --home ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
-    && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
-    && git clone -b ${SPIDER_VERSION} ${SPIDER_GIT_REPOSITORY} ${SPIDER_INSTALL_DIR} \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Add user and set up git config
+RUN adduser --disabled-password --uid ${SPIDER_UID} --home ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
+    && git config --global --add safe.directory ${SPIDER_INSTALL_DIR}
+
+# Clone Spider repository and set up permissions
+RUN git clone -b ${SPIDER_VERSION} ${SPIDER_GIT_REPOSITORY} ${SPIDER_INSTALL_DIR} \
     && mkdir -p ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_cmd ${SPIDER_INSTALL_DIR}/local_data \
     && find ${SPIDER_INSTALL_DIR}/. -type d -exec chmod 2775 {} \; \
     && find ${SPIDER_INSTALL_DIR}/. -type f -name '*.pl' -exec chmod 775 {} \; \
-    && (cd ${SPIDER_INSTALL_DIR}/src && make) \
-    && apt-get remove --purge -y \
+    && (cd ${SPIDER_INSTALL_DIR}/src && make)
+
+# Clean up unnecessary packages and dependencies
+RUN apt-get remove --purge -y \
         gcc \
         make \
         libncurses-dev \
@@ -56,27 +64,18 @@ RUN curl -L https://github.com/tsl0922/ttyd/releases/download/1.6.1/ttyd_1.6.1_a
     && dpkg -i ttyd.deb \
     && rm ttyd.deb
 
-# Copy connection node files
-RUN rm -rf /spider/connect/*
-
-# Copy node connection files over
+# Copy necessary files
 COPY ./connect /spider/connect/
-
-# Copy Message of the day file motd
 COPY motd ${SPIDER_INSTALL_DIR}/data
-
-# Copy Startup script
 COPY startup ${SPIDER_INSTALL_DIR}/scripts
-
-# Copy crontab
 COPY crontab ${SPIDER_INSTALL_DIR}/local_cmd
 
-# Permissions for spider
+# Set permissions for spider directory
 RUN chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR}/.
 
+# Set user for running the Spider application
 USER ${SPIDER_UID}
 
-# Copy entrypoint.sh file
+# Copy entrypoint.sh file and set as entrypoint
 COPY entrypoint.sh /entrypoint.sh
-
 ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
