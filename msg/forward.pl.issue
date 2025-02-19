@@ -1,0 +1,39 @@
+#
+# this is an example message forwarding file for the system
+#
+# The format of each line is as follows
+#
+#     type    to/from/at pattern action  destinations
+#     P/B/F     T/F/A     regex   I/F    [ call [, call ...] ]
+#
+# type: P - private, B - bulletin (msg), F - file (ak1a bull)
+# to/from/at: T - to field, F - from field, A - home bbs, O - origin 
+# pattern: a perl regex on the field requested
+# action: I - ignore, F - forward
+# destinations: a reference to an array containing node callsigns
+#
+# if it is non-private and isn't in here then it won't get forwarded 
+#
+# Currently only type B msgs are affected by this code.
+# 
+# The list is read from the top down, the first pattern that matches
+# causes the action to be taken.
+#
+# The pattern can be undef or 0 in which case it will always be selected
+# for the action specified
+#
+# If the BBS list is undef or 0 and the action is 'F' (and it matches the
+# pattern) then it will always be forwarded to every node that doesn't have 
+# it (I strongly recommend you don't use this unless you REALLY mean it, if
+# you allow a new link with this on EVERY bull will be forwarded immediately
+# on first connection)
+#
+
+package DXMsg;
+
+@forward = (
+'B',	'O', 	'K1XX',	'I',    0,	
+'B', 	'T',	'LOCAL',	'F',	[ qw(GB7TLH GB7DJK-1) ],
+'B', 	'T',	'ALL',	'F',	[ qw(GB7TLH GB7DJK-1 GB7BAA) ],
+'B', 	'T',	'UK',	'F',	[ qw(GB7TLH GB7DJK-1 GB7BAA) ],
+); 

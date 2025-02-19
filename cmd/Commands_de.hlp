@@ -1,0 +1,1856 @@
+#
+# please put your help in in alphabetical order
+#
+# a string search is done in the command field (case is ignored)
+# and all commands matching the asked for command are printed out
+#
+# the order of the fields in each header is 
+#   privilege, command, Description 
+# if the command ends in a - then that line isn't printed, but any
+# subsequent lines are
+#
+#
+#
+# Comment lines are indented before printing
+#
+=== 0^ACCEPT/ANNOUNCE [0-9] <Muster>^Setze eine 'accept' Filter Zeile fuer announce
+Erzeugen einer 'akzeptiere dieses announce' Zeile fuer einen Filter.
+
+Eine accept Filter bedeutet, wenn der announce mit dem Filter uebereinstimmt,
+wird es zum User weitergereicht. Siehe auch HELP FILTERING fuer mehr
+Informationen. Bitte dieses durchlesen um grundsaetzliches ueber die
+Funktionen von Filtern zu erfahren, das erspart so manchen Kummer und Aerger...
+
+Alle dieser Schluesselwoerter koennen verwendet werden:
+
+  info <string>            z.B.: iota oder qsl
+  by <prefixes>            z.B.: G,M,2
+  origin <prefixes>
+  origin_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  origin_itu <prefixes oder nummern>     oder: G,GM,GW
+  origin_zone <prefixes oder nummern>
+  by_dxcc <prefixes oder nummern>
+  by_itu <prefixes oder nummern>
+  by_zone <prefixes oder nummern>
+  channel <prefixes>
+  wx 1                     Filter WX announces
+  dest <prefixes>          z.B.: 6MUK,WDX      (distros)
+
+einige Beispiele:-
+
+  acc/ann dest 6MUK
+  acc/ann 2 by_zone 14,15,16
+  (Das kann auch in einer Zeile sein: acc/ann dest 6MUK or by_zone 14,15,16)
+oder
+  acc/ann by G,M,2 
+
+Man kann die Marke 'all' benutzen um ALLES zu akzeptieren z.B.:
+
+  acc/ann all
+
+
+=== 8^ACCEPT/ANNOUNCE <rufzeichen> [input] [0-9] <Muster>^Announce Filter Sysop Version
+Diese Version erlaubt dem Sysop Filter zu setzen fuer ein Rufzeichne als auch fuer Nodes und User als default. z.B.:-
+
+  accept/ann by G,M,2
+  accept/ann input node_default by G,M,2
+  accept/ann user_default by G,M,2
+
+=== 8^ACCEPT/ROUTE <rufzeichen> [0-9] <Muster>^Setze eine 'accept' Filter Zeile fuer das routing.
+Erzeuge eine 'accept this routing PC Protocol' Zeile fuer das Filter. 
+
+Eine accept Filter Zeile bedeutet das wenn ein PC16/17/19/21/24/41/50 mit dem Filter uebereinstimmt 
+wird es durch das Interface gelassen. Siehe auch HELP FILTERING fuer mehr
+Informationen. Bitte dieses durchlesen um grundsaetzliches ueber die
+Funktionen von Filtern zu erfahren, das erspart so machen Kummer und Aerger...
+
+Alle dieser Schluesselwoerter koennen verwendet werden:
+
+  call <prefixes>        the Rufzeichen von the thingy
+  call_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  call_itu <prefixes oder nummern>     oder: G,GM,GW
+  call_zone <prefixes oder nummern>
+  origin <prefixes>      
+  origin_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  origin_itu <prefixes oder nummern>     oder: G,GM,GW
+  origin_zone <prefixes oder nummern>
+
+einige Beispiele:-
+
+  acc/route gb7djk call_dxcc 61,38 (sende nur UK+Irland Nodes)
+  acc/route gb7djk call gb7djk     (equiv zu SET/ISOLATE)
+
+Du kannst die Marke 'all' benutzen um ALLES zu akzeptieren z.B.:
+
+  acc/route all
+
+
+=== 0^ACCEPT/SPOTS [0-9] <Muster>^Setze eine 'accept' Filter Zeile fuer Spots
+Erzeuge eine 'accept this spot' Zeile fuer das Filter. 
+
+Eine accept Filter bedeutet, wenn der announce mit dem Filter uebereinstimmt,
+wird es zum User weitergereicht. Siehe auch HELP FILTERING fuer mehr
+Informationen. Bitte dieses durchlesen um grundsaetzliches ueber die
+Funktionen von Filtern zu erfahren, das erspart so machen Kummer und Aerger...
+
+Alle dieser Schluesselwoerter koennen verwendet werden:
+
+  freq <range>           z.B.: 0/30000 oder hf oder hf/cw oder 6m,4m,2m
+  on <range>             gleich wie 'freq'
+  call <prefixes>        z.B.: G,PA,HB9
+  info <string>          z.B.: iota oder qsl
+  by <prefixes>            
+  call_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  call_itu <prefixes oder nummern>     oder: G,GM,GW
+  call_zone <prefixes oder nummern>
+  by_dxcc <prefixes oder nummern>
+  by_itu <prefixes oder nummern>
+  by_zone <prefixes oder nummern>
+  origin <prefixes>
+  channel <prefixes>
+
+Fuer Frequenzen koennen alle Band Namen welche mit SHOW/BANDS definiert
+und zu sehen sind, benutzt werden.
+Es kann auch ein Subband Name wie: cw, rtty, data, ssb -
+eingesetzt werden, folglich auch: hf/ssb. Auch ein Bereich wie z.B.
+0/30000 ist gueltig.
+Das ist effizienter als einfach: freq HF zu nehmen.
+
+einige Beispiele:-
+
+  acc/spot 1 on hf/cw
+  acc/spot 2 on vhf and (by_zone 14,15,16 or call_zone 14,15,16)
+
+Du kannst die Marke 'all' benutzen um ALLES zu akzeptieren z.B.:
+
+  acc/spot 3 all
+
+
+
+=== 8^ACCEPT/SPOTS <rufzeichen> [input] [0-9] <Muster>^Spot Filter Sysop Version
+Diese Version erlaubt dem Sysop ein Filter fuer ein Rufzeichen als auch fuer
+Nodes und Users als default zu setzen z.B.:-
+
+  accept/spot db0sue-7 1 by_zone 14,15,16
+  accept/spot node_default all
+  set/hops node_default 10
+
+  accept/spot user_default by G,M,2
+
+=== 0^ACCEPT/WCY [0-9] <Muster>^Setzt ein 'accept' WCY Filter
+Es waere etwas ungewoehnlich es zu tun, aber wenn Du willst, kann auch
+hier nach folgenden Regeln gefiltert werden:-
+
+  by <prefixes>            z.B.: G,M,2         
+  origin <prefixes>
+  origin_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  origin_itu <prefixes oder nummern>     oder: G,GM,GW
+  origin_zone <prefixes oder nummern>
+  by_dxcc <prefixes oder nummern>
+  by_itu <prefixes oder nummern>
+  by_zone <prefixes oder nummern>
+  channel <prefixes>
+
+Es gibt keine Beispiele des WCY Broadcasts da diese nur von einem
+Cluster aus (DB0SUE-7) ins Netz gespeist werden.
+Wenn du sie nicht willst - UNSET/WCY
+
+Sieh HELP FILTER fuer mehr Information.
+
+=== 8^ACCEPT/WCY <rufzeichen> [input] [0-9] <Muster>^WCY Filter Sysop Version
+Diese Version erlaubt dem Sysop ein Filter fuer ein Rufzeichen als auch fuer
+Nodes und Users als default zu setzen z.B.:-
+
+  accept/wcy node_default all
+  set/hops node_default 10
+
+=== 0^ACCEPT/WWV [0-9] <Muster>^Setzt ein 'accept' WWV Filter
+Es waere etwas ungewoehnlich es zu tun, aber wenn Du willst, kann auch
+hier nach folgenden Regeln gefiltert werden:-
+
+  by <prefixes>            z.B.: G,M,2         
+  origin <prefixes>
+  origin_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  origin_itu <prefixes oder nummern>     oder: G,GM,GW
+  origin_zone <prefixes oder nummern>
+  by_dxcc <prefixes oder nummern>
+  by_itu <prefixes oder nummern>
+  by_zone <prefixes oder nummern>
+  channel <prefixes>
+
+zum Beispiel
+
+  accept/wwv by_zone 4
+
+ist wahrscheinlich das sinnvollste hier, es werden nur WWV Spots aus den
+USA gezeigt (wo diese in der Regel auch eingespeist werden).
+by stations in the US).
+
+Siehe HELP FILTER fuer mehr Information.
+
+=== 8^ACCEPT/WWV <rufzeichen> [input] [0-9] <Muster>^WWV Filter Sysop Version
+Diese Version erlaubt dem Sysop ein Filter fuer ein Rufzeichen als auch fuer
+Nodes und Users als default zu setzen z.B.:-
+
+  accept/wwv db0sue-7 1 by_zone 4
+  accept/wwv node_default all
+  set/hops node_default 10
+
+  accept/wwv user_default by W,K
+
+=== 0^ANNOUNCE <text>^Sendet ein announcement an LOCAL eingeloggte
+Users
+<text> ist der Text des announcement der gesendet werden soll
+
+=== 0^ANNOUNCE FULL <text>^Sendet ein announcement welches
+ueber ALLE Cluster gesendet wird
+
+=== 5^ANNOUNCE SYSOP <text>^Sendet ein announcement nur an Sysops
+
+=== 0^APROPOS <string>^Datenbank Suchhilfe fuer <string>
+Sucht in der Datenbank nach <string> (Gross- Kleinschreibungs unabhaengig)
+und gibt den Namen aller Kommandos aus in dem <string> vorkommt.
+
+=== 0^BLANK [<string>] [<nn>]^Gibt nn (default 1) leere Zeilen (oder strings)
+In der Basisform werden eine oder mehr Leerzeilen ausgegeben.
+Wenn ein Zeichen(kette) als Argument uebergeben wird, bekommt man das
+Zeichen dupliziert auf den Schirm bis ans Ende der Zeile (default 80).
+
+  blank 2
+
+gibt zwei Leerzeilen
+
+  blank - 
+
+gibt eine Reihe von - Zeichen.
+
+  blank abc
+
+gibt 'abcabcabcabcabcabc....'
+
+Das alles macht eigentlich nur Sinn im Zusammenhang mit Skript Files,
+wobei das Maximum auf 9 Zeilen beschraenkt ist.
+
+=== 0^BYE^Beendet die Verbindung mit dem Cluster
+
+=== 5^CATCHUP <node call> All|[<msgno> ...]^Markiere eine Nachricht als gesendet
+
+=== 5^UNCATCHUP <node call> All|[msgno> ...]^Unmarkiere eine Nachricht als gesendet
+When you send Nachrichten the fact that you have forwarded it to another node 
+is remembered so that it isn't sent again. When you have eine new partner
+node and you add their Rufzeichen to your /spider/msg/forward.pl file, all
+outstanding non-private Nachrichten will be forwarded to them. This may well
+be ALL the non-private Nachrichten. You can prevent this by using these 
+commmands:-
+
+  catchup GB7DJK all
+  catchup GB7DJK 300 301 302 303 500-510
+	
+and to undo what you have just done:-
+  
+  uncatchup GB7DJK all
+  uncatchup GB7DJK 300 301 302 303 500-510
+
+which will arrange for them to be forward candidates again.
+
+Order is not important.
+
+=== 0^CLEAR/ANNOUNCE [1|all]^Loescht eine announce Filter Zeile
+Dieses Kommando erlaubt es eine Zeile oder ein ganze announce Filter
+zu loeschen.
+
+siehe CLEAR/SPOTS fuer eine mehr detaillierte Beschreibung.
+
+=== 8^CLEAR/ANNOUNCE [input] <callsign> [0-9|all]^Loescht eine announce Filter Zeile
+Ein Sysop kann das input oder normale output Filter fuer den User oder
+den Node_default bzw. User_default loeschen.
+
+=== 0^CLEAR/ROUTE [1|all]^Loescht eine route Filter Zeile
+Dieses Kommando erlaubt es eine Zeile oder ein ganzes route Filter
+zu loeschen.
+
+siehe CLEAR/SPOTS fuer eine mehr detaillierte Beschreibung.
+
+=== 8^CLEAR/ROUTE [input] <callsign> [0-9|all]^Loescht eine route Filter Zeile
+Ein Sysop kann das input oder normale output Filter fuer den User oder
+den Node_default bzw. User_default loeschen.
+
+=== 0^CLEAR/SPOTS [0-9|all]^Loescht eine spot Filter Zeile
+Dieses Kommando erlaubt es eine Zeile oder ein ganzes spot Filter
+zu loeschen.
+
+Nehmen wir folgende Filtereinstellung an:
+
+  acc/spot 1 on hf/cw
+  acc/spot 2 on vhf and (by_zone 14,15,16 oder call_zone 14,15,16)
+
+und du schreibst:-
+
+  clear/spot 1
+
+bleibt noch:-
+
+  acc/spot 2 on vhf and (by_zone 14,15,16 oder call_zone 14,15,16)
+
+im Filter bestehen.
+
+
+Wenn aber:
+
+  clear/spot all
+
+dann wird das Filter komplett geloescht.
+
+=== 8^CLEAR/SPOTS [input] <callsign> [0-9|all]^Loesche eine spot Filter Zeile
+Ein Sysop kann das input oder normale output Filter fuer den User oder
+den Node_default bzw. User_default loeschen.
+
+=== 0^CLEAR/WCY [1|all]^Loescht eine WCY Filter Zeile
+Dieses Kommando erlaubt es eine Zeile oder ein ganzes WCY Filter
+zu loeschen.
+
+siehe CLEAR/SPOTS fuer eine mehr detaillierte Beschreibung.
+
+=== 8^CLEAR/WCY [input] <callsign> [0-9|all]^Loescht eine WCY Filter Zeile
+Ein Sysop kann das input oder normale output Filter fuer den User oder
+den Node_default bzw. User_default loeschen.
+
+=== 0^CLEAR/WWV [1|all]^Loescht eine WWV Filter Zeile
+Dieses Kommando erlaubt es eine Zeile oder eine ganzes WWV Filter
+zu loeschen.
+
+siehe CLEAR/SPOTS fuer eine mehr detaillierte Beschreibung.
+
+=== 8^CLEAR/WWV [input] <callsign> [0-9|all]^Loescht eine WWV Filter Zeile
+Ein Sysop kann das input oder normale output Filter fuer den User oder
+den Node_default bzw. User_default loeschen.
+
+=== 5^CONNECT <callsign>^Startet eine Verbindung zu einem anderen DX Cluster
+Startet eine Node_to_Node Verbindung. Dieser Prozess erzeugt einen neuen
+'client' Prozess, welcher das Skript /spider/connect/<callsign> benutzt.
+Also vorher entsprechendes Skript erzeugen!
+
+=== 9^DELETE/USER <callsign> ...^Loescht den User aus der User Datenbank
+Dieses Kommando loescht den User Eintrag UNWIDERRUFLICH aus der
+Datenbank.
+
+=== 0^DBAVAIL^Zeigt eine Liste aller vorhandenen Datenbanken im System
+Auch als Alias Kommando SHOW/COMMAND vorhanden.
+
+=== 9^DBCREATE <name>^Erzeuge einen Datenbank Eintrag
+=== 9^DBCREATE <name> chain <name> [<name>..]^Erzeuge einen verketteten Datenbank Eintrag
+=== 9^DBCREATE <name> remote <node>^Erzeuge einen remote Datenbank Eintrag
+DBCREATE erlaubt das definieren eigener Datenbanken im System.
+Sie werden jedoch nur definiert und nicht erzeugt.
+
+Diese so 'erzeugten' Datenbanken sind simple DB_File hash Datenbanken und
+schon mit Indexen versehen.
+
+Das definieren der Datenbank(en) geschieht in seiner Grundform wie z.B.:
+
+  DBCREATE oblast
+
+Die Datenbanken koennen auch verkettet sein mit dem Hinzufuegen des
+'chain' Schluesselwortes.
+Dies laesst alle Datenbanken nacheinander absuchen. Ein typisches
+Beispiel ist:
+
+  DBCREATE sdx_qsl chain sql_ad
+
+Es wird nicht gecheckt ob irgendeine dieser Datenbanken wirklich
+existiert.
+
+Datenbanken koennen auch ausserhalb des Systems vorhanden sein. Um eine
+Datenbank zu erzeugen, die z.B. beim Clusternode GB7DXC liegt, mache:
+
+  DBCREATE buckmaster remote gb7dxc
+
+Remote Datenbanken koennen nicht verkettet werden, wobei aber
+die letzte Datenbank in einer Kette wiederum eine Remote
+Datenbank sein kann z.B.:
+
+  DBCREATE qsl chain gb7dxc
+
+Um zu sehen welche Datenbank definiert sind:
+
+  DBAVAIL
+
+Um den Usern den Umgang mit den neuen Datenbanken zu erleichtern, sollte
+das lokale Aliases File entsprechend geaendert werden.
+Das erlaubt dem User die 'SHOW/<dbname>' Syntax.
+Es ist also notwendig folgende Zeile hinzuzufuegen:-
+
+  's' => [
+    ..
+    ..
+    '^sh\w*/buc', 'dbshow buckmaster', 'dbshow',
+    ..
+    ..
+   ],
+
+das Resultat waere dann z.B.:
+ 
+  SH/BUCK g1tlh
+
+So wie es die User auch von anderen Clustern gewohnt sind.
+
+Siehe DBIMPORT fuer das Importieren der AK1A Format Daten zur Databank.
+Siehe DBSHOW fuer das Auswaehlen einer Datenbankanfrage.
+ 
+=== 9^DBIMPORT <dbname> <filename>^Importiert AK1A Daten in eine Datenbank
+Sollen Daten importiert oder neuere Daten in groesserem Umfang in eine
+Datenbank uebertragen werden, findet dieses Kommando Verwendung.
+Es erzeugt oder aktualisiert Eintraege in einer Datenbank.
+Zum Beispiel:
+
+  DBIMPORT oblast /tmp/OBLAST.FUL
+
+importiert die Standard OBLAST Datenbank, welche mit der AK1A
+Software gekommen ist, in die lokale oblast Datenbank.
+
+=== 9^DBREMOVE <dbname>^Loescht eine Datenbank
+DBREMOVE loescht eine Datebank komplett und ebenso jedes Datenfile das
+mit ihr verbunden ist.
+
+There is no warning, no comeback, no safety net... 
+
+Zum Beispiel:
+
+  DBREMOVE oblast 
+
+loescht die oblast Datenbank vom System und ebenso die damit verbundenen
+Datenfiles.
+
+=== 0^DBSHOW <dbname> <key>^Zeigt einen Eintrag, wenn er existiert, in einer Datenbank
+Dies ist das User Interface fuer das Datenbank System.
+
+Wenn der Sysop entsprechend das Aliases File eingerichtet hat, kann der
+User das gewohnte AK1A Kommando:
+
+  SH/BUCK G1TLH
+
+benutzen. Hat er nicht oder die Datenbank existiert nicht (DBAVAIL or
+SHOW/COMMAND) geht es auch mit:
+
+  DBSHOW buck G1TLH
+
+=== 9^DEBUG^Setzt das Cluster Program in den Debug Mode
+Ausfuehren dieses Kommandos hat nur einen Effekt wenn das Cluster im
+Debug Mode laeuft z.B.:
+
+	perl -d cluster.pl
+
+Es beendet das Cluster sofort nachdem das Debug Kommando beendet wurde.
+
+=== 0^DIRECTORY^Listet Nachrichten
+=== 0^DIRECTORY ALL^Listet alle Nachrichten
+=== 0^DIRECTORY OWN^Listet eigene Nachrichten
+=== 0^DIRECTORY NEW^Listet alle neuen Nachrichten
+=== 0^DIRECTORY TO <rufzeichen>^Listet alle Nachrichten an <call>
+=== 0^DIRECTORY FROM <rufzeichen>^Listet alle Nachrichten von <call>
+=== 0^DIRECTORY SUBJECT <string>^Listet alle Nachrichten mit <string> im Subject
+=== 0^DIRECTORY <nn>^Listet letzte <nn> Nachrichten
+=== 0^DIRECTORY <from>-<to>^Listet Nachrichten <von> Nachricht <bis> Nachricht
+Listet die Nachrichten in dem Nachrichten Directory.
+
+Ein 'p' hinter einer Nachrichten Nummer zeigt an das es sich um eine
+private Nachricht handelt.
+Ein '-' zeigt an das die Nachricht bereits gelesen wurde.
+
+Es koennen als <rufzeichen> alle Escape Character wie z.B. '*' und
+'?' verwendet werden.
+
+
+Die variablen Directory Kommandos koennen auch gemixt werden z.B.:-
+
+   DIR TO G1TLH 5
+oder 
+   DIR SUBJECT IOTA 200-250
+
+Die Kommandos koennen auch im AK1A Style verwandt werden:-
+
+   DIR/T G1* 10
+   DIR/S QSL 10-100 5
+
+=== 5^DIRECTORY-^
+Sysops koennen alle User Nachrichten sehen.
+
+=== 8^DISCONNECT <rufzeichen> [<rufzeichen> ...]^Disconnectet einen User oder ein Cluster
+Disconnectet <rufzeichen> lokal connected
+
+=== 0^DX [BY <rufzeichen>] <freq> <rufzeichen> <bemerkung>^Sendet einen DX Spot
+So werden DX Spots an andere User gesendet. Hierbei ist es egal
+ob zuerst die <freq> oder das <rufzeichen> genannt wird.
+
+   DX FR0G 144.600
+   DX 144.600 FR0G
+   DX 144600 FR0G 
+
+ergibt immer das gleiche Resultat. Zusaetzlich koennen auch Bemerkungen
+im Zusammenhang mit dem Spot gemacht werden:
+
+   DX FR0G 144600 this is eine test
+
+
+Die <freq> wird verglichen mit den verfuegbaren Baendern die im Cluster
+gesetzt sind. Siehe SHOW/BANDS fuer mehr Informationen.
+
+=== 9^EXPORT <msgno> <filename>^Exportiert eine Nachricht in ein File
+Exportiert eine Nachricht in ein File. Dieses Kommando kann nur von einem
+prviligiertem User an der Konsole ausgefuehrt werden.
+Das daraus produzierte File kann in das Cluster zurueck importiert werden,
+da es in das Import Directory (/spider/msg/import) plaziert wurde.
+
+Das Kommando ueberschreibt kein existierendes File.
+
+Beispiel:-
+
+  EXPORT 2345 /tmp/a
+
+=== 9^EXPORT_USERS [<filename>]^Exportiert die User Datenbank in ein ascii File
+Exportiert die User Datenbank in ein File in ascii Format.
+Wenn kein Filename angegeben wird, geht es automatisch in ein
+File in /spider/data/user_asc.
+
+Sollte das File bereits existieren, wird es umbenannt in <filename>.o.
+Bis zu 5 Files koennen so angesammelt werden, jedes mit einem
+extra 'o' im Suffix.
+
+Achtung:
+Es wird in jedes File geschrieben zu dem man access hat.
+
+=== 0^FILTERING...^Filter in DXSpider
+Es gibt etliche Variationen von Filter im DXSpider System.
+Sie alle benutzen den gleichen Mechanismus.
+
+Generell koennen 'reject' oder 'accept' Filter erzeugt werden die bis
+10 Zeilen enthalten koennen.
+
+Beispiel:-
+ 
+  accept/spots .....
+  reject/spots .....
+
+wobei ..... fuer die spezifischen Kommandos des Filtertypes stehen. Es
+gibt Filter fuer spots, wwv, announce, wcy und (fuer Sysops) connects.
+Siehe auch die verschiedenen accept oder reject Kommando Referenzen
+fuer mehr details.
+
+Es gibt auch ein Kommando welches eine oder mehrere Zeilen eines Filters
+loeschen und ein Kommando um sich die Filtereinstellungen anzeigen zu
+lassen. Diese sind:-
+
+  clear/spots 1
+  clear/spots all
+
+und
+  
+  show/filter
+
+Es gibt ein clear/xxxx Kommando fuer jeder Art von Filter.
+xxxx steht hier fuer spots, announce, route, wwv, wcy.
+
+Wir werden die Filteranwendung hier auf spots beziehen, sie koennen
+das Prinzip jedoch auf alle Arten von Filtern anwenden.
+
+Es gibt zwei Hauptarten von Filtern, 'accept' und 'reject';
+welches Sie anwenden, haengt davon ab wie Sie "die Welt sehen wollen"
+und was Sie zuguterletzt erhalten wollen.
+Jedes Filter hat maximal 10 Zeilen, welche von oben nach unten
+abgearbeitet werden. Die Zeilenlaenge ist unbegrenzt.
+Sobald eine Zeile uebereinstimmt, wird entsprechende Aktion
+die Sie spezifiziert haben ausgefuehrt.
+Zum Beispiel bedeutet reject "ignoriere" es und accept bedeutet
+"gib es mir".
+
+Das wichtigste ist aber sich daran zu erinnern das ein 'reject'
+Filter (z.B. reject/spots) alles sendet was nicht mit der
+Filterzeile uebereinstimmt, waehrend ein 'accept' alles
+unterdrueckt was nicht mit der Filterzeile uebereinstimmt.
+Wenn ich zum Beispiel einen ein Zeilen accept filter:-
+
+  accept/spots on vhf and (by_zone 14,15,16 oder call_zone 14,15,16)
+
+dann bekomme ich automatisch NUR VHF spots von bzw. nach CQ Zone
+14, 15 und 16. Ein reject Filter wie z.B.:-
+
+  reject/spots on hf/cw
+
+gibt alles AUSGENOMMEN HF CW Spots. Fuer interessierte am IOTA
+Programm koennte man:-
+
+  reject/spots on hf/cw and not info iota
+
+oder
+
+  accept/spots not on hf/cw oder info iota
+
+setzen, was beides die gleiche Bedeutung hat. Man sollte etwas
+probieren bis man Vertraut mit der Wirkungsweise ist.
+
+Ja und man kann accept und reject Filter mixen in einer Zeile,
+aber das sollte dann doch besser unterbleiben, es sei denn
+Sie kennen die Auswirkungen bzw. die Telefonnummer des Sysops ;-)
+
+Filter koennen in logische Einheiten (Zeilen) unterteilt sein,
+entweder um sie besser zu verstehen oder uebersehen zu koennen.
+Ein Beispiel:-
+
+  reject/spots 1 on hf/cw
+  reject/spots 2 on 50000/1400000 not (by_zone 14,15,16 oder call_zone 14,15,16)  
+
+Diese Einstellung ignoriert alle HF CW Spots und ignoriert jeden
+VHF Spot zwischen 50Mhz und 1.4Ghz wo der Spotter nicht aus Zone 14,15
+oder 16 kommt oder der gespottete nicht aus Zone 14,15 oder 16 kommt.
+
+Die 1 bzw. 2 ist jeweils die Zeilennummer.
+Wird keine Zeilennummer angegeben, wird per default 1 angenommen.
+Es sind 10 Zeilen moeglich (0...9).
+
+Das Wort 'and' kann ausgelassen werden, dieses ist schon eingebaut.
+Es duerfen jede Anzahl von Klammern verwendet werden um die
+Gewichtung des Ausdruckes hervorzuheben. Wie in der Mathematik
+haben auch hier Klammerausdruecke Vorrang und in manchen
+Ausdruecken sind Klammern ein muss :-
+
+  (on 50000/1400000 and by_zone 14,15,16) oder call_zone 14,15,16 
+
+Gross- Kleinschreibung spielt keine Rolle, 'and by_zone' ist das
+gleiche wie 'AND by_ZONE'.
+
+Soll das Filter geaendert werden, ist es moeglich einfach eine Zeile
+des Filters neu zu schreiben. Zum Beispiel:-
+
+  reject/spots 1 on hf/ssb
+
+oder um Zeile 1 des spot Filters zu loeschen
+
+  clear/spots 1
+
+oder um ALLE spot Filter zu loeschen
+
+  clear/spots all
+
+Gleichermassen kann dieses auf alle anderen Filtertypen
+angewendet werden:-
+
+  clear/announce
+  clear/wcy
+  clear/wwv
+
+Fuer den erfahrenen Benutzer:-
+
+Ist man ersteinmal zufrieden mit den Resultaten, moechte man vielleicht
+ein wenig experimentieren.
+
+Mein Beispiel welches hf/cw spots filtert und vhf/uhf spots von EU
+akzeptiert, kann auch in einer Mischform geschrieben werden z.B.:
+
+  rej/spot on hf/cw
+  acc/spot on 0/30000
+  acc/spot 2 on 50000/1400000 and (by_zone 14,15,16 oder call_zone 14,15,16)
+
+In dem Beispiel wird das reject Filter zuerst ausgefuehrt. Jeder
+NICHT hf/cw Spot wird an das accept Filter (2 Zeile) weitergereicht,
+welches alles andere auf HF durchlaesst.
+Man kann also sagen das jedes reject Filter ein verhuelltes accept Filter
+ist und umgekehrt in Kombination miteinander.
+
+Die naechste Zeile laesst alles auf VHF/UHF von EU durch.
+
+=== 8^FORWARD/LATLONG <node_call>^Sendet Breiten- und Laengengrad Information zu einem anderen Cluster
+Diese Kommando sendet alle vorhandenen Breiten- und Laengengrad Informationen.
+Es ist von Vorteil wenn ein Cluster diese Informationen erhalt, da es dann
+auch mehr Locator Infos besitzt. Ist also z.B. SET/DXGRID gesetzt,
+erscheinen diese Locator Infos in der Spot Ausgabezeile.
+Da es sich jedoch um sehr viele Infos handeln kann, ist es nicht
+empfehlenswert diese Daten auf einem langsame Link zu forwarden.
+
+=== 1^FORWARD/OPERNAM <rufzeichen>^Sendet Information fuer dieses <rufzeichen> an alle Cluster
+Dieses Kommando sendet alle verfuegbaren Informatioen aus dem Userfile,
+welche in einem PC41 Protokoll gebroadcastet werden.
+Hierbei kann es sich handeln um Name, QTH, Location und Homenode.
+ 
+=== 0^HELP^Das Hilfe Kommando
+Hilfe ist fuer fast alle Kommandos verfuegbar. Die Syntax lautet:-
+
+  HELP <cmd>
+  
+Wobei <cmd> der Name des Kommandos ist fuer das Hilfe gefordert wird.
+
+Alle Kommandos koennen abgekuerzt werden. Zum Beispiel
+SHOW/DX als SH/DX, ANNOUNE zu AN und so weiter.
+
+Schau dir das APROPOS <string> Kommando an. Es durchsucht die
+Hilfe Datenbank nach <string> und gibt eine Liste aehnlicher
+Kommandos, die man dann mit HELP <cmd> ansehen kann.
+
+=== 5^INIT <node>^Re-initialisiert einen Link zu einem AK1A kompatiblen Node
+Dieses Kommando versucht den Link zu einem gewoehnlicherweise AK1A
+Node, welches etwas durcheinander geraten zu sein scheint, zu
+re-initialisieren. Vermutlich funktioniert es, aber sicherheitshalber
+sollte man doch den Node einfach disconnecten.
+  
+=== 0^KILL <msgno> [<msgno..]^Loescht eine Nachricht vom lokalen System
+=== 0^KILL <from msgno>-<to msgno>^Loescht einen Bereich von Nachrichten
+=== 0^KILL from <regex>^Loescht Nachrichten von einem Rufzeichen oder Muster
+=== 0^KILL to <regex>^Loescht Nachrichten an ein Rufzeichen oder Muster
+=== 5^KILL FULL <msgno> [<msgno..]^Loescht eine Nachricht vom ganzen Cluster
+Loescht eine Nachricht vom lokalen System. Man kann nur Nachrichten loeschen
+die an einen selbst gerichtet sind oder von einem selbst verfasst (aus-
+genommen der Sysop).
+
+  KILL 1234-1255
+
+Loescht Nachrichten von Nummer 1234 bis 1255.
+
+  KILL from g1tlh
+
+Loescht alle Nachrichten von g1tlh. Aehnlich:
+
+  KILL to g1tlh
+
+Loescht alle Nachrichten an g1tlh.
+
+  KILL FULL 1234
+ 
+Loescht eine Nachricht (evtl. ein 'bulletin') vom Cluster System. 
+
+Hier wurde das Subjekt Feld gebraucht, also alle Nachrichten mit
+dem Subjekt FULL werden geloescht!
+
+=== 6^KILL EXPunge <msgno> [<msgno..]^Loescht eine Nachricht
+Loeschen einer Nachricht mit dem normalen KILL Kommandos markiert diese
+nur. Die Loeschung selbst passiert meist erst nach ein paar Tagen.
+
+Das KILL EXPUNGE Kommando wird die Nachricht mehr oder weniger sofort
+loeschen.
+
+=== 0^LINKS^Zeigt welche Nodes physikalisch connected sind
+Dies ist eine Schnellanzeige die zeigt welche Links connected sind
+und ein paar zusaetzliche Informationen.
+Siehe auch WHO fuer eine Liste aller Verbindungen.
+
+=== 9^LOAD/ALIASES^Neuladen der Kommando alias Tabelle
+Nachdem editieren von /spider/cmd/Aliases muss diese mit
+diesem Kommando neu geladen werden (waehrend das Cluster laeuft)
+um sofort zu wirken.
+
+=== 9^LOAD/BANDS^Neuladen der Band limit Tabelle
+Nach editieren von /spider/data/bands.pl muss diese wieder neu geladen
+werden (waehrend das Cluster laeuft) um sofort zu wirken.
+
+=== 9^LOAD/BADMSG^Neuladen der bad Nachrichten Tabelle
+Laedt das /spider/msg/badmsg.pl neu wenn es geaendert wurde waehrend
+das Cluster in Betrieb ist.
+Diese Tabelle enthaelt eine Anzahl von perl regulaeren Ausdruecken
+welche mit den Nachrichten verglichen wird. Sobald Uebereinstimmung
+besteht, wird die Nachricht augenblicklich nach dem Empfang geloescht.
+
+=== 9^LOAD/BADWORDS^Neuladen der bad Woerter Tabelle
+Laedt das /spider/data/badwords File neu wenn es geaendert wurde waehrend
+das Cluster in Betrieb ist.
+Dieses File enthaelt eine Liste von Woertern die, einmal in Textstuecken
+auf der Protokoll Ebene verglichene und gefundene Woerter, dieses
+Frame ablehnt.
+
+=== 9^LOAD/CMD_CACHE^Neuladen des automatsichen Kommando Cache
+Normalerweise, wenn ein Kommando File im cmd oder local_cmd
+Verzeichnis geaendert wird, wird dieses neue File automatisch
+im Cluster Programm aufgenommen. Manchmal kann es jedoch auch
+etwas durcheinander sein ;-) when eine groessere Anzahl von
+move oder delete Kommandos im local_cmd Verzeichnis ausgefuehrt
+wurden...dieses Kommando macht einen Reset auf den Zustand wie
+er noch beim letzten Cluster start war.
+
+=== 9^LOAD/FORWARD^Neuladen der msg forwarding routing table
+Laedt das /spider/msg/forward.pl File neu wenn es geaendert wurde waehrend
+das Cluster in Betrieb ist.
+
+=== 9^LOAD/MESSAGES^Neuladen des System Nachrichten Files
+Laedt das /spider/msg/Messages File neu wenn es geaendert wurde waehrend
+das Cluster in Betrieb ist.
+Dieses File enthaelt die System Nachrichten, u.a. auch die anderer
+Sprachen. Sollte irgendetwas in der Form:-
+
+unknown message 'xxxx' in lang 'en'
+
+erscheinen, sollte dieses File ueberarbeitet werden.
+
+=== 9^LOAD/PREFIXES^Neuladen der prefix Tabelle
+Laedt das /spider/data/prefix_data.pl File neu wenn es geaendert wurde waehrend
+das Cluster in Betrieb ist.
+
+=== 5^MERGE <node> [<no spots>/<no wwv>]^Fragt nach den letzten spots und WWV 
+MERGE erlaubt es nach einem neu-connect die spot und WWV Datenbank auf dem
+neuesten Stand zu halten. Per default werden die letzen 10 spots und die
+letzten 5 WWVs gemergt. Der Node muss lokal connectet sein.
+
+=== 9^MSG <cmd> <msgno> [data ... ]^Aendert verschiedene Nachrichten Parameter
+Aendert Nachrichten Parameters wie To, From, Subject, egal ob Privat oder Bulletin oder um ein return receipt (RR) zu erlangen oder eine Nachricht vom
+Timeout zu bewahren.
+
+  MSG TO <msgno> <rufzeichen>     - aendere TO Rufzeichen auf <rufzeichen>
+  MSG FRom <msgno> <rufzeichen>   - aendere FROM Rufzeichen auf <rufzeichen>
+  MSG PRrivate <msgno>      - setze private flag
+  MSG NOPRrivate <msgno>    - unset private flag
+  MSG RR <msgno>            - setze RR flag
+  MSG NORR <msgno>          - unset RR flag
+  MSG KEep <msgno>          - setze das keep flag (Nachricht wird nie geloescht)
+  MSG NOKEep <msgno>        - unset das keep flag
+  MSG SUbject <msgno> <new> - aendere das Subject auf <new>
+  MSG WAittime <msgno>      - remove any waitting time for this message
+  MSG NOREad <msgno>        - markiere Nachricht als ungelesen
+  MSG REad <msgno>          - markiere Nachricht als gelesen
+  MSG QUeue                 - queue any outstanding bulletins
+  MSG QUeue 1               - queue any outstanding private message
+
+Der Status einer Nachricht kann mit:-
+
+  STAT/MSG <msgno>      
+
+angezeigt werden. Hier werden detaillierte Informationen angezeigt.
+   
+=== 8^PC <rufzeichen> <text>^Sendet text (z.B. PC Protokoll) an <rufzeichen>
+Dieses Kommando erlaubt es an ein lokal connectetes Rufzeichen
+einen Protokoll Text zu senden um damit eventuelle Probleme
+aufzudecken.
+
+   pc gb7djk PC33^GB7TLH^GB7DJK^400^
+oder 
+   pc G1TLH Try doing that properly!!!
+
+=== 0^KILL <msgno> [<msgno> ...]^Entfernt oder loescht eine Nachricht vom System
+Hiermit kann man sich seiner eigenen Nachrichten entledigen. Es koennen
+eine oder mehrere Nachrichten zur gleichen Zeit geloescht werden.
+
+=== 5^KILL <from>-<to>^Entfernt einen Bereich von Nachrichten vom System
+=== 5^KILL FROM <rufzeichen>^Entfernt alle Nachrichten von einem Rufzeichen
+=== 5^KILL TO <rufzeichen>^Entfernt alle Nachrichten an ein Rufzeichen
+=== 5^KILL FULL <msgno> [<msgno]^Entfernt eine Nachricht vom ganzen Cluster
+=== 5^KILL^
+Als Sysop kann man jede Nachricht vom System entfernen.
+
+=== 1^PING <node call>^Checkt die Link Qualitaet zwischen Nodes
+Dieses Kommando erlaubt das senden eines Frames an einen anderen
+Cluster Node und man erhaelt einen return frame. Die Antwort
+Zeit wird gemessen und ausgegeben. Dadurch laesst sich auf die
+Linkqualitaet zurueck schliessen. Die Zeitangabe ist in Sekunden.
+Jedes "sichtbare" Cluster kann gepingt werden.
+
+=== 1^RCMD <node call> <cmd>^Sendet ein Kommando an ein anderes DX Cluster
+Dieses Kommando erlaubt es nahezu jedes Kommando an ein anderes DX Cluster
+zu senden.
+
+Ob man eine Antwort auf das Kommando bekommt ist abhaenging von
+a) weiss das System das das Node Rufzeichen ein Cluster ist
+b) ob das System RCMDs von diesem Node erlaubt und
+c) hat man genuegend Privilegien ein RCMD auszufuehren
+
+=== 0^READ^Liest die naechste ungelesene private Nachricht adressiert an mich
+=== 0^READ <msgno>^Liest die Nachricht mit Nummer nn
+Man kann alle Nachrichten lesen die keinen "Privat" Status haben und
+Nachrichten die von einem selbst geschrieben bzw. an einen adressiert sind.
+
+=== 5^READ-^
+Als Sysop kann man alle Nachrichten lesen.
+
+=== 0^REJECT/ANNOUNCE [0-9] <Muster>^Setzt eine 'reject' Filter Zeile fuer announce
+Erzeugt ein 'lehne dieses announce ab' Filter.
+
+Eine reject Filter Zeile bedeutet das wenn ein announce uebereinstimmt mit dem
+Filter es nicht an den User weitergeleitet wird.
+Siehe HELP FILTERING fuer mehr Infos. Bitte das gut durchlesen um zu verstehen
+wie Filter arbeiten, das erspart viel Aerger ;-)
+
+Folgende Schluesselwoerter koennen in einer Zeile angewendet werden:-
+
+  info <string>            z.B.: iota oder qsl
+  by <prefixes>            z.B.: G,M,2         
+  origin <prefixes>
+  origin_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  origin_itu <prefixes oder nummern>     oder: G,GM,GW
+  origin_zone <prefixes oder nummern>
+  by_dxcc <prefixes oder nummern>
+  by_itu <prefixes oder nummern>
+  by_zone <prefixes oder nummern>
+  channel <prefixes>
+  wx 1                     Filter WX announces
+  dest <prefixes>          z.B.: 6MUK,WDX      (distros)
+
+einige Beispiele:-
+
+  rej/ann by_zone 14,15,16 and not by G,M,2
+ 
+Hier kann man sehen das das tag 'all' alle announces unterdruecken
+wuerde.
+
+  rej/ann all
+
+=== 8^REJECT/ANNOUNCE <rufzeichen> [input] [0-9] <Muster>^Announce Filter Sysop Version
+Diese Version erlaubt es dem Sysop Filter fuer ein Rufzeichen, das default fuer
+einen Node oder einen User zu setzen z.B.:-
+
+  reject/ann by G,M,2
+  reject/ann input node_default by G,M,2
+  reject/ann user_default by G,M,2
+
+=== 0^REJECT/SPOTS [0-9] <Muster>^Setzt eine 'reject' Filter Zeile fuer spots
+Erzeugt ein 'lehne diesen spot ab' Filter.
+
+Eine reject Filter Zeile bedeutet das wenn ein spot uebereinstimmt mit dem
+Filter es nicht an den User weitergeleitet wird.
+Siehe HELP FILTERING fuer mehr Infos. Bitte das gut durchlesen um zu verstehen
+wie Filter arbeiten, das erspart viel Aerger ;-)
+
+Folgende Schluesselwoerter koennen in einer Zeile angewendet werden:-
+
+  freq <range>           z.B.: 0/30000 oder hf oder hf/cw oder 6m,4m,2m
+  on <range>             gleich wie 'freq'
+  call <prefixes>        z.B.: G,PA,HB9
+  info <string>          z.B.: iota oder qsl
+  by <prefixes>            
+  call_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  call_itu <prefixes oder nummern>     oder: G,GM,GW
+  call_zone <prefixes oder nummern>
+  by_dxcc <prefixes oder nummern>
+  by_itu <prefixes oder nummern>
+  by_zone <prefixes oder nummern>
+  origin <prefixes>
+  channel <prefixes>
+
+
+Fuer Frequenzen koennen alle Band Namen welche mit SHOW/BANDS definiert
+und zu sehen sind, benutzt werden.
+Es kann auch ein Subband Name wie: cw, rtty, data, ssb -
+eingesetzt werden, folglich auch: hf/ssb. Auch ein Bereich wie z.B.
+0/30000 ist gueltig.
+Das ist effizienter als einfach: freq HF zu nehmen.
+
+einige Beispiele:-
+
+  rej/spot 1 on hf
+  rej/spot 2 on vhf and not (by_zone 14,15,16 or call_zone 14,15,16)
+
+Das tag 'all' kann auch hier angewendet werden um ALLE spots zu
+unterdruecken z.B.:-
+
+  rej/spot 3 all
+
+das macht in einem Cluster dann aber wohl wenig Sinn ;-)
+
+=== 8^REJECT/ROUTE <rufzeichen> [0-9] <Muster>^Setzt eine 'reject' Filter Zeile fuer routing
+Erzeugt eine 'lehne dieses PC Protokoll' Zeile fuer ein Filter.
+
+Eine reject Filter Zeile bedeutet das wenn ein PC16/17/19/21/24/41/50 mit
+dem Filter uebereinstimmt, wird es NICHT durch das Interface gelassen.
+Siehe auch HELP FILTERING fuer mehr Informationen.
+Bitte dieses durchlesen um grundsaetzliches ueber die Funktionen von Filtern
+zu erfahren, das erspart so machen Kummer und Aerger...
+
+Folgende Schluesselwoerter koennen in einer Zeile angewendet werden:-
+
+  call <prefixes>        das Rufzeichen eines 'Boesewichtes'
+  call_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  call_itu <prefixes oder nummern>     oder: G,GM,GW
+  call_zone <prefixes oder nummern>
+  origin <prefixes>      das Interface (kann ein Node Call sein)
+  origin_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  origin_itu <prefixes oder nummern>     oder: G,GM,GW
+  origin_zone <prefixes oder nummern>
+
+einige Beispiele:-
+
+  rej/route gb7djk call_dxcc 61,38 (everything except  UK+EIRE nodes)
+
+Das tag 'all' kann angewendet werden um alle Nodes zu unterdruecken :-
+
+  rej/route all
+
+=== 8^REJECT/SPOTS <rufzeichen> [input] [0-9] <Muster>^Spot Filter Sysop Version
+Diese Version erlaubt einem Sysop ein Filter fuer ein Rufzeichen, oder auch
+den default fuer Nodes und User zu setzen z.B.:-
+
+  reject/spot db0sue-7 1 by_zone 14,15,16
+  reject/spot node_default all
+  set/hops node_default 10
+
+  reject/spot user_default by G,M,2
+
+=== 0^REJECT/WCY [0-9] <Muster>^Setzt ein 'reject' WCY Filter
+Einige Beispiele:-
+
+  by <prefixes>            z.B.: G,M,2         
+  origin <prefixes>
+  origin_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  origin_itu <prefixes oder nummern>     oder: G,GM,GW
+  origin_zone <prefixes oder nummern>
+  by_dxcc <prefixes oder nummern>
+  by_itu <prefixes oder nummern>
+  by_zone <prefixes oder nummern>
+  channel <prefixes>
+
+Normalerweise belaesst man es aber bei maximal die WCY Broadcasts zu
+unterdruecken (siehe auch UNSET/WCY), da WCY nur in einem Node
+eingespeist wird.
+
+=== 8^REJECT/WCY <rufzeichen> [input] [0-9] <Muster>^WCY Filter Sysop Version
+Diese Version erlaubt einem Sysop ein Filter fuer ein Rufzeichen, oder auch
+den default fuer Nodes und User zu setzen z.B.:-
+
+  reject/wcy gb7djk all
+
+=== 0^REJECT/WWV [0-9] <Muster>^Setzt ein 'reject' WWV Filter
+Einige Beispiele:-
+
+  by <prefixes>            z.B.: G,M,2         
+  origin <prefixes>
+  origin_dxcc <prefixes oder nummern>    z.B.: 61,62 (von z.B.: sh/pre G)
+  origin_itu <prefixes oder nummern>     oder: G,GM,GW
+  origin_zone <prefixes oder nummern>
+  by_dxcc <prefixes oder nummern>
+  by_itu <prefixes oder nummern>
+  by_zone <prefixes oder nummern>
+  channel <prefixes>
+
+  reject/wwv by_zone 14,15,16
+
+=== 8^REJECT/WWV <rufzeichen> [input] [0-9] <Muster>^WWV Filter Sysop Version
+Diese Version erlaubt einem Sysop ein Filter fuer ein Rufzeichen, oder auch
+den default fuer Nodes und User zu setzen z.B.:-
+
+  reject/wwv db0sue-7 1 by_zone 4
+  reject/wwv node_default all
+  reject/wwv user_default by W
+
+=== 0^REPLY^Antworte (Privat) auf die zuletzt gelesene Nachricht
+=== 0^REPLY <msgno>^Antworte (Privat) an die Nachricht mit Nummer nn
+=== 0^REPLY B <msgno>^Antworte auf eine Bulletin Nachricht mit Nummer nn
+=== 0^REPLY NOPrivate <msgno>^Antwort auf eine Bulletin Nachricht mit Nummer nn
+=== 0^REPLY RR <msgno>^Antwort auf eine Nachricht mit Nummer nn und read receipt
+Eine Antwort auf eine Nachricht enthaelt automatisch das Subjekt der
+original Nachricht mit vorangestelltem 'Re:'
+
+Auch andere Vermerke wie RR, PRIVATE, NOPRIVATE oder B sind hier gueltig.
+Siehe auch HELP SEND fuer mehr details.
+
+=== 0^SEND <rufzeichen> [<rufzeichen> ...]^Sendet eine Nachricht an ein oder mehrere Rufzeichen
+=== 0^SEND RR <rufzeichen>^Sendet eine Nachricht und fragt nach einem read receipt
+=== 0^SEND COPY <msgno> <rufzeichen>^Sendet eine Kopie einer Nachricht tan jemanden
+=== 0^SEND PRIVATE <rufzeichen>^Sendet eine private Nachricht
+=== 0^SEND NOPRIVATE <rufzeichen>^Sendet eine Nachricht fuer alle lesbar
+All diese SEND Kommandos erzeugen eine Nachricht die entweder an ein
+individuelles Rufzeichen oder an eine Bulletin Adresse (z.B. LOKAL) gehen.
+
+SEND <rufzeichen> bedeutet das gleiche als wenn man SEND PRIVATE
+schreibt. Die Nachricht wird also als 'Privat' markiert und an den Cluster
+Node versendet wo <rufzeichen> connectet ist.
+
+Man kann mehrere Rufzeichen gleichzeitig anschreiben :-
+
+SEND DK8LV DJ6TN DJ4SO
+
+Es koennen verschiedene Kriterien in einer Zeile angewendet werden :-
+
+  SEND RR COPY 123 PRIVATE G1TLH G0RDI
+
+was eine Kopie der Nachricht Nummer 123 an G1TLH und G0RDI als
+private Nachricht versendet und man bekommt ein read receipt wenn beide
+diese Nachricht gelesen haben.
+
+SB ist ein alias fuer SEND NOPRIVATE (also sende ein Bulletin)
+SP ist ein alias fuer SEND PRIVATE
+
+=== 0^SET/ADDRESS <your address>^Speichert eine (Deine) Postadresse
+
+=== 0^SET/ANNOUNCE^Erlaubt announce Nachrichten
+=== 0^UNSET/ANNOUNCE^Stopt announce Nachrichten
+
+=== 0^SET/ANNTALK^Erlaubt talk Nachrichten
+=== 0^UNSET/ANNTALK^Stopt talk Nachrichten
+Durch die Vernetzung verschiedener Cluster Systeme ist es nicht
+immer moeglich User XY connectet bei Node YZ 'anzutalken'.
+
+  unset/anntalk
+
+Hiermit werden announce talks unterdrueckt.
+
+  set/anntalk 
+
+schaltet diese wieder ein. Das ist auch der default.
+
+=== 5^SET/ARCLUSTER <rufzeichen> [<rufzeichen>..]^Macht das Rufzeichen zum AR-Cluster Node
+
+=== 8^SET/BADDX <rufzeichen>..^
+=== 8^UNSET/BADDX <rufzeichen>..^
+Wird z.B. ein Rufzeichen gespottet welches offensichtlich ein Pirat ist
+oder es werden generell das DX Feld im Spot fuer anderes als DX
+gebraucht (Schlagwort: WSJT, VIDEO, V1DEO usw.), kann man diese
+in 'baddx' eintragen um diese von da an zu unterdruecken.
+
+Das Wort muss voll ausgeschrieben werden, wild cards sind nicht
+erlaubt z.B.:-
+
+  set/baddx FORSALE VIDEO FR0G
+
+Um ein Wort/Rufzeichen wieder zu erlauben...
+
+  unset/baddx VIDEO
+
+=== 8^SET/BADNODE <rufzeichen>..^
+=== 8^UNSET/BADNODE <rufzeichen>..^
+Setzt ein Node Rufzeichen als 'badnode' und unterdrueckt spots von
+diesem.
+
+Das Rufzeichen darf nicht abgekuerzt werden z.B.:-
+
+  set/badnode K1TTT 
+
+stoppt alle Spots vom Node K1TTT. SSIDs koennen natuerlich auch
+hinzugefuegt werden.
+
+  unset/badnode K1TTT
+
+um Spots vom Cluster Node K1TTT wieder zu erlauben. Per default
+werden keine Nodes unterdrueckt.
+
+Use with extreme care. This command may well be superceeded by FILTERing.
+
+=== 8^SET/BADSPOTTER <rufzeichen>..^
+=== 8^UNSET/BADSPOTTER <rufzeichen>..^
+Setzt ein Rufzeichen als 'badspotter'. ALLES von <rufzeichen> wird
+nicht an die lokalen User weitergereicht und auch nicht an andere Nodes
+(PC11) weitergeschickt.
+
+Das Rufzeichen darf nicht abgekuerzt werden, wildcards sind nicht
+erlaubt z.B:-
+
+  set/badspotter VE2STN 
+
+stoppt ALLES von VE2STN. SSIDs sind natuerlich auch gueltig.
+
+  unset/badspotter VE2STN
+
+macht dieses setting rueckgaengig.
+
+Use with extreme care. This command may well be superceded by FILTERing.
+
+=== 8^SET/BADWORD <word>..^
+=== 8^UNSET/BADWORD <word>..^
+Das setzen eines 'badword' unterdrueckt alles, also spots, announce,
+talks und Nachrichten, die dieses Wort enthalten. Es wird auch
+nichts dergleichen an andere Nodes geforwardet.
+
+Das Wort darf nicht abgekuerzt werden, wildcards sind nicht
+erlaubt z.B:-
+
+  set/badword annihilate annihilated annihilation 
+
+stoppt alles mit diesem Wort im Text.
+
+  unset/badword annihilated
+
+macht dieses setting rueckgaengig.
+
+=== 0^SET/BEEP^Fuegt ein beep an ein DX Spot und an eine Nachricht nach erhalt
+=== 0^UNSET/BEEP^Stoppt beeps DX und Nachrichten
+
+=== 5^SET/BBS <rufzeichen> [<rufzeichen>..]^Setzt das Rufzeichen als eine BBS
+
+=== 5^SET/CLX <rufzeichen> [<rufzeichen>..]^Setzt das Rufzeichen als ein CLX Node
+
+=== 9^SET/DEBUG <name>^Setzt den debug level von <name>
+=== 9^UNSET/DEBUG <name>^Entfernt den debug level von <name>
+Folgende <name> sind gueltig :-
+
+ chan
+ state
+ msg
+ cron
+ connect
+
+Mit SHOW/DEBUG kann man sehen wofuer debug gerade eingeschaltet ist.
+
+=== 0^SET/DX^Erlaubt die Ausgabe von DX Spots
+=== 0^UNSET/DX^Stoppt die Ausgabe von DX Spots
+
+=== 0^SET/DXGRID^Erlaubt die Ausgabe von Grid Squares am Ende eines DX Spots
+=== 0^UNSET/DXGRID^Stoppt die Ausgabe von Grid Squares am Ende von DX Spots
+Eine standard Einrichtung seit Version 1.43 und hoeher die die Ausgabe
+von Grid Squares (JO44) am Ende eines DX Spots erlaubt, wenn der Grid
+bekannt ist.
+Einige Programme koennen dieses Feature nicht haendeln, dafuer steht
+UNSET/DXGRID zur Verfuegung.
+
+=== 5^SET/DXNET <rufzeichen> [<rufzeichen>..]^Setzt ein Rufzeichen als DXNet Node
+
+=== 0^SET/ECHO^Echot jede Eingabe ins Cluster
+=== 0^UNSET/ECHO^Schaltert Echo fuer die Eingabe ab
+Telnet Verbindungen und verschiedenartige Realisierungen von Telnet
+Programmen (u.a. abhaenging vom Betriebssystem) haendeln das Echo
+auf verschiedene Weise.
+
+Es ist NICHT notwendig dieses Kommando anzuwenden wenn man per
+AX25, also Netrom -> Packet Radio connectet.
+
+=== 0^SET/EMAIL <email> ...^Setzt die email Adresse(n) und forwardet Ihre privaten Nachrichten an diese Adresse
+=== 0^UNSET/EMAIL^Stoppt den forward von privaten Nachrichten an Ihre email Adresse(n)
+Ein nettes Feature...einige Beispiele :-
+
+  SET/EMAIL mike.tubby@somewhere.com
+
+Es koennen auch mehrere email Adressen eingeben werden die nur
+durch ein Leerzeichen getrennt sein muessen.
+
+Abschalten kann man diese Funktion mit :-
+
+  UNSET/EMAIL
+
+=== 0^SET/HERE^Sagt dem System das man erreichbar vor seinem Terminal ist
+=== 0^UNSET/HERE^Sagt dem System das man abwesend vom Terminal ist
+
+=== 0^SET/HOMENODE <node> ^Setzt das Heimat Cluster Rufzeichen
+Man sollte dem Cluster mitteilen wo man normalerweise connectet ist.
+Auf diesem Weg findet eigentlich jede Nachricht seinen Empfaenger.
+Beispiel:-
+
+  SET/HOMENODE gb7djk
+
+=== 8^SET/HOPS <rufzeichen> ann|spots|route|wwv|wcy <n>^Setzt den Hop count  
+=== 8^UNSET/HOPS <rufzeichen> ann|spots|route|wwv|wcy^Zuruecksetzen des Hop count
+Setzt den Hop count fuer einen bestimmten Typ von Broadcast fuer einen Node.
+Zur Zeit werden announce, spots, wwv und wcy Broadcasts unterstuetzt.
+
+z.B.:-
+
+  set/hops gb7djk ann 10
+  set/hops gb7mbc spots 20
+
+SHOW/HOPS zeigt was bereits gesetzt wurde.
+Dieses Kommando erzeugt ein Filter welches in Verbindung mit dem
+Filter System arbeitet.
+
+Um den Hop count auf das default zurueckzusetzen gibt es das
+Kommando UNSET/HOPS. Zum Beispiel:-
+
+  unset/hops gb7djk ann
+  unset/hops gb7mbc spots
+
+
+=== 9^SET/ISOLATE^Isoliert einen Node vom Rest des Netzwerkes
+Auf diese Weise ist ein Node zwar im Netzwerk sichtbar, man kann
+alle Spots sehen usw., aber nichts bis auf die lokalen User werden
+an den anderen Node uebertragen.
+ 
+=== 9^UNSET/ISOLATE^Stoppt Isolation eines Nodes vom Rest des Netzwerkes
+
+=== 0^SET/LANGUAGE <lang>^Setzt die System Sprache
+Zur Zeit werden en (english), nl (nederlandse), es (espanol), it (italiano) 
+und de (deutsch) unterstuetzt.
+
+=== 0^SET/LOCATION <lat & long>^Setzt Breiten- und Laengengrad der eigenen Station
+Beispiel:-
+
+ SET/LOCATION 52 22 N 0 57 E
+
+=== 9^SET/SYS_LOCATION <lat & long>^Setzt Breiten- und Laengengrad des Clusters
+Diese Eingabe ist notwendig um genaue Angaben von einigen Tools des
+Systems zu erhalten (z.B. SHOW/SUN).
+Wenn noch nicht SET/QRA gesetzt wurde, sollte man dies jetzt nachholen
+mit dem Kommando Beispiel :-
+  
+ SET/LOCATION 52 22 N 0 57 E
+
+=== 0^SET/LOGININFO^Informiert wenn eine Station lokal einloggt
+=== 0^UNSET/LOGININFO^Informiert wenn eine Station lokal ausloggt
+
+=== 9^SET/LOCKOUT <rufzeichen>^Verhindert das connecten von <rufzeichen>
+=== 9^UNSET/LOCKOUT <rufzeichen>^Erlaubt das connecten von <rufzeichen>
+
+=== 0^SET/NAME <your name>^Setzt den eigenen Namen
+Beispiel :-
+  
+ SET/NAME Dirk
+
+=== 5^SET/NODE <rufzeichen> [<rufzeichen>..]^Setzt ein Rufzeichen als AK1A Cluster
+Auf diese Weise weiss das System das <rufzeichen> ein AK1A Cluster ist und
+entsprechend im PC Protokoll beruecksichtigt wird.
+
+=== 8^SET/OBSCOUNT <count> <nodecall>^Setzt den 'pump-up' Obscelence counter 
+Ab Version 1.35 aufwaerts Nachbar Nodes pingen sich gegenseitig in
+regelmaessigen Intervallen, ueblicherweise alle 5 Minuten.
+Es gibt einen 'pump-up' Zaehler welcher immer einen herunterzaehlt nach
+jedem ausgehenden Ping und dann den 'obscount' Wert nach jedem eingehenden
+Ping resettet. Der default Wert ist 2.
+
+Das bedeutet also das ein Nachbar Node zweimal (default)
+gepingt wird und wenn keine Rueckantwort bis
+kurz vor dem dritten Ping kommt, dieser Node disconnectet wird.
+
+Wird die Rueckantwort gehoert, wird auch der obscount auf seinen
+max. Wert zurueckgesetzt. Bei den default Einstellungen und keiner
+Rueckantwort erfolgt der disconnect also nach max. 15 Minuten.
+
+Werte zwischen 1 und 9 sind gueltig.
+
+Es ist aber Empfehlenswert den default Wert NICHT zu aendern.
+
+=== 0^SET/PAGE <lines per page>^Setzt die Zeilenzahl pro Seite
+Teilt dem System mit wie gross die Zeilenanzahl pro Seite sein
+soll, besonders wichtig beim Lesen laengerer Mail oder groesseren
+Ausgaben. Default ist 20.
+  
+	SET/PAGE 0
+
+setzt die Anzahl der Zeilen auf unendlich.
+
+=== 9^SET/PINGINTERVAL <time> <nodecall>^Setzt das Ping Intervall zum Nachbar Node
+Default ist 300 Sekunden.
+Gueltige Werte sind :-
+
+  5      Werte kleiner als 30 werden zu Minuten gewandelt, es sei denn...
+         die Eingabe erfolgt mit einer Einheit
+  120s   120 seconds
+  5m     5 minutes
+  1h     1 hour
+
+Bitte unbedingt daran denken das zu kleine Werte einen erheblichen Traffic
+verursachen koennen!
+
+Um Ping ganz abzuschalten, muss der Wert 0 verwendet werden.
+
+=== 9^SET/PRIVILEGE <n> <rufzeichen> [<call..]^Setzt den Privileg Level auf ein <rufzeichen>
+Folgende Level sind per default eingestellt :-
+  
+  0 - Normaler User
+  1 - erlaubt Remote Nodes normale User RCMDs
+  5 - various privileged commands (including shutdown, but not disc-
+      connect), the normal level for another node.
+  8 - more privileged commands (including disconnect)
+  9 - lokal Sysop privilege. DO NOT SET ANY REMOTE USER OR NODE TO THIS
+      LEVEL.
+
+Sysops die als normaler User ueber eine remote Verbindung connecten
+erhalten automatisch Level 0.
+
+=== 0^UNSET/PRIVILEGE^Entfernt alle Privilegien fuer diese Sitzung
+Dieses Kommando kann benutzt werden um die Sitzung von
+unberechtigter Nutzung zu schuetzen.
+Um die Privilegien wieder zu erhalten ist es notwendig erneut
+wieder einzuloggen oder an der Konsole das SYSOP Kommando zu
+verwenden.
+
+=== 9^SET/PASSWORD <callsign> <string>^Setzt ein User Passwort
+Das Passwort eines Users kann vom Sysop nur mit Level 9
+gesetzt werden. Die Zeichenkette kann alle Zeichen enthalten.
+
+Die Weise wie dieses Feld benutzt wird ist davon abhaengig in welchem
+Zusammenhang sie steht. Wird es als SYSOP Kommando genutzt, werden
+einem 5 Zufallszahlen angeboten und man muss entsprechende
+Zahlenfolge parat haben. Das gilt hauptsaechlich fuer ax25 Verbindungen.
+
+Steht es im Zusammenhang mit einer telnet Session, dann, wenn ein
+Passwort gesetzt wurde oder bei :-
+
+  set/var $main::passwdreq = 1
+
+wird das Kommando im startup Skript ausgefuehrt und ein Passwort prompt wird
+ausgegeben nach dem normalen Login prompt.
+
+=== 0^SET/PASSWORD^Setzt das eigene Passwort
+Diese Kommando arbeitet zur Zeit nur fuer 'telnet' Verbindungen.
+Es funktioniert auch nur wenn zuvor das initial Passwort vom
+Sysop gesetzt wurde (Nachricht an Sysop).
+
+Nach dem ausfuehren des Kommandos wird zuerst nach dem alten
+Passwort gefragt, danach dann nach dem neuen Passwort. Das
+neue Passwort muss erneut bestaetigt werden.
+Abhaengig davon ob man sein eigenes Echo sieht (HELP SET/ECHO), kann
+man sehen was man schreibt.
+Wer sein Rufzeichen schuetzen will benutzt ein Passwort!
+
+=== 9^UNSET/PASSWORD <rufzeichen> ...^Loescht ein User Passwort
+Diese Kommando erlaubt dem Sysop das Passwort eines Users
+komplett zu entfernen.
+
+=== 5^SET/SPIDER <rufzeichen> [<rufzeichen>..]^Setzt ein Rufzeichen als DXSpider Node
+Teilt dem System mit das <rufzeichen> von nun an als DXSpider Node
+behandelt wird und das neue DX Protokoll Verwendung findet.
+
+=== 9^SET/SYS_QRA <locator>^Setzt den QRA Grid Locator vom Cluster
+=== 0^SET/QRA <locator>^Setzt den QRA Grid Locator
+Teilt dem System den eigenen QRA (oder Maidenhead) Locator mit.
+Aus dem QRA Locator kann das System mehr oder weniger genau den
+Breiten - und Laengengrad ermitteln, so das die Eingabe von
+SET/LOCATION nicht mehr notwendig wird.
+Beispiel:-
+
+  SET/QRA JO02LQ
+
+=== 0^SET/QTH <your qth>^Setzt das QTH
+Teilt dem System mit wo man seine Station hat z.B.:-
+
+  SET/QTH East Dereham, Norfolk
+
+=== 9^SET/REGISTER <rufzeichen> ...^Markiert einen User als registriert
+=== 9^UNSET/REGISTER <rufzeichen> ...^Markiert einen User als nicht registriert
+Registrierung ist ein Konzept das man Einschalten kann mit dem:-
+
+  set/var $main::regreq = 1 
+
+Kommando (ueblicherweise im startup file)
+
+Ist ein User nicht registriert, erhaelt er anstatt des normalen
+motd Files (/spider/data/motd), das motd_nor File.
+Desweiteren hat der nicht registrierte User dann nur READ-ONLY access
+im Cluster.
+
+Die einzige Ausnahme ist das der User TALK und/oder SEND Nachrichten an
+den Sysop schicken kann.
+ 
+=== 0^SET/TALK^Erlaubt TALKs
+=== 0^UNSET/TALK^Stoppt TALKs
+
+=== 0^SET/WCY^Erlaubt WCY Nachrichten
+=== 0^UNSET/WCY^Stoppt WCY Nachrichten
+
+=== 0^SET/WWV^Erlaubt WWV Nachrichten
+=== 0^UNSET/WWV^Stoppt WWV Nachrichten
+
+=== 0^SET/WX^Erlaubt WX Nachrichten
+=== 0^UNSET/WX^Stoppt WX Nachrichten
+
+=== 1^SHOW/BADDX^Zeigt alle bad dx calls im System
+Siehe SET/BADDX fuer mehr details.
+
+=== 1^SHOW/BADNODE^Zeigt alle bad nodes im System
+Siehe SET/BADNODE fuer mehr details.
+
+=== 1^SHOW/BADSPOTTER^Zeigt alle bad spotters im System
+Siehe SET/BADSPOTTER fuer mehr details.
+
+=== 1^SHOW/BADWORD^Zeigt alle bad words im System
+Siehe SET/BADWORD fuer mehr details.
+
+=== 0^SHOW/CONFIGURATION [<node>]^Zeigt alle Nodes und Users sichtbar
+Zeigt alle Nodes und User die sichtbar sind und wo sie connectet sind.
+
+Abkuerzung: sh/c
+
+Aber Achtung: Die Ausgabe kann sehr lang sein...
+
+=== 0^SHOW/CONFIGURATION/NODE^Zeigt alle Nodes lokal connectet
+
+=== 1^SHOW/CONNECT^Zeigt alle aktiven Verbindungen
+Dieses Kommando zeigt noch mehr Informationen ueber den Status von
+aktiven Verbindungen als das Kommando WHO.
+
+=== 0^SHOW/DATE [<prefix>|<callsign>]^Zeigt die lokale oder Uhrzeit von Prefix
+Gibt Datum sowie Uhrzeit aus.
+
+=== 9^SHOW/DEBUG^Zeigt den debug Level und was geloggt wird
+
+=== 0^SHOW/DX^Fragt die DX Spot Datenbank ab
+SHOW/DX gibt die letzten 10 Spots (abhaengig vom Sysop).
+   
+Zusaetzlich kann jedes dieser Schluesselwoerter hinzugefuegt
+werden um die Ausgabe besser auf seine Beduerfnisse zu
+erzeigen, dies sind :-
+   
+ on <band>       - z.B. 160m 20m 2m 23cm 6mm (!)
+ on <region>     - z.B. hf vhf uhf shf      (siehe SHOW/BANDS)
+   
+ <number>        - die Anzahl von Spots
+ <from>-<to>     - <from> Spot Nummer <to>
+   
+ <prefix>        - fuer ein gespottetes Rufzeichen beginnend mit <prefix>
+ *<suffix>       - fuer ein gespottetes Rufzeichen endend mit <suffix>
+ *<string>*      - fuer ein gespottetes Rufzeichen welches <string> enthaelt
+   
+ day <number>    - startend mit <number> Tage zurueck
+ day <from>-<to> - <from> Tag <to> Tag zurueck
+   
+ info <text>     - jeder Spot der <text> im Info Feld enthaelt
+   
+ by <rufzeichen>       - jeder Spots gespottet von <rufzeichen> (spotter <call>
+ ist das gleiche).
+
+ qsl             - schaut automatisch nach jeder QSL Info fuer das Rufzeichen
+    	           in der Spot Datenbank nach.
+
+ iota [<iota>]   - Sollte die Iota Nummer fehlen, wird nach dem String Iota
+	           geschaut und alles was aussieht wie eine IOTA Insel Nummer
+		   wird ausgegeben. Es kann auch die IOTA Nummer eingegeben
+		   werden, dann wird nach jedem passenden Spot gesucht.
+
+ qra [<locator>] - Hier wird nach einem Locator gesucht.
+   
+Beispiele:-
+   
+   SH/DX 9m0
+   SH/DX on 20m info iota
+   SH/DX 9a on vhf day 30
+   SH/DX rf1p qsl
+   SH/DX iota 
+   SH/DX iota eu-064
+   SH/DX qra jn86
+  
+=== 0^SHOW/DXCC <prefix>^Fragt die Spot Datenbank per <prefix> ab
+Dieses Kommando nimmt den <prefix>, welcher ein Rufzeichen oder nur
+Teile davon sein koennen, als Grundlage fuer die Suche.
+Es gibt die interne Landesnummer aus und zeigt alle Spots wie mit
+SH/DX definiert sind.
+   
+Die Optionen von SHOW/DX gelten auch fuer dieses Kommando :-
+   
+   SH/DXCC G
+   SH/DXCC W on 20m info iota
+
+=== 0^SHOW/DXSTATS^Zeigt die DX Statistik fuer die letzten 31 Tage
+
+=== 0^SHOW/FILES [<filearea> [<string>]]^Listet den Inhalt von einer Filearea
+Nur SHOW/FILES zeigt eine Liste aller Fileareas die im System zur
+Verfuegung stehen.
+Um den Inhalt einer Fileare zu sehen :-
+
+   SH/FILES <filearea>
+
+wobei <filearea> der Name der Filearea ist.
+
+Es ist auch moeglich Wildcards wie '*' oder '?' in einem String zu
+benutzen um die Selektion zu vereinfachen z.B.:-
+
+   SH/FILES bulletins arld*
+
+Siehe auch TYPE - um den Inhalt eines Files zu sehen.
+
+=== 0^SHOW/FILTER^Zeigt den Inhalt aller Filter die gesetzt wurden
+
+=== 0^SHOW/HFSTATS^Zeigt die DX Statistics fuer die letzten 31 Tage
+Die Statistik wird Bandweise ausgegeben.
+
+=== 0^SHOW/HFTABLE^Zeigt die HF DX Spotter Tabelle fuer das eigene Land (31 Tage)
+
+=== 8^SHOW/HOPS <rufzeichen> [ann|spots|route|wcy|wwv]^Zeigt die Hop Counts fuer einen Node
+Dieses Kommando zeigt die Hop counts die fuer einen Node gesetzt wurden.
+Zusaetzlich kann angegeben werden welche Kategorie ausgegeben werden soll.
+ 
+=== 1^SHOW/ISOLATE^Zeigt eine Liste der isolierten Nodes
+
+=== 9^SHOW/LOCKOUT <prefix>|ALL^Zeigt eine Liste aller Rufzeichen die vom System ausgeschlossen sind
+
+=== 8^SHOW/LOG [<callsign>]^Zeigt einen Auszug vom System Log
+Mit Angabe eines Rufzeichens beschraenkt sich die Ausgabe auf alles
+was mit dem Rufzeichen in Verbindung steht.
+
+=== 0^SHOW/MOON [<prefix>|<callsign>]^Zeigt Mond Auf- und Untergang Zeiten an
+Dieses Kommando kann auch auf eine Liste von Prefixen oder Rufzeichen
+angewendet werden. Es werden auch Azimuth und Elevation angezeigt.
+
+Ohne Angabe von Prefix oder Rufzeichen werden die Angaben in Bezug auf
+das eigene QTH gemacht - vorrausgesetzt man hat mit SET/LOCATION oder
+SET/QRA Angaben dazu gemacht.
+
+(In addition, it will show the gain oder loss dB relative to the nominal 
+distance von 385,000Km due to the ellipsoidal nature of the orbit.)
+
+Beispiele:-
+
+  SH/MOON
+  SH/MOON G1TLH W5UN
+
+Man kann auch in die Zukunft oder Vergangenheit schauen mit einer
+Zeitangabe :-
+
+  SH/MOON -1 
+
+einen Tag zurueck
+
+  SH/MOON +3 W9
+
+oder in drei Tagen
+
+=== 0^SHOW/MUF <prefix> [<hours>][long]^Zeigt die wahrscheinliche Propagation zu einem Prefix
+Dieses Kommando erlaubt eine geschaetzte Vorhersage der HF Bedingungen
+zu einer Station/Land wenn der Prefix angegeben wurde.
+Als Output wird eine Leistung von 20dBW angenommen, die Empfaenger-
+empfindlichkeit betraegt -123dBm (0.15muV/10dB SINAD).
+
+Das Resultat sagt eine wahrscheinliche Arbeitsfrequenz und die
+zu erwartenden Signalstaerken fuer den spezifizierten Tag des
+Jahres und der Uhrzeit vorher. Solche Vorhersagen sind sehr
+gebraeuchlich auf Funkstrecken zwischen 250KM und 6000KM, kann
+aber auch mit einer geringeren Wahrscheinlichkeit auf Strecken
+unter- oder oberhalb davon benutzt werden.
+
+Der Befehl verwendet eine Routine von MINIMUF 3.5, entwickelt von der
+U.S. NAVY und benutzt zur Vorhersage die MUF, basierend auf den
+vorhergesagten FLUX, dem Tag des Jahres, der Stunde des Tages und den
+geografischen Koordinaten des Senders/Empfaengers.
+
+Fuer erweiterte Informationen steht die englische Version des
+Help Textes zur Verfuegung (set/lang en + help sh/muf).
+
+Per default werden die naechsten zwei Stunden ausgegeben.
+Man kann sich jedoch bis zu 24 Stunden anzeigen lassen.
+Beispiel:-
+
+  SH/MUF W
+
+ergibt:
+
+  RxSens: -123 dBM SFI: 159   R: 193   Month: 10   Day: 21
+  Power :   20 dBW    Distance:  6283 km    Delay: 22.4 ms
+  Location                       Lat / Long           Azim
+  East Dereham, Norfolk          52 41 N 0 57 E         47
+  United-States-W                43 0 N 87 54 W        299
+  UT LT  MUF Zen  1.8  3.5  7.0 10.1 14.0 18.1 21.0 24.9 28.0 50.0
+  18 23 11.5 -35  mS0+ mS2   S3
+  19  0 11.2 -41  mS0+ mS2   S3
+
+
+  SH/MUF W 24
+
+zeigt Daten fuer die naechsten 24 Stunden.
+
+  SH/MUF W L 24
+  SH/MUF W 24 Long
+
+Mit dem Parameter "L" wird eine Long Path Vorhersage gemacht, die
+jedoch wenig glaubwuerdig ist. Nur der vollstaendigkeit halber sei
+diese hier erwaehnt.
+
+=== 0^SHOW/NEWCONFIGURATION [<node>]^Zeigt alle Nodes und User sichtbar im System
+Dieses Kommando zeigt alle Nodes und User die sichtbar sind.
+Der Output ist jedoch etwas anders als beim SHOW/CONFIGURATION
+Kommando. Es werden User zugehoerig zum Node und Nodes
+zugehoerig zum Link angezeigt.
+
+Aber Vorsicht: Die Liste kann extrem lang sein...
+
+=== 0^SHOW/NEWCONFIGURATION/NODE^Zeigt alle Nodes lokal connected
+Zeigt lokal connectete Nodes im neuen Ausgabe Format.
+
+=== 1^SHOW/NODE [<callsign> ...]^Zeigt den Typ und Versionsnummer von Nodes
+Zeigt den Typ und Versionsnummer von Nodes (wenn connectet) die per
+Kommando (SET/NODE|CLX|SPIDER|DXNET) gesetz wurden.
+Ohne Angabe von <callsign> wird einer Liste aller dem System bekannten
+Nodes mit Typ und Version ausgegeben.
+
+=== 0^SHOW/PREFIX <callsign>^Abfragen der Prefix Datenbank
+Dieser Befehl nimmt das <callsign> (kann ein Prefix oder auch ein
+Teil des Rufzeichens sein) als Kriterium und gibt passend dazu
+den Country Prefix, die interne Country Nummer, die CQ und ITU
+Zone aus.
+
+Siehe auch SHOW/DXCC
+
+=== 5^SHOW/PROGRAM^Zeigt die Verzeichnisse von allen eingebauten Programm Modulen
+Zeigt den Namen und das Verzeichnis von jedem Programm Modul.
+Unter anderem gut dafuer damit man weiss wo man welches .pm File
+geladen hat.
+
+=== 0^SHOW/QRA <locator> [<locator>]^Zeigt Distanz zwischen QRA Grid Locatoren
+=== 0^SHOW/QRA <lat> <long>^Konvertiert Breiten- und Laengengard in ein QRA Grid Locator
+Dies ist ein Mehrzweck Kommando welches es erlaubt entweder die Distanz und
+die Richtung zwischen 2 Locatoren zu berechnen oder wenn nur ein Locator
+eingegeben wurde, die Distanz und Richtung von meiner Station zum
+Locator zu berechnen z.B.:-
+
+SH/QRA IO92QL 
+SH/QRA JN06 IN73
+
+Desweiteren kann man auch eine Breiten- und Laengengrad Eingabe in einen
+Locator wandeln z.B.:-
+
+SH/QRA 52 41 N 0 58 E
+
+=== 0^SHOW/QRZ <callsign>^Zeigt QRZ Callbook Details von einem Rufzeichen
+Dieser Befehl befragt den QRZ Callbook Server ueber das Internet nach
+<callsign> und wenn vorhanden, werden alle verfuegbaren Infos
+ausgegeben. Dieser Service steht Usern auch unter http://www.qrz.com
+zur Verfuegung, Man kann sich dort auch selbst eintragen.
+
+=== 9^SHOW/REGISTERED [<prefix>]^Zeigt die registrierten User
+
+=== 0^SHOW/ROUTE <callsign> ...^Zeigt die route zum Rufzeichen...
+Dieser Befehl erlaubt es zu sehen bei welchem Node ein bestimmtes
+Rufzeichen connectet ist.
+
+sh/route n2tly
+
+=== 0^SHOW/SATELLITE <name> [<hours> <interval>]^Zeigt Satellitendaten
+Zeigt die Bahndaten vom QTH zu einem Satelliten der Wahl von nun an
+bis zu ein paar Stunden.
+
+Ohne Angabe von einem Satellitennamen wird eine Liste aller
+verfuegbaren Satelliten angezeigt.
+
+Ansonsten werden die Daten beginnnend mit 5 Grad unterhalb des
+Horizontes ausgegeben. Der default ist eine Ausgabe per 5 Minuten fuer
+die naechsten 3 Stunden.
+
+Die Zahl der Stunden und der Step koennen innerhalb einer 
+gewissen Grenze eingestellt werden.
+
+Jeder Durchgang einer Periode ist getrennt durch eine Reihe
+von '-----' Zeichen.
+
+Ein Beispiel :-
+
+SH/SAT AO-10 
+SH/SAT FENGYUN1 12 2
+
+=== 6^SHOW/STATION ALL [<regex>]^Zeigt eine Liste aller User im System
+=== 0^SHOW/STATION [<callsign> ..]^Zeigt weitere Information ueber ein Rufzeichen
+Zeigt alle Informationen die ueber ein Rufzeichen vorhanden sind.
+
+  SH/ST G1TLH
+
+=== 0^SHOW/SUN [+/- days][<prefix>|<callsign>]^Zeigt Sonnenauf - und niedergangs Zeiten
+Zeigt die Sonnenauf- und niedergangs Zeiten fuer ein Prefix oder ein
+Rufzeichen (auch eine Liste derer) mit Azimuth und Elevation der Sonne an
+deren Standorten.
+
+Wird kein Prefix oder Rufzeichen definiert, bezieht sich die Ausgabe
+auf den eigenen Standort (vorrausgesetzt man hat diesen mit
+SET/LOCATION oder SET/QRA eingegeben).
+
+Ansonsten beziehen sich die Ausgabe auf den Standort des Clusters.
+
+Beispiel:-
+
+  SH/SUN
+  SH/SUN G1TLH K9CW ZS
+
+Man kann sowohl in die Zukunft als auch in die Vergangenheit blicken :-
+
+  SH/SUN -1 
+
+oder in drei Tagen:-
+
+  SH/SUN +3 W9
+
+=== 0^SHOW/TIME [<prefix>|<callsign>]^Zeigt die Uhrzeit
+Wenn kein Rufzeichen oder Prefix eingegeben wird, bekommt man
+als Ausgabe die lokale Rechnerzeit geliefert.
+Ansonsten erhaelt man die Zeit am Standort von <prefix> oder <callsign>.
+
+=== 0^SHOW/VHFSTATS^Zeigt eine VHF DX Statistik fuer die letzten 31 Tage
+Ausgabe erfolgt per Band.
+
+=== 0^SHOW/VHFTABLE^Zeigt die VHF DX Spotter Tabelle des eigenen Landes (31 Tage)
+
+=== 0^SHOW/WCY^Zeigt die letzten 10 WCY broadcasts
+=== 0^SHOW/WCY <n>^Zeigt Anzahl von <n> WCY broadcasts
+
+=== 0^SHOW/WWV^Zeigt die letzten 10 WWV broadcasts
+=== 0^SHOW/WWV <n>^Zeigt Anzahl von <n> WWV broadcasts
+
+=== 5^SHUTDOWN^Beendet das Clusterprogramm
+Beendet das Clusterprogramm und disconnectet alle User und Nodes.
+
+=== 9^SPOOF <rufzeichen> <command>^Fuehrt ein Befehl aus als User XY
+Dieser Befehl erlaubt dem Sysop Kommandos unter dem Rufzeichen eines
+anderen Users auszufuehren, zum Beispiel bei der Fehlersuche.
+
+Beispiel:-
+
+   SPOOF G1TLH set/name Dirk
+   SPOOF G1TLH set/qra JO02LQ
+
+=== 5^STAT/DB <dbname>^Zeigt den Status einer Datenbank
+Zeigt den internen Status eines Datenbank Deskriptors.
+
+Abhaengig vom Privileg Level bekommt man mehr oder weniger
+Informationen zu sehen.
+
+=== 5^STAT/CHANNEL [<callsign>]^Zeigt den Status eines Channels fuer Rufzeichen
+Zeigt System interne Infos und den Status eines Channel oder eines
+Rufzeichens.
+Es werden nur Felder gezeigt die in (in perl term) definiert sind.
+
+=== 1^STAT/MSG^Zeigt den Status von Nachrichten im System
+=== 1^STAT/MSG <msgno>^Zeigt den Status einer Nachricht mit Nummer
+Dieser Befehl zeigt den internen Status einer Nachricht und
+beeinhaltet noch zusaetzliche Infos an.
+
+Wird keine Nummer angegeben, wird der Status des Nachrichten Systems
+angezeigt.
+
+=== 5^STAT/ROUTE_NODE <callsign>^Zeigt Daten einer Route zu Node::Node object
+=== 5^STAT/ROUTE_NODE all^Zeigt eine Liste von allen Routen zu Nodes::Node objects
+
+=== 5^STAT/ROUTE_USER <callsign>^Zeigt Daten einer Route zu User::User object
+=== 5^STAT/ROUTE_USER all^Zeigt eine Liste von allen Routen zu User::User objects
+
+=== 5^STAT/USER [<callsign>]^Zeigt den vollen Status von einem User
+Zeigt einen kompletten Usereintrag inkl. aller geheimen flags usw.
+
+Es werden nur Felder gezeigt die in (in perl term) definiert sind.
+
+=== 0^SYSOP^Sysop Status erlangen beim einloggen per Remote
+Das System reduziert automatisch die Privilegien zurueck zu einem
+normalen User wenn man per remote einloggt.
+Dieser Befehl erlaubt es die Privilegien wiederzuerlangen.
+Das System ist aehnlich den Baycom Passwort system.
+Zuvor muss noch ein Passwort mit SET/PASSWORD gesetzt werden.
+Es wird bei 0 begonnen...
+
+Beispiel:-
+
+  password = 012345678901234567890123456789
+  > sysop
+  22 10 15 17 3
+man gibt ein:-
+ aa2bbbb0ccc5ddd7xxx3n
+ oder 2 0 5 7 3
+ oder 20573
+
+Alle diese Eingeben entsprechen dem 'password'. Die Eingabe ist
+'case sensitive'!
+
+=== 0^TALK <rufzeichen> [<text>]^Sendet einen Text an eine andere Station
+=== 0^TALK <rufzeichen> > <node> [<text>]^Sendet einen Text an eine andere Station via Node
+Die Station muss sichtbar im Cluster sein (SHOW/STAT) und letztlich
+ist es auch etwas Glueckssache, denn es gibt viele verschiedene
+Systeme die nicht unbedingt miteinander Harmonieren was TALKs
+betrifft.
+
+Es ist aber auch moeglich einen TALK an eine unsichtbare Station
+zu versenden wenn man sicher ist das Station XY bei Node YZ
+connectet ist. Vorraussetzung ist, das Node YZ sichtbar ist.
+
+Will man sich laenger Unterhalten, tippt man einfach TALK RUFZEICHEN
+ohne Text und schon ist man im TALKMODE. Alles was man nun eintippt,
+geht direkt an den Talkpartner.
+
+Announce, Spot usw. wird auch weiterhin empfangen. Ist dies stoerend,
+stellt man diese einfach ab.
+
+Will man waehrend des Talkmodes ein Clister Kommando ausfuehren,
+muss dem Kommando ein '/' vorangestellt sein z.B.:-
+
+   /DX 14001 G1TLH What's a B class licensee doing on 20m CW?
+   /HELP talk
+
+Um den Talkmode zu beenden:-
+   
+   /EX
+
+=== 0^TYPE <filearea>/<name>^Gibt den Inhalt eines Files in einer der Fileareas aus
+Gibt den Inhalt eines Files in einer der Fileareas aus. Will man
+zum Beispiel in der Area 'bulletins'das File 'arld051' sehen, muesste
+man eingeben :-
+
+   TYPE bulletins/arld051
+
+Siehe auch SHOW/FILES fuer eine Liste der vorhandenen Fileareas und
+deren Inhalt.
+
+=== 0^WHO^Zeigt wer physikalisch im Cluster connectet ist
+
+=== 0^WX <text>^Send eine Wetter Nachricht an lokale User
+=== 0^WX FULL <text>^Sendet eine Wetter Nachricht an alle Cluster User
+=== 5^WX SYSOP <text>^Sendet eine Wetter Nachricht nur an andere Cluster
+

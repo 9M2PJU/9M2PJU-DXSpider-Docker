@@ -1,0 +1,131 @@
+Programming Notes
+
+* Every command that can used on the command line lives in either this
+  directory ('cmd') or in a local version ('local_cmd'). You are cajoled or
+  ordered not to and generally discouraged from altering the commands in
+  the 'cmd' directory. You can put local copies in the 'local_cmd' directory
+  and they will override the standard ones.
+
+* If you want to play, do it in the 'local_cmd' directory. It's very easy and
+  reasonably safe. You can override a command whilst the cluster is running. 
+  Compilation errors will simply give you error messages, it won't stop the
+  cluster running - this only happens if you mess with the internals to the
+  extent that it gets confused...
+
+* A command is a piece of perl, it is simply a small snippet of program
+  that is dynamically loaded into the cluster on invocation from the 
+  command line. The last modification time is used to determine whether to
+  reload it.
+
+* New (or altered) commands are available for test the moment you save them.
+
+* A command is placed into the appropriate directory with a '.pl' appended
+  to the end. So the 'show/qra' command lives in 'cmd/show/qra.pl' (or a
+  local version would be in 'local_cmd/show/qra.pl'.
+
+* For the security conscious, potentially dubious characters (i.e. not 
+  [A-Za-z0-9_/]) are converted to their hex equivalents. This will almost
+  certainly mean that the user will get an error message (unless you have
+  your secret squirrel hat on and have deliberately put such commands up 
+  [in 'local_cmd' of course]).
+
+* The snippets of program you put here are wrapped in an eval { } and
+  are subroutines derived from the DXChannel class. They effectively
+  the following declaration :-
+
+  sub Emb_<cmdname>($self, $args)
+  {
+     ...
+     your code here
+     ...
+  }
+
+* slash characters are replaced by '_' so the equivalent name for 'show/qth'
+  is 'Emb_show_qth'.
+
+* you would normally do a 'my ($self, $line) = @_;' as the first thing. There
+  are a complete set of accessors for DXUser, DXCommandmode and DXChannel
+  classes and these are the recommended way of getting at these classes.
+  A fairly standard start might be:-
+
+  my ($self, $line) = @_;
+  @args = split /\s+/, $line;
+  $call = $self->call;
+  $user = $self->user;
+
+* $args is the rest of the line after the command (as a string).
+
+* You are responsible for maintaining user security. If you have a command
+  that does something a normal system shouldn't be allowed to do or see, 
+  there is $self->priv (using the above example) which gives you the running
+  privilege level of the channel. USE IT!
+
+* The normal privilege levels are:-
+    0 - user privilege.
+    1 - remote user user privilege
+    5 - sysop privilege.
+    8 - maximum recommended remote sysop privilege
+    9 - console privilege.
+
+  The sysop privilege is for things that you are prepared for remote
+  sysops and clusters to do or see.
+
+  A console privilege can only be executed locally (at least if you have
+  correctly installed the client program in inetd or ax25d).
+
+  The set/priv command can only be executed by a console privileged 
+  session.
+
+* You must return a list with a 0 or 1 as the first element. 1 means
+  success and 0 means fail. Each element of the list which follows is 
+  assumed to be one line for output. Don't put \n characters at the end
+  of an element (the client will put the correct one in if required 
+  [but see below]).
+
+* As this is perl and it is very easy to alter stuff to get it correct,
+  I would like to see some intelligent argument processing, e.g. if 
+  you can have one callsign, you can have several. Interpret your
+  arguments; so for example:-
+
+    set/qra jo02lq       - sets your own locator to JO02LQ
+    set/qra g1tlh jo02lq - sets G1TLH's locator (if you are allowed)
+
+  or
+
+    show/qra in92jo      - displays the bearing and distance to 
+                           IN92JO using your lat/long or locator
+    show/qra jn56in in92jo  - bearing and distance between two
+                              locators
+
+* It is important that you remember when you have tie hashes using MLDBM
+  et al. If you do a DXUser::get($call) you will get a different (older)
+  thing than the one in $self->$user. This is almost certainly NOT what
+  you want if want to modify a user that is currently connected.
+
+* If you want to debug something, start the cluster.pl up thus:-
+    
+    perl -d cluster.pl
+    dbg> r
+
+  Then you can go into debug mode at anytime by using the command :-
+ 
+    debug
+
+  or you can put the line:-
+
+    $DB::single = 1;
+
+  in an appropriate place in a command. This will only have an effect
+  if you are running in perl debug mode.
+
+* Anything you output with a > as the last character is taken to mean
+  that this is a prompt and will not have a \r or \n appended to it.
+
+* help files can also be placed in the appropriate place. These files 
+  have exactly the same naming conventions as commands except that they
+  have a '.hlp' appended to the command name rather than a '.pl'. All 
+  in the help file are sent to the user except those starting with a '#'
+  character.
+
+* PLEASE add your new commands to the Commands_*.hlp file so that 
+  people know about and how to use them!

@@ -1,0 +1,40 @@
+#
+# the list of regexes for messages that we won't store having
+# received them (bear in mind that we must receive them fully before
+# we can bin them)
+#
+#
+# The format of each line is as follows
+#
+#     type      source       pattern   tofield   to 
+#     P/B/F     T/F/O/S      regex     T/F/O/S   expression
+#
+# type: P - private, B - bulletin (msg), F - file (ak1a bull)
+# source: T - to field, F - from field,  O - origin, S - subject 
+# pattern: a perl regex on the field requested
+# tofield: T - to field, F - from field,  O - origin, S - subject 
+# to: what you want this field changed to
+#
+# Currently only type B and P msgs are affected by this code.
+# 
+# The list is read from the top down, the first pattern that matches
+# causes the action to be taken.
+#
+# Basically this will take all the headers in turn and shove them thru the
+# rewrite engine, starting at the top. 
+#
+# The result is then passed thru the rest of the system as though it came in
+# like that.
+#
+# You can either swop a field for another another value or set a field to
+# value after regexing another field - useful in europe where we are paranoid
+# about for sale notices - you can check subject for suspicious words and
+# the swop the TO field.
+#
+
+package DXMsg;
+
+@swop = (
+
+); 
+

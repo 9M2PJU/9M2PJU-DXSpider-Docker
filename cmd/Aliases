@@ -1,0 +1,171 @@
+#!/usr/bin/perl
+#
+# provide some standard aliases for commands for terminally
+# helpless ak1a user (helpless in the sense that they never
+# read nor understand help files)
+#
+# This file is automagically reloaded if its modification time is 
+# later than the one stored in CmdAlias.pm
+#
+# PLEASE make this file consistant with reality! (the patterns MUST
+# match the filenames!)
+#
+# Don't alter this file, copy it into the local_cmd tree and modify it.
+# This file will be replaced everytime I issue a new release.
+#
+# You only need to put aliases in here for commands that don't work as
+# you desire naturally, e.g sh/dx on its own just works as you expect
+# so you need not add it as an alias.
+#
+
+
+package CmdAlias;
+
+%alias = (
+    '?' => [
+	  '^\?', 'apropos', 'apropos',
+	],
+    'a' => [
+	  '^a$', 'announce', 'announce',
+	'^acc?e?p?t?$', 'apropos accept', 'apropos',
+	  '^ann?o?u?n?c?e?/full', 'announce full', 'announce', 
+	  '^ann?o?u?n?c?e?/sysop', 'announce sysop', 'announce',
+	  '^ann?o?u?n?c?e?/(.*)$', 'announce $1', 'announce',
+	],
+	'b' => [
+	  '^b$', 'bye', 'bye',
+	],
+	'c' => [
+	'^cle?a?r?$', 'apropos clear', 'apropos',
+	'^cre?a?t?e?$', 'apropos create', 'apropos',
+	],
+	'd' => [
+	  '^dele?t?e?/fu', 'kill full', 'kill',
+	  '^dele?t?e?$', 'kill', 'kill',
+	  '^dir?e?c?t?o?r?y?/a\w*', 'directory all', 'directory',
+	  '^dir?e?c?t?o?r?y?/b\w*', 'directory bulletins', 'directory',
+	  '^dir?e?c?t?o?r?y?/n\w*', 'directory new', 'directory',
+	  '^dir?e?c?t?o?r?y?/o\w*', 'directory own', 'directory',
+	  '^dir?e?c?t?o?r?y?/s\w*', 'directory subject', 'directory',
+	  '^dir?e?c?t?o?r?y?/t\w*', 'directory to', 'directory',
+	  '^dir?e?c?t?o?r?y?/f\w*', 'directory from', 'directory',
+	  '^dir?e?c?t?o?r?y?/(\d+)-(\d+)', 'directory $1-$2', 'directory',
+	  '^dir?e?c?t?o?r?y?/(\d+)', 'directory $1', 'directory',
+	],
+	'e' => [
+	  '^exi?t?$', 'bye', 'bye',
+	  '^export_u', 'export_users', 'export_users',
+	  '^expor?', 'export', 'export',
+	  '^expun?g?e?$', 'kill expunge', 'kill expunge',
+	],
+	'f' => [
+	'^for?w?a?r?d?$', 'apropos forward', 'apropos',
+	],
+	'g' => [
+	],
+	'h' => [
+	],
+	'i' => [
+	],
+	'j' => [
+	],
+	'k' => [
+			'^ki?l?l?/ex', 'kill expunge', 'kill',
+	],
+	'l' => [
+	'^loa?d?$', 'apropos load', 'apropos',
+	  '^l$', 'directory', 'directory',
+	  '^ll$', 'directory', 'directory',
+	  '^ll/(\d+)', 'directory $1', 'directory',
+	  '^lm$', 'directory own', 'directory',
+      '^l>$', 'directory to', 'directory',
+      '^l<$', 'directory from', 'directory',
+	],
+	'm' => [
+	],
+	'n' => [
+	],
+	'o' => [
+	],
+	'p' => [
+	],
+	'q' => [
+	  '^qu?i?t?$', 'bye', 'bye',
+	],
+	'r' => [	
+	  '^r$', 'read', 'read',
+	'^reje?c?t?$', 'apropos reject', 'apropos',
+	  '^rcmd/(\S+)', 'rcmd $1', 'rcmd',
+	],
+	's' => [
+	  '^s$', 'send', 'send',
+	  '^s/p$', 'send', 'send',
+	  '^sb$', 'send noprivate', 'send',
+	  '^set/home$', 'set/homenode', 'set/homenode',
+	  '^set/nobe', 'unset/beep', 'unset/beep',
+	  '^set/nohe', 'unset/here', 'unset/here',
+	  '^set/noan', 'unset/announce', 'unset/announce',
+	  '^set/nodxg', 'unset/dxgrid', 'unset/dxgrid',
+	  '^set/nodx', 'unset/dx', 'unset/dx',
+	  '^set/noe', 'unset/echo', 'unset/echo',
+	  '^set/nota', 'unset/talk', 'unset/talk',
+	  '^set/noww', 'unset/wwv', 'unset/wwv',
+	  '^set/nowx', 'unset/wx', 'unset/wx',
+	'^set$', 'apropos set', 'apropos',
+	  '^sho?w?/u$', 'show/user', 'show/user',
+	  '^sho?w?/bul', 'show/files bulletins', 'show/files',
+	  '^sho?w?/co?n?\w*/a', 'show/configuration all', 'show/configuration',
+	  '^sho?w?/co?n?\w*/n', 'show/configuration nodes', 'show/configuration',
+	  '^sho?w?/c$', 'show/configuration', 'show/configuration',
+	  '^sho?w?/com', 'dbavail', 'dbavail',
+	  '^sho?w?/dxcc', 'show/dx dxcc', 'show/dx',
+	  '^sho?w?/dx/(\d+)-(\d+)', 'show/dx $1-$2', 'show/dx',
+	  '^sho?w?/dx/(\d+)', 'show/dx $1', 'show/dx',
+	  '^sho?w?/dx/d(\d+)', 'show/dx from $1', 'show/dx',
+	  '^sho?w?/fdx/(\d+)-(\d+)', 'show/dx real $1-$2', 'show/fdx',
+	  '^sho?w?/fdx/(\d+)', 'show/dx real $1', 'show/fdx',
+	  '^sho?w?/fdx/d(\d+)', 'show/dx real from $1', 'show/fdx',
+	  '^sho?w?/fdx', 'show/dx real', 'show/fdx',
+	  '^sho?w?/gre?y?l?i?n?e?', 'show/grayline', 'show/grayline',
+	  '^sho?w?/myfd?x?/(\d+)-(\d+)', 'show/dx filter real $1-$2', 'show/mydx',
+	  '^sho?w?/myfd?x?/(\d+)', 'show/dx filter real $1', 'show/mydx',
+	  '^sho?w?/myfd?x?/d(\d+)', 'show/dx filter real from $1', 'show/mydx',
+	  '^sho?w?/myfd?x?', 'show/dx filter real', 'show/mydx',
+	  '^sho?w?/myd?x?/(\d+)-(\d+)', 'show/dx filter $1-$2', 'show/mydx',
+	  '^sho?w?/myd?x?/(\d+)', 'show/dx filter $1', 'show/mydx',
+	  '^sho?w?/myd?x?/d(\d+)', 'show/dx filter from $1', 'show/mydx',
+	  '^sho?w?/myd?x?', 'show/dx filter', 'show/mydx',
+	  '^sho?w?/newco?n?\w*/n', 'show/newconfiguration node', 'show/newconfiguration',
+	  '^sho?w?/sta?$', 'show/station', 'show/station',
+	  '^sho?w?/tnc', 'who', 'who',
+      '^sho?w?/up', 'show/cluster', 'show/cluster',
+	  '^sho?w?/ww?v?/(\d+)-(\d+)', 'show/wwv $1-$2', 'show/wwv',
+	  '^sho?w?/ww?v?/(\d+)', 'show/wwv $1', 'show/wwv',
+	'^sho?w?$', 'apropos show', 'apropos',
+	'^shutd?\w*$', 'shutdown', 'shutdown',
+	  '^sp$', 'send', 'send',
+	'^sta?t?$', 'apropos stat', 'apropos',
+      	
+    ],
+	't' => [
+	  '^ta$', 'talk', 'talk',
+	  '^t$', 'talk', 'talk',
+	],
+	'u' => [
+	'^uns?e?t?$', 'apropos unset', 'apropos',
+	'^uns?e?t?/node$', 'set/user', 'set/user',
+	],
+	'v' => [
+	],
+	'w' => [
+	  '^w$', 'who', 'who',
+	  '^wx/full', 'wx full', 'wx',
+	  '^wx/sysop', 'wx sysop', 'wx',
+	],
+	'x' => [
+	],
+	'y' => [
+	],
+	'z' => [
+	],
+)

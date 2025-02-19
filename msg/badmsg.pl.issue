@@ -1,0 +1,36 @@
+#
+# the list of regexes for messages that we won't store having
+# received them (bear in mind that we must receive them fully before
+# we can bin them)
+#
+#
+# The format of each line is as follows
+#
+#     type      source             pattern 
+#     P/B/F     T/F/O/S/I          regex  
+#
+# type: P - private, B - bulletin (msg), F - file (ak1a bull)
+# source: T - to field, F - from field,  O - origin, S - subject, I - interface call 
+# pattern: a perl regex on the field requested
+#
+# Currently only type B and P msgs are affected by this code.
+# 
+# The list is read from the top down, the first pattern that matches
+# causes the action to be taken.
+#
+# The pattern can be undef or 0 in which case it will always be selected
+# for the action specified
+#
+
+
+package DXMsg;
+
+@badmsg = (
+'B', 	'T',	'SALE',	
+'B', 	'T',	'WANTED',
+'B', 	'S',	'WANTED',
+'B', 	'S',	'SALE',	
+'B',    'S',    'WTB',
+'B',    'S',    'WTS',
+); 
+
