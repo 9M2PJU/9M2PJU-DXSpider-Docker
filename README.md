@@ -10,8 +10,6 @@
 [![GitHub Stars](https://img.shields.io/github/stars/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/network/members)
 
-<img src="https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/.github/assets/dxspider-logo.png" alt="DXSpider Logo" width="200"/>
-
 *Transforming DXSpider deployment into a seamless Docker experience for the global amateur radio community* 📡
 
 [Key Features](#-key-features) • [Quick Start](#-quick-start) • [Installation](#%EF%B8%8F-installation) • [Documentation](#-documentation) • [Contributing](#-contributing)
