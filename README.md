@@ -14,6 +14,7 @@ This project provides a **Dockerized DXSpider Cluster Node**, allowing amateur r
 - **Lightweight and Scalable:** Can be deployed on a Raspberry Pi, VPS, or dedicated server.
 
 ## 📦 Installation
+
 ### Prerequisites
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
@@ -30,6 +31,11 @@ Create a `.env` file in the root directory and configure your DXSpider settings:
 nano .env
 ```
 
+## 🛠 Configuration
+- Modify `dxspider/startup` or `dxspider/crontab` to customize settings.
+- Add partner link files to `dxspider/connect` directory.
+- Ports can be mapped in `docker-compose.yml` to suit your network.
+
 ### 3️⃣ Start the DXSpider Container
 ```bash
 docker compose up -d
@@ -40,11 +46,6 @@ To verify that DXSpider is running correctly:
 ```bash
 docker compose logs -f
 ```
-
-## 🛠 Configuration
-- Modify `dxspider/startup` or `dxspider/config` to customize settings.
-- Ports can be mapped in `docker-compose.yml` to suit your network.
-- The DXSpider web interface (if enabled) will be accessible via `http://your_server_ip:port`.
 
 ## 📡 Usage
 - Connect to the cluster using any DX Cluster client (e.g., **N1MM, DXTelnet, CC Cluster, Log4OM**):
@@ -73,4 +74,6 @@ Pull requests are welcome! If you find a bug or have an improvement, feel free t
 
 ---
 Happy DXing! 🎙️
+
+73 from 9M2PJU
 
