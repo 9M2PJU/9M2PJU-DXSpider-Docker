@@ -37,8 +37,6 @@ services:
       - ./dxspider/crontab:/spider/local_cmd/crontab:ro
       - ./dxspider/connect:/spider/connect
       - ./dxspider/motd:/spider/data/motd:ro 
-      - cluster_scripts_data:/spider/scripts
-      - cluster_local_data_data:/spider/local_data
     ports:
       - ${CLUSTER_PORT}:${CLUSTER_PORT}
       - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
