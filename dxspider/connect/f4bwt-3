@@ -1,4 +1,0 @@
-timeout 60
-connect telnet 82.64.40.245 7300
-'login' '9m2pju-2'
-

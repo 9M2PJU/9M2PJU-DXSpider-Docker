@@ -1,4 +1,0 @@
-timeout 60
-connect telnet telnet.reversebeacon.net 7001
-'login' '9m2pju-2'
-
