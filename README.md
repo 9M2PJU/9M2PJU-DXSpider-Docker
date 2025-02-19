@@ -73,7 +73,6 @@ docker compose up -d
 
 1. **Environment Setup**
    ```bash
-   cp .env.example .env
    nano .env  # Configure your settings
    ```
 
