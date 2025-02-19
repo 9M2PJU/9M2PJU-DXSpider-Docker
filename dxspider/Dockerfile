@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ghcr.io/ubuntu:22.04
 
 ARG SPIDER_GIT_REPOSITORY=git://scm.dxcluster.org/scm/spider
 # SPIDER_VERSION can be "mojo" or "master"
@@ -8,7 +8,8 @@ ARG SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR:-/spider}
 ARG SPIDER_USERNAME=${SPIDER_USERNAME:-sysop}
 ARG SPIDER_UID=${SPIDER_UID:-1000}
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update \
+    && apt-get install -y \
     gcc \
     git \
     make \
@@ -20,8 +21,6 @@ RUN apt-get update && apt-get install -y \
     libmysqlclient-dev \
     ttyd \
     wget \
-    curl \
-    && curl -L https://cpanmin.us | perl - App::cpanminus \
     && cpanm --no-wget Data::Structure::Util \
     && cpanm --no-wget \
         DB_File \
@@ -47,10 +46,10 @@ RUN apt-get update && apt-get install -y \
     && find ${SPIDER_INSTALL_DIR}/. -type f -name '*.pl' -exec chmod 775 {} \; \
     && (cd ${SPIDER_INSTALL_DIR}/src && make) \
     && apt-get remove --purge -y \
-    gcc \
-    make \
-    libncurses-dev \
-    perl-modules-5.34 \
+        gcc \
+        make \
+        libncurses-dev \
+        perl-modules-5.34 \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy connection node files - cleanup
