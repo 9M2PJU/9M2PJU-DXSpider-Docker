@@ -1,0 +1,4 @@
+timeout 15
+connect telnet dxc.hamserve.uk 7300
+'login' '9M2PJU-2'
+'password:' 'yGBFJW5FW23p'

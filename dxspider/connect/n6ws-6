@@ -1,0 +1,4 @@
+timeout 30
+connect telnet n6ws.ddns.net 7300
+'login:' '9m2pju-2'
+
