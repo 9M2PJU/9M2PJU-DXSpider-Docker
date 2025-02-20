@@ -1,4 +1,4 @@
-timeout 60
+timeout 15
 connect telnet 9m2pju.hamradio.my 7300
 'login:' '9m2pju-10'
 
