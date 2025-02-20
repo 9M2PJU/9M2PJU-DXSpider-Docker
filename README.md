@@ -182,13 +182,6 @@ If you find this project useful, please consider:
 - 🔀 Forking and contributing
 - 📢 Sharing with other operators
 
-## 📞 Contact & Support
-
-- **Author:** 9M2PJU
-- **Website:** [hamradio.my](https://hamradio.my)
-- **GitHub:** [@9M2PJU](https://github.com/9M2PJU)
-- **Email:** [9m2pju@hamradio.my](mailto:9m2pju@hamradio.my)
-
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
