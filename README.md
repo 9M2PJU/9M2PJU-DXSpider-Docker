@@ -16,6 +16,50 @@
 
 </div>
 
+<div align="center">
+  <h1>
+    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Radio.png" alt="Radio" width="25" height="25" />
+    Special Acknowledgment
+    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Satellite%20Antenna.png" alt="Satellite" width="25" height="25" />
+  </h1>
+</div>
+
+<div align="center">
+  <img src="https://img.shields.io/badge/DXSpider-Creator-blue?style=for-the-badge" alt="DXSpider Creator"/>
+  <img src="https://img.shields.io/badge/G1TLH-Amateur%20Radio-red?style=for-the-badge" alt="G1TLH"/>
+</div>
+
+<br>
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <h3>📡 Thank You Dirk Koopman (G1TLH)</h3>
+        <p>We extend our deepest gratitude to <b>Dirk Koopman (G1TLH)</b> for creating <b>DXSpider</b>, 
+        a revolutionary contribution that transformed DX Cluster networking.</p>
+        <p>His innovative work continues to empower the global amateur radio community.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div align="center">
+  <h4>🌟 Key Impacts</h4>
+  <code>Real-time DX Information</code> •
+  <code>Global Communications</code> •
+  <code>Community Building</code>
+</div>
+
+<br>
+
+<div align="center">
+  <i>"Standing on the shoulders of giants - The continued evolution of DX clustering 
+  owes much to G1TLH's pioneering vision."</i>
+</div>
+
+<hr>
+
 ## 📡 Overview
 
 9M2PJU-DXSpider-Docker revolutionizes the way amateur radio operators deploy and manage DX Cluster nodes. By containerizing the legendary DXSpider cluster software, we've eliminated complex setup procedures while maintaining all the powerful features that make DXSpider the gold standard in DX clustering.
