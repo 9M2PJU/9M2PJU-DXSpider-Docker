@@ -1,1 +1,2 @@
+0,5,10,20,30,40,50 * * * * start_connect('9m2pju-2') unless connected('9m2pju-2')
 
