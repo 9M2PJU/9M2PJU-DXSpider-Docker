@@ -82,14 +82,11 @@ COPY crontab ${SPIDER_INSTALL_DIR}/local_cmd
 RUN chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR}/.
 
 # Set permissions on the mounted volumes
-RUN chmod -R a+rwx /spider/scripts/startup
-RUN chmod -R a+rwx /spider/local_cmd/crontab
-RUN chmod -R a+rwx /spider/connect
-RUN chmod -R a+rwx /spider/local_data
-RUN chmod -R a+rwx /spider/cmd
-RUN chmod -R a+rwx /spider/msg
+
 
 USER ${SPIDER_UID}
+
+RUN chmod -R a+rwx /spider
 
 # COPY entrypoint.sh file
 COPY entrypoint.sh /entrypoint.sh
