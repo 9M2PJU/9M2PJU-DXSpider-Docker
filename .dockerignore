@@ -34,3 +34,8 @@ Thumbs.db
 *.bak
 tmp/
 temp/
+
+# CI/CD
+.github/
+scripts/smoke-test.sh
+.trivyignore

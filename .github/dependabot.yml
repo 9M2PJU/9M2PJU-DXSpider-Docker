@@ -1,0 +1,62 @@
+# Dependabot configuration for automated dependency updates
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+
+updates:
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    reviewers:
+      - "9M2PJU"
+    assignees:
+      - "9M2PJU"
+
+  # Docker base image updates
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+      - "automated"
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    reviewers:
+      - "9M2PJU"
+    assignees:
+      - "9M2PJU"
+    # Only update patch and minor versions by default
+    # Major version updates require manual review
+    ignore:
+      - dependency-name: "alpine"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "mariadb"
+        update-types: ["version-update:semver-major"]
+
+# Dependabot will automatically:
+# 1. Check for updates weekly on Mondays at 06:00 UTC
+# 2. Create PRs for outdated dependencies
+# 3. Limit to 5 open PRs to avoid overwhelming maintainers
+# 4. Label PRs appropriately for easy filtering
+# 5. Assign to repository maintainers for review
+#
+# To customize security updates, configure in:
+# Settings > Security > Dependabot security updates

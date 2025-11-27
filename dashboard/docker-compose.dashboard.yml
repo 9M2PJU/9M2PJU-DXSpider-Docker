@@ -1,0 +1,87 @@
+# DXSpider Dashboard - Docker Compose Override
+#
+# Usage (MUST be run from project root):
+#   docker compose -f docker-compose.yml -f dashboard/docker-compose.dashboard.yml up -d
+#
+# The dashboard will be available at http://localhost:8080
+
+version: '3.8'
+
+services:
+  # ===========================================================================
+  # DXSpider Dashboard Web Interface
+  # ===========================================================================
+  dashboard:
+    image: alpine:3.20
+    container_name: dxspider-dashboard
+
+    # Build context (if building custom image)
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.dashboard
+
+    environment:
+      - SPIDER_INSTALL_DIR=/spider
+      - DASHBOARD_PORT=${DASHBOARD_PORT:-8080}
+      - DASHBOARD_MAX_SPOTS=${DASHBOARD_MAX_SPOTS:-100}
+      - CLUSTER_CALLSIGN=${CLUSTER_CALLSIGN:-UNKNOWN}
+      - CLUSTER_QTH=${CLUSTER_QTH:-Unknown Location}
+      - CLUSTER_LOCATOR=${CLUSTER_LOCATOR:-}
+
+    # Install Perl and Mojolicious, then run dashboard
+    command: >
+      sh -c "
+        apk add --no-cache perl perl-mojolicious perl-io-socket-ssl &&
+        cd /dashboard/server &&
+        perl dashboard.pl
+      "
+
+    volumes:
+      # Mount dashboard files (relative to compose file location)
+      - ./server:/dashboard/server:ro
+      - ./templates:/dashboard/server/templates:ro
+      - ./public:/dashboard/server/public:ro
+      # Mount DXSpider data (relative to project root when using -f)
+      - ${PWD}/local_data:/spider/local_data:ro
+      - ${PWD}/cmd:/spider/cmd:ro
+
+    ports:
+      - "${DASHBOARD_PORT:-8080}:${DASHBOARD_PORT:-8080}"
+
+    networks:
+      - dxspider-net
+
+    # Dashboard depends on DXSpider being available
+    depends_on:
+      dxspider:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 32M
+
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:${DASHBOARD_PORT:-8080}/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  dxspider-net:
+    external: false

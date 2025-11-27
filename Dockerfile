@@ -93,6 +93,9 @@ RUN apk update && apk add --no-cache \
     perl-dbi \
     perl-net-cidr-lite \
     perl-test-simple \
+    # Additional modules for notification system
+    perl-uri \
+    # Note: perl-http-tiny is part of Perl core (5.14+), included automatically
     # MySQL client for database connectivity
     mysql-client \
     # Network utilities
@@ -122,6 +125,10 @@ COPY motd ${SPIDER_INSTALL_DIR}/data/
 COPY startup ${SPIDER_INSTALL_DIR}/scripts/
 COPY crontab ${SPIDER_INSTALL_DIR}/local_cmd/
 
+# Create metrics directory and copy metrics server for optional Prometheus monitoring
+RUN mkdir -p ${SPIDER_INSTALL_DIR}/metrics
+COPY --chown=${SPIDER_USERNAME}:${SPIDER_USERNAME} metrics/prometheus/metrics_server.pl ${SPIDER_INSTALL_DIR}/metrics/
+
 # Set ownership to sysop user
 RUN chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR}
 
@@ -133,7 +140,7 @@ RUN chmod +x /entrypoint.sh
 USER ${SPIDER_UID}
 
 # Health check will be defined in docker-compose.yml for flexibility
-# Default ports: 7300 (telnet), 8050 (web console)
-EXPOSE 7300 8050
+# Default ports: 7300 (telnet), 8050 (web console), 9100 (metrics)
+EXPOSE 7300 8050 9100
 
 ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]

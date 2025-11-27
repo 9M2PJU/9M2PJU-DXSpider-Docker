@@ -9,20 +9,53 @@
 
 set -e
 
+# =============================================================================
+# Environment Variable Validation
+# =============================================================================
+validate_env() {
+    local missing=""
+
+    # Required variables
+    if [ -z "$CLUSTER_CALLSIGN" ]; then
+        missing="${missing}CLUSTER_CALLSIGN "
+    fi
+    if [ -z "$CLUSTER_SYSOP_CALLSIGN" ]; then
+        missing="${missing}CLUSTER_SYSOP_CALLSIGN "
+    fi
+
+    if [ -n "$missing" ]; then
+        echo "[entrypoint] ERROR: Missing required environment variables: $missing"
+        echo "[entrypoint] Please set these variables in your .env file"
+        exit 1
+    fi
+
+    echo "[entrypoint] Environment validation passed"
+}
+
+validate_env
+
 SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR:-/spider}
 CLUSTER_PORT=${CLUSTER_PORT:-7300}
 CLUSTER_SYSOP_PORT=${CLUSTER_SYSOP_PORT:-8050}
+CLUSTER_METRICS_PORT=${CLUSTER_METRICS_PORT:-9100}
 
 # =============================================================================
 # Signal Handling for Graceful Shutdown
 # =============================================================================
 CLUSTER_PID=""
 TTYD_PID=""
+METRICS_PID=""
 
 cleanup() {
     echo "[entrypoint] Received shutdown signal, cleaning up..."
 
-    # Stop ttyd first
+    # Stop metrics server first
+    if [ -n "$METRICS_PID" ] && kill -0 "$METRICS_PID" 2>/dev/null; then
+        echo "[entrypoint] Stopping metrics server (PID: $METRICS_PID)..."
+        kill -TERM "$METRICS_PID" 2>/dev/null || true
+    fi
+
+    # Stop ttyd
     if [ -n "$TTYD_PID" ] && kill -0 "$TTYD_PID" 2>/dev/null; then
         echo "[entrypoint] Stopping ttyd (PID: $TTYD_PID)..."
         kill -TERM "$TTYD_PID" 2>/dev/null || true
@@ -122,6 +155,21 @@ rm -f ${SPIDER_INSTALL_DIR}/local/cluster.lck
 rm -f ${SPIDER_INSTALL_DIR}/local_data/cluster.lck
 
 # =============================================================================
+# Initialize Notification System (Optional)
+# =============================================================================
+if [ -f "${SPIDER_INSTALL_DIR}/notifications/config/notifications.yml" ]; then
+    echo "[entrypoint] Notification system configuration found"
+    # Copy notification libraries if not already in place
+    if [ -d "${SPIDER_INSTALL_DIR}/notifications/lib" ]; then
+        cp -n ${SPIDER_INSTALL_DIR}/notifications/lib/*.pm ${SPIDER_INSTALL_DIR}/local/ 2>/dev/null || true
+        cp -rn ${SPIDER_INSTALL_DIR}/notifications/lib/Notify ${SPIDER_INSTALL_DIR}/local/ 2>/dev/null || true
+        echo "[entrypoint] Notification modules loaded"
+    fi
+else
+    echo "[entrypoint] Notification system not configured (optional)"
+fi
+
+# =============================================================================
 # Start DXSpider Cluster
 # =============================================================================
 echo "[entrypoint] Starting DXSpider cluster..."
@@ -174,15 +222,35 @@ ttyd -p ${CLUSTER_SYSOP_PORT} -u 1000 -t fontSize=16 -c "@${TTYD_CRED_FILE}" per
 TTYD_PID=$!
 
 echo "[entrypoint] ttyd started (PID: $TTYD_PID)"
+
+# =============================================================================
+# Start Prometheus Metrics Server (Optional)
+# =============================================================================
+if [ -f "${SPIDER_INSTALL_DIR}/metrics/metrics_server.pl" ]; then
+    echo "[entrypoint] Starting Prometheus metrics server on port ${CLUSTER_METRICS_PORT}..."
+    cd ${SPIDER_INSTALL_DIR}/metrics
+    perl metrics_server.pl daemon -l http://*:${CLUSTER_METRICS_PORT} &
+    METRICS_PID=$!
+    echo "[entrypoint] Metrics server started (PID: $METRICS_PID)"
+    cd ${SPIDER_INSTALL_DIR}/perl
+else
+    echo "[entrypoint] Metrics server script not found, skipping metrics..."
+fi
+
 echo "[entrypoint] DXSpider is ready!"
 echo "[entrypoint]   - Telnet: port ${CLUSTER_PORT}"
 echo "[entrypoint]   - Web Console: port ${CLUSTER_SYSOP_PORT}"
+[ -n "$METRICS_PID" ] && echo "[entrypoint]   - Metrics: port ${CLUSTER_METRICS_PORT}"
 
 # =============================================================================
 # Wait for Processes (and handle signals)
 # =============================================================================
 # Wait for any process to exit
-wait -n $CLUSTER_PID $TTYD_PID 2>/dev/null || true
+if [ -n "$METRICS_PID" ]; then
+    wait -n $CLUSTER_PID $TTYD_PID $METRICS_PID 2>/dev/null || true
+else
+    wait -n $CLUSTER_PID $TTYD_PID 2>/dev/null || true
+fi
 
 # If we get here, one of the processes died unexpectedly
 echo "[entrypoint] A process exited unexpectedly, shutting down..."

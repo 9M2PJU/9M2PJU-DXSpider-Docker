@@ -1,0 +1,137 @@
+# DXSpider Prometheus Alert Rules
+#
+# These rules define alerts for monitoring DXSpider cluster health.
+# Alerts will fire when conditions are met for the specified duration.
+#
+# To enable: Uncomment the rule_files section in prometheus.yml
+
+groups:
+  # Cluster Health Alerts
+  - name: dxspider_cluster_health
+    interval: 30s
+    rules:
+      - alert: DXSpiderDown
+        expr: up{job="dxspider"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: cluster
+        annotations:
+          summary: "DXSpider metrics endpoint is down"
+          description: "The DXSpider metrics exporter has been unreachable for more than 1 minute."
+
+      - alert: NoConnectedNodes
+        expr: sum(dxspider_nodes_connected) == 0
+        for: 5m
+        labels:
+          severity: warning
+          component: network
+        annotations:
+          summary: "No connected nodes"
+          description: "DXSpider has no connected nodes for {{ $value }} minutes. Cluster may be isolated."
+
+      - alert: LowNodeCount
+        expr: sum(dxspider_nodes_connected) < 2
+        for: 10m
+        labels:
+          severity: warning
+          component: network
+        annotations:
+          summary: "Low node count"
+          description: "Only {{ $value }} node(s) connected. Consider adding more connections for redundancy."
+
+  # Spot Activity Alerts
+  - name: dxspider_spot_activity
+    interval: 30s
+    rules:
+      - alert: HighSpotRate
+        expr: dxspider_spots_per_minute > 100
+        for: 5m
+        labels:
+          severity: warning
+          component: spots
+        annotations:
+          summary: "Unusually high spot rate"
+          description: "Spot rate is {{ $value }} spots/minute, which may indicate a contest or unusual activity."
+
+      - alert: NoSpotActivity
+        expr: dxspider_spots_per_minute == 0
+        for: 30m
+        labels:
+          severity: info
+          component: spots
+        annotations:
+          summary: "No spot activity"
+          description: "No DX spots received in the last 30 minutes. This may be normal during off-peak hours."
+
+  # Resource Usage Alerts
+  - name: dxspider_resource_usage
+    interval: 30s
+    rules:
+      - alert: HighTrafficIn
+        expr: rate(dxspider_bytes_in_total[5m]) > 1000000
+        for: 10m
+        labels:
+          severity: warning
+          component: network
+        annotations:
+          summary: "High inbound traffic"
+          description: "Inbound traffic is {{ $value | humanize }}B/s for over 10 minutes."
+
+      - alert: HighTrafficOut
+        expr: rate(dxspider_bytes_out_total[5m]) > 1000000
+        for: 10m
+        labels:
+          severity: warning
+          component: network
+        annotations:
+          summary: "High outbound traffic"
+          description: "Outbound traffic is {{ $value | humanize }}B/s for over 10 minutes."
+
+  # User Connection Alerts
+  - name: dxspider_user_connections
+    interval: 30s
+    rules:
+      - alert: HighUserCount
+        expr: dxspider_users_connected > 50
+        for: 5m
+        labels:
+          severity: info
+          component: users
+        annotations:
+          summary: "High number of connected users"
+          description: "{{ $value }} users currently connected. Monitor for performance issues."
+
+      - alert: NoConnectedUsers
+        expr: dxspider_users_connected == 0
+        for: 60m
+        labels:
+          severity: info
+          component: users
+        annotations:
+          summary: "No connected users"
+          description: "No users have connected in the last hour. This may be normal during off-peak hours."
+
+  # Uptime Alerts
+  - name: dxspider_uptime
+    interval: 60s
+    rules:
+      - alert: RecentRestart
+        expr: dxspider_uptime_seconds < 300
+        for: 1m
+        labels:
+          severity: info
+          component: cluster
+        annotations:
+          summary: "DXSpider recently restarted"
+          description: "DXSpider has been running for only {{ $value | humanizeDuration }}. Check logs for unexpected restarts."
+
+      - alert: LongUptime
+        expr: dxspider_uptime_seconds > 2592000
+        for: 1h
+        labels:
+          severity: info
+          component: maintenance
+        annotations:
+          summary: "DXSpider has been running for over 30 days"
+          description: "Uptime: {{ $value | humanizeDuration }}. Consider scheduling maintenance restart to apply updates."

@@ -173,6 +173,109 @@ CLUSTER_DB_USER=sysop
 CLUSTER_DB_PASS=your_secure_password
 ```
 
+### Full Stack Deployment (Phase 4 Features)
+
+Deploy DXSpider with **all features** including dashboard and metrics monitoring using the unified configuration:
+
+#### Features Included:
+- **Web Dashboard** - Modern web interface for viewing spots, nodes, and statistics (port 8080)
+- **Prometheus** - Metrics collection and time-series database (port 9090)
+- **Grafana** - Metrics visualization with pre-built dashboards (port 3000)
+
+#### Quick Deploy (All Features):
+
+```bash
+# 1. Configure environment variables
+cp .env.example .env
+nano .env
+
+# IMPORTANT: Set these required variables in .env:
+#   DASHBOARD_PORT=8080
+#   DASHBOARD_CORS_ORIGIN=              # Leave empty for security
+#   GF_ADMIN_PASSWORD=your_strong_password   # REQUIRED for Grafana
+#   CLUSTER_METRICS_PORT=9100
+
+# 2. Deploy all services
+docker compose -f docker-compose.full.yml --profile all up -d --build
+
+# 3. Access services:
+#   DXSpider Telnet:    telnet localhost 7300
+#   Web Console (ttyd): http://localhost:8050
+#   Dashboard:          http://localhost:8080
+#   Prometheus:         http://localhost:9090
+#   Grafana:            http://localhost:3000
+```
+
+#### Selective Deployment:
+
+Deploy only specific features using profiles:
+
+```bash
+# Base DXSpider only (no optional features)
+docker compose -f docker-compose.full.yml up -d
+
+# DXSpider + Dashboard only
+docker compose -f docker-compose.full.yml --profile dashboard up -d
+
+# DXSpider + Metrics only (Prometheus + Grafana)
+docker compose -f docker-compose.full.yml --profile metrics up -d
+
+# DXSpider + Database + Dashboard
+docker compose -f docker-compose.full.yml --profile database --profile dashboard up -d
+
+# All features
+docker compose -f docker-compose.full.yml --profile all up -d
+```
+
+#### Dashboard Configuration
+
+The web dashboard provides real-time spot monitoring with filtering and search:
+
+```bash
+# Environment variables in .env:
+DASHBOARD_PORT=8080                    # Dashboard web port
+DASHBOARD_MAX_SPOTS=100               # Max spots to display
+DASHBOARD_CORS_ORIGIN=                # Leave empty (disabled by default)
+                                      # Only set if using reverse proxy
+```
+
+**Security Note**: CORS is disabled by default. Only set `DASHBOARD_CORS_ORIGIN` if you're using a reverse proxy and understand the security implications.
+
+#### Metrics Configuration
+
+Grafana requires explicit password configuration for security:
+
+```bash
+# REQUIRED in .env:
+GF_ADMIN_PASSWORD=your_strong_password_here
+
+# Optional:
+GF_ADMIN_USER=admin                   # Default: admin
+CLUSTER_METRICS_PORT=9100            # Prometheus metrics port
+```
+
+**First-time Grafana access**:
+1. Navigate to `http://localhost:3000`
+2. Login with username `admin` and the password you set in `.env`
+3. Pre-configured dashboards are automatically loaded
+
+#### Alternative: Modular Deployment
+
+You can also deploy features separately using individual compose files:
+
+```bash
+# Base DXSpider
+docker compose up -d
+
+# Add dashboard (from project root)
+docker compose -f docker-compose.yml -f dashboard/docker-compose.dashboard.yml up -d
+
+# Add metrics (from project root)
+docker compose -f docker-compose.yml -f metrics/docker-compose.metrics.yml up -d
+```
+
+**Note**: The unified `docker-compose.full.yml` is recommended for easier management.
+
 ---
 
 ## Architecture

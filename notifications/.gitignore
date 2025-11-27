@@ -1,0 +1,11 @@
+# Ignore actual configuration (keep example)
+config/notifications.yml
+
+# Ignore test results
+test_results/
+*.log
+
+# Ignore backup files
+*.bak
+*~
+.*.swp

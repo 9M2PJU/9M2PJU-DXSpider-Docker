@@ -1,0 +1,189 @@
+================================================================================
+DXSpider has been successfully deployed!
+================================================================================
+
+Cluster Callsign: {{ include "dxspider.callsign" . }}
+Sysop Callsign:   {{ include "dxspider.sysopCallsign" . }}
+Location:         {{ .Values.cluster.location.qth }}
+Grid Locator:     {{ include "dxspider.locator" . }}
+
+--------------------------------------------------------------------------------
+Accessing DXSpider
+--------------------------------------------------------------------------------
+
+1. Telnet Access (DX Cluster Clients):
+
+   {{- if eq .Values.service.type "NodePort" }}
+   Get the node IP and port:
+
+     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='telnet')].nodePort}" services {{ include "dxspider.fullname" . }})
+
+   Connect via telnet:
+
+     telnet $NODE_IP $NODE_PORT
+
+   {{- else if eq .Values.service.type "LoadBalancer" }}
+   Get the load balancer IP:
+
+     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "dxspider.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+   Connect via telnet (may take a few minutes for the LoadBalancer to be ready):
+
+     telnet $SERVICE_IP {{ .Values.service.telnet.port }}
+
+   {{- else }}
+   Forward the telnet port:
+
+     kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ include "dxspider.fullname" . }} {{ .Values.service.telnet.port }}:{{ .Values.service.telnet.port }}
+
+   Connect via telnet:
+
+     telnet localhost {{ .Values.service.telnet.port }}
+
+   {{- end }}
+
+2. Web Console Access (Sysop):
+
+   {{- if .Values.ingress.enabled }}
+   {{- range .Values.ingress.hosts }}
+   {{- range .paths }}
+   {{- if eq .service "console" }}
+   Access the web console at:
+
+     {{- if $.Values.ingress.tls }}
+     https://{{ .host }}{{ .path }}
+     {{- else }}
+     http://{{ .host }}{{ .path }}
+     {{- end }}
+
+   {{- end }}
+   {{- end }}
+   {{- end }}
+   {{- else if eq .Values.service.type "NodePort" }}
+   Get the node IP and port:
+
+     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+     export CONSOLE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='console')].nodePort}" services {{ include "dxspider.fullname" . }})
+
+   Access the web console at:
+
+     http://$NODE_IP:$CONSOLE_PORT
+
+   {{- else if eq .Values.service.type "LoadBalancer" }}
+   Get the load balancer IP:
+
+     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "dxspider.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+   Access the web console at (may take a few minutes for the LoadBalancer to be ready):
+
+     http://$SERVICE_IP:{{ .Values.service.console.port }}
+
+   {{- else }}
+   Forward the console port:
+
+     kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ include "dxspider.fullname" . }} {{ .Values.service.console.port }}:{{ .Values.service.console.port }}
+
+   Access the web console at:
+
+     http://localhost:{{ .Values.service.console.port }}
+
+   {{- end }}
+
+   {{- if .Values.sysop.password }}
+   Login credentials:
+     Username: {{ .Values.database.user | default "sysop" }}
+     Password: (as configured in values.yaml)
+   {{- else }}
+   Retrieve the auto-generated sysop password:
+
+     kubectl get secret --namespace {{ .Release.Namespace }} {{ include "dxspider.secretName" . }} -o jsonpath="{.data.sysop-password}" | base64 --decode
+
+   Login credentials:
+     Username: {{ .Values.database.user | default "sysop" }}
+     Password: <retrieved from secret>
+   {{- end }}
+
+--------------------------------------------------------------------------------
+Monitoring and Logs
+--------------------------------------------------------------------------------
+
+View pod status:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "dxspider.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+View DXSpider logs:
+
+  kubectl logs --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "dxspider.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -f
+
+Execute commands in the DXSpider pod:
+
+  kubectl exec --namespace {{ .Release.Namespace }} -it {{ include "dxspider.fullname" . }}-0 -- /bin/sh
+
+{{- if .Values.metrics.enabled }}
+
+Access metrics endpoint:
+
+  kubectl --namespace {{ .Release.Namespace }} port-forward service/{{ include "dxspider.fullname" . }} {{ .Values.cluster.network.metricsPort }}:{{ .Values.cluster.network.metricsPort }}
+
+  Then visit: http://localhost:{{ .Values.cluster.network.metricsPort }}/metrics
+
+{{- if .Values.metrics.serviceMonitor.enabled }}
+
+ServiceMonitor has been created for Prometheus Operator integration.
+{{- end }}
+{{- end }}
+
+--------------------------------------------------------------------------------
+Persistence
+--------------------------------------------------------------------------------
+
+{{- if .Values.persistence.enabled }}
+Persistent storage is ENABLED.
+
+{{- if .Values.persistence.existingClaim }}
+Using existing PersistentVolumeClaim: {{ .Values.persistence.existingClaim }}
+{{- else }}
+PersistentVolumeClaim created by StatefulSet:
+
+  kubectl get pvc --namespace {{ .Release.Namespace }} data-{{ include "dxspider.fullname" . }}-0
+
+{{- end }}
+
+Data is stored at: {{ .Values.persistence.mountPath }}
+Storage size: {{ .Values.persistence.size }}
+{{- else }}
+WARNING: Persistent storage is DISABLED.
+All data will be lost when the pod is restarted!
+
+To enable persistence, set:
+  persistence.enabled=true
+  persistence.size=<desired size>
+{{- end }}
+
+--------------------------------------------------------------------------------
+Customization
+--------------------------------------------------------------------------------
+
+To update configuration (startup, crontab, motd):
+
+  helm upgrade {{ .Release.Name }} {{ .Chart.Name }} \
+    --namespace {{ .Release.Namespace }} \
+    --set config.startup="<new startup script>" \
+    --set config.crontab="<new crontab>" \
+    --set config.motd="<new MOTD>"
+
+Or edit values.yaml and run:
+
+  helm upgrade {{ .Release.Name }} {{ .Chart.Name }} --namespace {{ .Release.Namespace }} -f values.yaml
+
+--------------------------------------------------------------------------------
+{{- include "dxspider.validateValues.warnings" . }}
+--------------------------------------------------------------------------------
+
+For more information, visit:
+  - Project: https://github.com/9M2PJU/9M2PJU-DXSpider-Docker
+  - DXSpider: http://www.dxcluster.org/
+
+Happy DXing!
+73 de {{ include "dxspider.callsign" . }}
