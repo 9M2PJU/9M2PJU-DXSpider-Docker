@@ -61,4 +61,10 @@ cd ${SPIDER_INSTALL_DIR}/perl && \
 
 sleep 3
 
-ttyd -p ${CLUSTER_SYSOP_PORT} -u 1000 -t fontSize=16 -c ${CLUSTER_DBUSER}:${CLUSTER_DBPASS} perl /spider/perl/console.pl
+# Security: Write credentials to file instead of passing on command line
+# This prevents credentials from being visible in 'ps aux' output
+TTYD_CRED_FILE="/tmp/.ttyd_credentials"
+echo "${CLUSTER_DBUSER}:${CLUSTER_DBPASS}" > "${TTYD_CRED_FILE}"
+chmod 600 "${TTYD_CRED_FILE}"
+
+ttyd -p ${CLUSTER_SYSOP_PORT} -u 1000 -t fontSize=16 -c "@${TTYD_CRED_FILE}" perl /spider/perl/console.pl

@@ -83,8 +83,9 @@ RUN chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR}/.
 
 USER ${SPIDER_UID}
 
-# Set permissions on the mounted volumes
-RUN chmod -R a+rwx /spider
+# Note: Removed insecure 'chmod -R a+rwx /spider'
+# Mounted volumes should have correct ownership on the host
+# or use 'docker compose run --user' if permission issues occur
 
 # COPY entrypoint.sh file
 COPY entrypoint.sh /entrypoint.sh

@@ -9,7 +9,8 @@ services:
       args:
         - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH}
         - SPIDER_USERNAME=${CLUSTER_DB_USER}
-    privileged: true
+    # Security: Removed 'privileged: true' - not needed for DXSpider
+    # If you encounter permission issues, use specific cap_add instead
     environment:
       - SPIDER_INSTALL_DIR=/spider
       - CLUSTER_CALLSIGN=${CLUSTER_CALLSIGN}
