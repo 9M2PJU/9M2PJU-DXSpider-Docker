@@ -124,7 +124,7 @@ RUN apk add perl perl-modules-only ...
 - No build tools in production
 - Faster pulls and deployments
 
-**Status**: [ ] Not Started
+**Status**: [x] Completed
 
 ---
 
@@ -157,7 +157,7 @@ services:
     # ... rest of config
 ```
 
-**Status**: [ ] Not Started
+**Status**: [x] Completed (using Docker Compose profiles)
 
 ---
 
@@ -177,7 +177,7 @@ pgrep -f ttyd || exit 1
 exit 0
 ```
 
-**Status**: [ ] Not Started
+**Status**: [x] Completed
 
 ---
 
@@ -203,7 +203,7 @@ trap cleanup SIGTERM SIGINT
 exec ttyd ...
 ```
 
-**Status**: [ ] Not Started
+**Status**: [x] Completed
 
 ---
 
@@ -225,7 +225,7 @@ services:
           memory: 128M
 ```
 
-**Status**: [ ] Not Started
+**Status**: [x] Completed
 
 ---
 
@@ -384,11 +384,11 @@ Production-grade Kubernetes deployment:
 4. [x] Hide credentials from process list
 
 ### Phase 2: Best Practices (High)
-5. [ ] Multi-stage Dockerfile
-6. [ ] Add MariaDB service
-7. [ ] Improved health checks
-8. [ ] Signal handling
-9. [ ] Resource limits
+5. [x] Multi-stage Dockerfile
+6. [x] Add MariaDB service
+7. [x] Improved health checks
+8. [x] Signal handling
+9. [x] Resource limits
 
 ### Phase 3: Documentation (Medium)
 10. [ ] Add LICENSE file

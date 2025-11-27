@@ -1,4 +1,15 @@
+# DXSpider Docker Compose Configuration
+#
+# Usage:
+#   Basic (no database):     docker compose up -d
+#   With MariaDB:            docker compose --profile database up -d
+#
+# See .env.example for configuration options
+
 services:
+  # ===========================================================================
+  # DXSpider Cluster Node
+  # ===========================================================================
   dxspider:
     build:
       context: .
@@ -7,10 +18,14 @@ services:
         - "linux/arm64"
         - "linux/amd64"
       args:
-        - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH}
-        - SPIDER_USERNAME=${CLUSTER_DB_USER}
-    # Security: Removed 'privileged: true' - not needed for DXSpider
-    # If you encounter permission issues, use specific cap_add instead
+        - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH:-mojo}
+        - SPIDER_USERNAME=${CLUSTER_DB_USER:-sysop}
+
+    # Security: No privileged mode needed
+    # If you encounter permission issues, use specific cap_add instead:
+    # cap_add:
+    #   - NET_BIND_SERVICE  # Only if binding to ports < 1024
+
     environment:
       - SPIDER_INSTALL_DIR=/spider
       - CLUSTER_CALLSIGN=${CLUSTER_CALLSIGN}
@@ -22,35 +37,116 @@ services:
       - CLUSTER_SYSOP_BBS_ADDRESS=${CLUSTER_SYSOP_BBS_ADDRESS}
       - CLUSTER_LATITUDE=${CLUSTER_LATITUDE}
       - CLUSTER_LONGITUDE=${CLUSTER_LONGITUDE}
-      - SPIDER_USERNAME=${CLUSTER_DB_USER}
-      - CLUSTER_DSN=dbi:mysql:${CLUSTER_DB_NAME}:${CLUSTER_DB_HOSTNAME}:${CLUSTER_DB_PORT}
-      - CLUSTER_DBUSER=${CLUSTER_DB_USER}
+      - SPIDER_USERNAME=${CLUSTER_DB_USER:-sysop}
+      - CLUSTER_DSN=dbi:mysql:${CLUSTER_DB_NAME:-dxspider}:${CLUSTER_DB_HOSTNAME:-mariadb}:${CLUSTER_DB_PORT:-3306}
+      - CLUSTER_DBUSER=${CLUSTER_DB_USER:-sysop}
       - CLUSTER_DBPASS=${CLUSTER_DB_PASS}
-      - CLUSTER_PORT=${CLUSTER_PORT}
-      - CLUSTER_SYSOP_PORT=${CLUSTER_SYSOP_PORT}
+      - CLUSTER_PORT=${CLUSTER_PORT:-7300}
+      - CLUSTER_SYSOP_PORT=${CLUSTER_SYSOP_PORT:-8050}
+
+    # Improved health check: verify both port AND process are running
     healthcheck:
-      test: ["CMD", "nc", "-z", "-v", "localhost", "${CLUSTER_PORT}"]
-      interval: 10s
-      start_period: 5s
+      test: ["CMD-SHELL", "nc -z localhost ${CLUSTER_PORT:-7300} && pgrep -f cluster.pl > /dev/null"]
+      interval: 30s
+      start_period: 10s
       retries: 3
-      timeout: 60s
-    restart: always
+      timeout: 10s
+
+    restart: unless-stopped
+
+    # Resource limits to prevent runaway containers
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
     volumes:
+      # Configuration files (read-write for runtime updates)
       - ./startup:/spider/scripts/startup:rw
       - ./crontab:/spider/local_cmd/crontab:rw
       - ./connect:/spider/connect:rw
       - ./motd:/spider/local_data/motd:rw
+      # Runtime data (read-write, persisted)
       - ./local_data:/spider/local_data:rw
+      # Command scripts (read-write for customization)
       - ./cmd:/spider/cmd:rw
-      - ./msg:/spider/msg:rw  
+      # Message configuration
+      - ./msg:/spider/msg:rw
+
     ports:
-      - ${CLUSTER_PORT}:${CLUSTER_PORT}
-      - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
-    expose:
-      - ${CLUSTER_PORT}
-      - ${CLUSTER_SYSOP_PORT}
+      - "${CLUSTER_PORT:-7300}:${CLUSTER_PORT:-7300}"
+      - "${CLUSTER_SYSOP_PORT:-8050}:${CLUSTER_SYSOP_PORT:-8050}"
+
+    networks:
+      - dxspider-net
+
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
-        max-file: "10"
+        max-size: "10m"
+        max-file: "5"
+
+    # Stop gracefully (give time for clean shutdown)
+    stop_grace_period: 30s
+
+  # ===========================================================================
+  # MariaDB Database (Optional - use --profile database)
+  # ===========================================================================
+  mariadb:
+    image: mariadb:10.11
+    profiles:
+      - database
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${CLUSTER_DB_ROOT_PWD:-rootpassword}
+      - MYSQL_DATABASE=${CLUSTER_DB_NAME:-dxspider}
+      - MYSQL_USER=${CLUSTER_DB_USER:-sysop}
+      - MYSQL_PASSWORD=${CLUSTER_DB_PASS}
+
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      start_period: 30s
+      retries: 5
+      timeout: 5s
+
+    restart: unless-stopped
+
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+    networks:
+      - dxspider-net
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# ===========================================================================
+# Networks
+# ===========================================================================
+networks:
+  dxspider-net:
+    driver: bridge
+
+# ===========================================================================
+# Volumes
+# ===========================================================================
+volumes:
+  mariadb_data:
+    driver: local
