@@ -250,21 +250,21 @@ Update periodically with security patches.
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `LICENSE` | MIT license text (referenced in README) | [ ] Missing |
+| `LICENSE` | MIT license text (referenced in README) | [x] Created |
 | `.env.example` | Configuration template | [x] Created |
-| `CONTRIBUTING.md` | Contribution guidelines | [ ] Missing |
-| `SECURITY.md` | Security policy & disclosure | [ ] Missing |
-| `TROUBLESHOOTING.md` | Common issues & solutions | [ ] Missing |
+| `CONTRIBUTING.md` | Contribution guidelines | [x] Created |
+| `SECURITY.md` | Security policy & disclosure | [x] Created |
+| `TROUBLESHOOTING.md` | Common issues & solutions | [x] Created |
 | `.dockerignore` | Optimize Docker builds | [x] Created |
 
 ### README Improvements
 
-- [ ] Fix claim about "multi-stage builds" (currently single-stage)
-- [ ] Fix claim about "hardened configuration" (uses privileged mode)
-- [ ] Add architecture diagram
-- [ ] Add backup/restore procedures
-- [ ] Document upgrade path
-- [ ] Add multiple partner node examples
+- [x] Fix claim about "multi-stage builds" (now accurate)
+- [x] Fix claim about "hardened configuration" (now accurate)
+- [x] Add architecture diagram
+- [x] Add backup/restore procedures
+- [x] Document upgrade path
+- [x] Add multiple partner node examples
 
 ---
 
@@ -391,11 +391,11 @@ Production-grade Kubernetes deployment:
 9. [x] Resource limits
 
 ### Phase 3: Documentation (Medium)
-10. [ ] Add LICENSE file
-11. [ ] Create CONTRIBUTING.md
-12. [ ] Create SECURITY.md
-13. [ ] Create TROUBLESHOOTING.md
-14. [ ] Update README accuracy
+10. [x] Add LICENSE file
+11. [x] Create CONTRIBUTING.md
+12. [x] Create SECURITY.md
+13. [x] Create TROUBLESHOOTING.md
+14. [x] Update README accuracy
 
 ### Phase 4: Features (Future)
 15. [ ] Prometheus metrics
