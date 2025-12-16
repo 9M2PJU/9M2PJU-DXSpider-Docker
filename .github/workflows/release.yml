@@ -99,7 +99,7 @@ jobs:
 
       - name: Build and push mojo variant
         id: build-mojo
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -122,7 +122,7 @@ jobs:
 
       - name: Build and push master variant
         id: build-master
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile

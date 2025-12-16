@@ -57,7 +57,7 @@ jobs:
             type=sha,prefix={{branch}}-
 
       - name: Build Docker image (mojo branch)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -72,7 +72,7 @@ jobs:
           outputs: type=docker,dest=/tmp/image-mojo.tar
 
       - name: Build Docker image (master branch)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
