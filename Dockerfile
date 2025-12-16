@@ -5,7 +5,7 @@
 # =============================================================================
 # Stage 1: Builder
 # =============================================================================
-FROM alpine:3.20 AS builder
+FROM alpine:3.23 AS builder
 
 ARG SPIDER_GIT_REPOSITORY=git://scm.dxcluster.org/scm/spider
 ARG SPIDER_VERSION=mojo
@@ -62,7 +62,7 @@ RUN cd ${SPIDER_INSTALL_DIR}/src && make
 # =============================================================================
 # Stage 2: Runtime
 # =============================================================================
-FROM alpine:3.20 AS runtime
+FROM alpine:3.23 AS runtime
 
 # Labels for container metadata
 LABEL org.opencontainers.image.title="DXSpider" \
