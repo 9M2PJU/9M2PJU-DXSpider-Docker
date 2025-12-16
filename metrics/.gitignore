@@ -1,0 +1,17 @@
+# Ignore Grafana and Prometheus runtime data
+# These are mounted as Docker volumes and shouldn't be in git
+
+# Prometheus data
+prometheus/data/
+
+# Grafana data
+grafana/data/
+
+# Temporary files
+*.tmp
+*.log
+*.pid
+
+# OS files
+.DS_Store
+Thumbs.db

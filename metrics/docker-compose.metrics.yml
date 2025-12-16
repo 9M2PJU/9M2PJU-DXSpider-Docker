@@ -1,0 +1,218 @@
+# Docker Compose Override for DXSpider Metrics Monitoring
+#
+# This file adds Prometheus and Grafana containers to your DXSpider deployment.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f metrics/docker-compose.metrics.yml up -d
+#
+# Services Added:
+#   - Prometheus (port 9090) - Metrics collection and storage
+#   - Grafana (port 3000) - Metrics visualization and dashboards
+#
+# Default Credentials:
+#   Grafana: admin / admin (change on first login)
+
+services:
+  # ===========================================================================
+  # DXSpider - Extended Configuration for Metrics
+  # ===========================================================================
+  dxspider:
+    environment:
+      # Metrics port configuration
+      - CLUSTER_METRICS_PORT=${CLUSTER_METRICS_PORT:-9100}
+
+    # Expose metrics port
+    ports:
+      - "${CLUSTER_METRICS_PORT:-9100}:${CLUSTER_METRICS_PORT:-9100}"
+
+    # Mount metrics server script
+    volumes:
+      - ./metrics/prometheus/metrics_server.pl:/spider/metrics/metrics_server.pl:ro
+
+    networks:
+      - dxspider-net
+      - metrics-net
+
+  # ===========================================================================
+  # Prometheus - Metrics Collection and Storage
+  # ===========================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dxspider-prometheus
+    restart: unless-stopped
+
+    # Command line arguments
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--storage.tsdb.retention.size=10GB'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+
+    ports:
+      - "9090:9090"
+
+    volumes:
+      # Prometheus configuration
+      - ./metrics/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      # Alert rules (optional)
+      # - ./metrics/prometheus/alerts:/etc/prometheus/alerts:ro
+      # Time-series database storage
+      - prometheus_data:/prometheus
+
+    networks:
+      - metrics-net
+
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ===========================================================================
+  # Grafana - Metrics Visualization and Dashboards
+  # ===========================================================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dxspider-grafana
+    restart: unless-stopped
+
+    environment:
+      # Admin credentials
+      - GF_SECURITY_ADMIN_USER=${GF_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_ADMIN_PASSWORD:?ERROR: GF_ADMIN_PASSWORD must be set in .env}
+
+      # Server settings
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_SERVER_DOMAIN=localhost
+
+      # Anonymous access (set to false for production)
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+
+      # Disable Grafana telemetry
+      - GF_ANALYTICS_REPORTING_ENABLED=false
+      - GF_ANALYTICS_CHECK_FOR_UPDATES=false
+
+      # Provisioning
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+
+      # Plugins
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      # Grafana data (dashboards, users, etc.)
+      - grafana_data:/var/lib/grafana
+
+      # Datasource provisioning
+      - ./metrics/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+
+      # Dashboard provisioning
+      - ./metrics/grafana/provisioning/dashboards/dxspider.yml:/etc/grafana/provisioning/dashboards/dxspider.yml:ro
+      - ./metrics/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+
+    networks:
+      - metrics-net
+
+    depends_on:
+      - prometheus
+
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ===========================================================================
+  # Optional: Node Exporter for System Metrics
+  # ===========================================================================
+  # Uncomment to enable system-level metrics (CPU, memory, disk, network)
+  #
+  # node-exporter:
+  #   image: prom/node-exporter:latest
+  #   container_name: dxspider-node-exporter
+  #   restart: unless-stopped
+  #
+  #   command:
+  #     - '--path.rootfs=/host'
+  #     - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+  #
+  #   ports:
+  #     - "9101:9100"
+  #
+  #   volumes:
+  #     - /:/host:ro,rslave
+  #
+  #   networks:
+  #     - metrics-net
+  #
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.5'
+  #         memory: 128M
+
+# ===========================================================================
+# Networks
+# ===========================================================================
+networks:
+  # Extend existing dxspider-net from main docker-compose.yml
+  dxspider-net:
+    external: false
+
+  # New network for metrics stack
+  metrics-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# ===========================================================================
+# Volumes
+# ===========================================================================
+volumes:
+  # Prometheus time-series database
+  prometheus_data:
+    driver: local
+
+  # Grafana configuration and dashboards
+  grafana_data:
+    driver: local

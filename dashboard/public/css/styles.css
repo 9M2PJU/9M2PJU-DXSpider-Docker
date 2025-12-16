@@ -1,0 +1,68 @@
+/**
+ * DXSpider Dashboard - Additional Styles
+ *
+ * Main styles are inlined in index.html.ep for performance.
+ * This file is for future customizations.
+ */
+
+/* Additional utility classes */
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.box-shadow-lg {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Print styles for spot logging */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+
+    header, footer, .band-btn, button {
+        display: none;
+    }
+
+    .spot-row {
+        border-bottom: 1px solid #ddd;
+    }
+}
+
+/* Accessibility improvements */
+.focus-visible:focus {
+    outline: 2px solid #00d4ff;
+    outline-offset: 2px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+    .callsign {
+        font-size: 0.875rem;
+    }
+
+    table {
+        font-size: 0.75rem;
+    }
+
+    th, td {
+        padding: 0.5rem !important;
+    }
+}

@@ -1,0 +1,18 @@
+--- a/cmd/dx.pl
++++ b/cmd/dx.pl
+@@ -183,6 +183,14 @@ if ($freq =~ /^69/ || $localonly) {
+ 		push @{$self->{sluggedpcs}}, [61, $spot, \@spot];
+ 	} else {
+ 		# store in spots database
+ 		Spot::add(@spot);
++
++		# Dispatch to notification system (if enabled)
++		eval {
++			require Notify;
++			Notify::dispatch(\@spot) if $Notify::enabled;
++		};
++		# Silently ignore notification errors - don't impact spot processing
++
+ 		DXProt::send_dx_spot($self, $spot, @spot);
+ 	}
+ }

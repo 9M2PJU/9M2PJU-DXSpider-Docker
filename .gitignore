@@ -1,0 +1,54 @@
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.secret
+*.secrets
+
+# Credentials
+.ttyd_credentials
+*credentials*
+
+# Runtime data (keep structure but not content)
+local_data/*.lck
+local_data/debug/
+local_data/log/
+local_data/users.v3j
+local_data/dupefile
+local_data/dxqsl.v1j
+local_data/rbn_cache
+local_data/badip.local
+
+# Message data
+msg/*.dat
+msg/m_*.pl
+
+# Docker
+.docker/
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db

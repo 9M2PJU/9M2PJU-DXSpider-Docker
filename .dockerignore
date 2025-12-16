@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+!README.md
+LICENSE
+
+# Environment files (build uses ARGs instead)
+.env
+.env.*
+
+# Local development
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime data (should be mounted as volumes)
+local_data/debug/
+local_data/log/
+local_data/*.lck
+local_data/users.v3j
+local_data/dupefile
+local_data/dxqsl.v1j
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary
+*.tmp
+*.bak
+tmp/
+temp/
+
+# CI/CD
+.github/
+scripts/smoke-test.sh
+.trivyignore

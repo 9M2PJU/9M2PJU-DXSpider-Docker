@@ -1,0 +1,62 @@
+{{- if .Values.ingress.enabled }}
+{{- $fullName := include "dxspider.fullname" . -}}
+{{- $apiVersion := include "dxspider.ingress.apiVersion" . -}}
+apiVersion: {{ $apiVersion }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "dxspider.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if eq $apiVersion "networking.k8s.io/v1" }}
+            pathType: {{ .pathType }}
+            {{- end }}
+            backend:
+              {{- if eq $apiVersion "networking.k8s.io/v1" }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  {{- if eq .service "console" }}
+                  number: {{ $.Values.service.console.port }}
+                  {{- else if eq .service "metrics" }}
+                  number: {{ $.Values.service.metrics.port }}
+                  {{- else }}
+                  number: {{ $.Values.service.telnet.port }}
+                  {{- end }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              {{- if eq .service "console" }}
+              servicePort: {{ $.Values.service.console.port }}
+              {{- else if eq .service "metrics" }}
+              servicePort: {{ $.Values.service.metrics.port }}
+              {{- else }}
+              servicePort: {{ $.Values.service.telnet.port }}
+              {{- end }}
+              {{- end }}
+          {{- end }}
+    {{- end }}
+{{- end }}
