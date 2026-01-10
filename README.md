@@ -162,7 +162,7 @@ docker compose logs -f dxspider
 
 ### Accessing the Shell
 ```bash
-docker compose exec dxspider bash
+docker compose exec dxspider sh
 ```
 
 ---
