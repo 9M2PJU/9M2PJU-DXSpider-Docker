@@ -9,9 +9,13 @@
 # 🌐 DXSpider Docker
 ### The **Ultimate** Modern DX Cluster Solution
 
-[![Version](https://img.shields.io/github/v/release/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&label=Version&color=hotpink)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/releases)
-[![License](https://img.shields.io/badge/License-MIT-cyan.svg?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/github/license/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&color=cyan)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&color=red)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&color=blue)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/commits/main)
+[![Repo Size](https://img.shields.io/github/repo-size/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&color=orange)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
+<br/>
 [![Uptime](https://img.shields.io/badge/Uptime-99.9%25-green?style=for-the-badge&logo=activity)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
+[![Language](https://img.shields.io/badge/Written%20in-Perl-0073a1?style=for-the-badge&logo=perl&logoColor=white)](https://www.perl.org/)
 [![Platform](https://img.shields.io/badge/Platform-ARM64%20%7C%20AMD64-blueviolet?style=for-the-badge&logo=docker)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
 
 <br/>
