@@ -91,6 +91,8 @@ Follow these simple steps to join the global network.
 ### Prerequisites
 *   Docker & Docker Compose installed.
 
+
+
 ### 1-Minute Setup
 
 **1. Get the Code**
@@ -243,6 +245,12 @@ We love community involvement!
 3.  Commit your changes.
 4.  Push to the branch.
 5.  Create a Pull Request.
+
+---
+
+## 📜 License
+
+Distributed under the GNU General Public License v3.0. See `LICENSE` for more information.
 
 ---
 
