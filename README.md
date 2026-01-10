@@ -7,7 +7,7 @@
 # 🌐 DXSpider Docker
 ### The Modern Standard for DX Clustering
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/9m2pju/dxspider?style=for-the-badge&logo=docker&logoColor=white&color=2496ED)](https://hub.docker.com/r/9m2pju/dxspider)
+
 [![Version](https://img.shields.io/github/v/release/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&label=Version&color=FF4B4B)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/releases)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-linux%2Farm64%20%7C%20linux%2Famd64-lightgrey?style=for-the-badge&logo=linux)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
