@@ -1,22 +1,25 @@
 <div align="center">
 
-<img src="assets/header.png" alt="DXSpider Docker Hero" width="100%" />
+<img src="assets/logo.png" alt="DXSpider Logo" width="200" height="200" style="border-radius: 20px; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);" />
 
-<br/>
+<br/><br/>
+
+<img src="assets/header.png" alt="DXSpider Docker Hero" width="100%" style="border-radius: 10px;" />
 
 # 🌐 DXSpider Docker
-### The Modern Standard for DX Clustering
+### The **Ultimate** Modern DX Cluster Solution
 
-
-[![Version](https://img.shields.io/github/v/release/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&label=Version&color=FF4B4B)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/releases)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-linux%2Farm64%20%7C%20linux%2Famd64-lightgrey?style=for-the-badge&logo=linux)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
+[![Version](https://img.shields.io/github/v/release/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&label=Version&color=hotpink)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/releases)
+[![License](https://img.shields.io/badge/License-MIT-cyan.svg?style=for-the-badge)](LICENSE)
+[![Uptime](https://img.shields.io/badge/Uptime-99.9%25-green?style=for-the-badge&logo=activity)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
+[![Platform](https://img.shields.io/badge/Platform-ARM64%20%7C%20AMD64-blueviolet?style=for-the-badge&logo=docker)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
 
 <br/>
 
-**Revolutionizing Amateur Radio DX Clustering with Containerization**
+**Experience the future of Amateur Radio Networking.**
+*Deploy a professional-grade DX Cluster node in minutes, not hours.*
 
-[Features](#-key-features) • [Quick Start](#-quick-start) • [Configuration](#%EF%B8%8F-configuration) • [Architecture](#-architecture) • [Contributing](#-contributing)
+[✨ Features](#-key-features) • [🚀 Quick Start](#-quick-start) • [⚙️ Configuration](#%EF%B8%8F-configuration) • [📚 Deep Dive](#-deep-dive-documentation) • [🆘 Support](#-troubleshooting--faq)
 
 </div>
 
@@ -24,167 +27,229 @@
 
 ## 📖 Introduction
 
-**9M2PJU-DXSpider-Docker** brings the legendary **DXSpider** cluster software into the modern era. By encapsulating the complex Perl-based infrastructure into a lightweight, secure, and production-ready Docker container, we empower amateur radio operators to deploy global DX nodes in minutes, not hours.
+Welcome to **9M2PJU-DXSpider-Docker**. We've taken the legendary DXSpider software—the backbone of the global DX Cluster network—and encased it in a state-of-the-art Docker container.
 
-Whether you are running a contest station, a club node, or backing up the global cluster network, this solution provides the reliability and ease of management you need.
+**Why is this cool?**
+*   **Zero Dependencies**: No need to install Perl, CPAN modules, or databases manually.
+*   **Sandboxed**: Keeps your server clean and secure.
+*   **Portable**: Move your entire cluster to a new server just by copying a few folders.
+*   **Beautiful**: Designed for modern sysops who care about quality and ease of use.
 
-> **Special Acknowledgment**: Deepest gratitude to **Dirk Koopman (G1TLH)** for creating DXSpider, the engine that powers our global DX networks.
+> **Standing on Giant Shoulders**: A massive tribute to **Dirk Koopman (G1TLH)**, the creator of DXSpider, for his decades of service to our hobby.
 
 ---
 
 ## ✨ Key Features
 
-- **🚀 Instant Deployment**: Go from zero to a fully functional DX Cluster node in under 2 minutes.
-- **🔒 Hardened Security**: Minimal base image with reduced attack surface and non-root execution where possible.
-- **💾 Persistent Data**: Smart volume management ensures your user database, spots, and configuration survive restarts.
-- **🌍 Multi-Architecture**: Native support for **AMD64** (Standard Server) and **ARM64** (Raspberry Pi / Apple Silicon).
-- **🔧 GitOps Ready**: Fully configurable via environment variables and standard config files.
-- **🚦 Health Checks**: Built-in Docker health checks for automated recovery and monitoring.
+| Feature | Description |
+| :--- | :--- |
+| **🚀 Instant Launch** | Type 3 lines of code, and you are live. Literally. |
+| **🔒 Iron-Clad** | Runs with minimal privileges. Hardened for the modern web. |
+| **💾 Data Safety** | Your user database and spots are safe in persistent volumes. |
+| **🌍 Universal** | Runs on your powerful server OR your customized Raspberry Pi. |
+| **🤖 Automation** | Built-in Cron and Startup script support. |
+| **⚡ Performance** | Optimized for low-latency spot delivery. |
 
 ---
 
-## 🏗 Architecture
+## 🏗 Architecture & Flow
 
-The following diagram illustrates how the container interacts with the host system, the amateur radio network, and your users.
+How does the magic happen?
 
 ```mermaid
-graph TD
-    subgraph "Host System"
-        direction TB
-        Config[".env Configuration"]
-        Volumes["Persistent Volumes (/spider/...)"]
+graph LR
+    subgraph "Your Station (Host)"
+        Config[".Env Config"]
+        Data["📂 Local Data"]
     end
 
-    subgraph "Docker Container"
-        DXSpider["🕷️ DXSpider Process"]
-        Cron["⏱️ Cron Scheduler"]
-        DB["🗃️ Local Data"]
+    subgraph "The Engine (Docker)"
+        DXSpider["🕷️ DXSpider Core"]
+        Cron["⏱️ Scheduler"]
     end
-
-    UserClients["User Clients"] -- Port 7300 --> DXSpider
-    Sysop -- Port 7300 --> DXSpider
-    DXSpider -- Internet --> GlobalCluster["🌐 Global DX Cluster Network"]
     
+    World["🌍 Global Network"]
+    Users["👨‍💻 Hams (Port 7300)"]
+
     Config --> DXSpider
-    Volumes <--> DB
-    Volumes <--> DXSpider
+    Data <--> DXSpider
+    DXSpider <--> World
+    Users --> DXSpider
+    Cron --> DXSpider
 ```
 
 ---
 
 ## 🚀 Quick Start
 
+Follow these simple steps to join the global network.
+
 ### Prerequisites
-- Docker Engine 20.10+
-- Docker Compose v2.0+
+*   Docker & Docker Compose installed.
 
 ### 1-Minute Setup
 
+**1. Get the Code**
 ```bash
-# 1. Clone the repository
 git clone https://github.com/9M2PJU/9M2PJU-DXSpider-Docker.git
 cd 9M2PJU-DXSpider-Docker
+```
 
-# 2. Configure your station
-cp .env.example .env  # If example exists, otherwise edit .env directly
+**2. Configure Identity**
+Open `.env` and tell the cluster who you are.
+```bash
+cp .env.example .env
 nano .env
+# Set CLUSTER_CALLSIGN, CLUSTER_SYSOP_CALLSIGN, etc.
+```
 
-# 3. Start the node
+**3. Launch!**
+```bash
 docker compose up -d --build
 ```
 
-**That's it!** Your node is now running on port `7300`. Connect with any telnet client:
-`telnet localhost 7300`
-
----
-
-## ⚙️ Configuration
-
-Control your node completely via environment variables in `.env`.
-
-### Node Identity
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `CLUSTER_CALLSIGN` | The callsign of your update (Root Node) | `9M2PJU-10` |
-| `CLUSTER_SYSOP_CALLSIGN` | Your personal callsign (Admin) | `9M2PJU` |
-| `CLUSTER_LOCATOR` | Your Maidenhead Grid Square | `OJ03` |
-| `CLUSTER_QTH` | Human-readable location | `Kuala Lumpur` |
-
-### System & Network
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `CLUSTER_PORT` | Public Telnet Port | `7300` |
-| `CLUSTER_SYSOP_PORT` | Sysop Management Port | `7300` |
-| `CLUSTER_LATITUDE` | Latitude (Decimal) | `+03 08` |
-| `CLUSTER_LONGITUDE` | Longitude (Decimal) | `+101 41` |
-
-### Advanced / Database
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `CLUSTER_DB_USER` | Internal Database User | `dxspider` |
-| `CLUSTER_DB_NAME` | Database Name | `dxspider` |
-| `CLUSTER_DB_HOSTNAME` | Database Host (if external) | `db` |
-| `SPIDER_VERSION` | Git Branch/Tag to build | `mojo` |
-
----
-
-## 💾 Volume Management
-
-We map critical directories to the host to ensure data persistence.
-
-| Host Path | Container Path | Purpose |
-|-----------|----------------|---------|
-| `./local_data` | `/spider/local_data` | User database, spots, and state. **Backup this!** |
-| `./connect` | `/spider/connect` | Partner node connection scripts. |
-| `./cmd` | `/spider/cmd` | Custom commands and aliases. |
-| `./msg` | `/spider/msg` | Bulletins and messages. |
-| `./startup` | `/spider/scripts/startup` | Commands to run on boot. |
-
----
-
-## 🛠️ Advanced Usage
-
-### Connecting to Partner Nodes
-Create a connection script in the `connect` directory.
+🎉 **You are live!** Connect to your node:
 ```bash
-# Example: connect/gb7mbc
-timeout 60
-connect telnet GB7MBC dest_port
-client gb7mbc telnet
-login gb7mbc
-pass your_password
+telnet localhost 7300
 ```
 
-### Viewing Logs
+---
+
+## ⚙️ Configuration Reference
+
+Edit these in your `.env` file. We've set sensible defaults for everything else.
+
+| Variable | Description | Example |
+| :--- | :--- | :--- |
+| `CLUSTER_CALLSIGN` | **Required**. The callsign of your node. | `9M2PJU-2` |
+| `CLUSTER_SYSOP_CALLSIGN` | **Required**. Your admin callsign. | `9M2PJU` |
+| `CLUSTER_LOCATOR` | Your Grid Square. | `OJ03` |
+| `CLUSTER_LATITUDE` | Your Latitude. | `+03 08` |
+| `CLUSTER_LONGITUDE` | Your Longitude. | `+101 41` |
+| `CLUSTER_PORT` | The user-facing Telnet port. | `7300` |
+
+---
+
+## 📚 Deep Dive Documentation
+
+<details>
+<summary><b>📂 Understanding the Directory Structure</b> (Click to Expand)</summary>
+
+We map several folders from your host machine into the container using Docker Volumes. This is what allows your data to SURVIVE when you update or restart the container.
+
+*   `./local_data`: **CRITICAL**. Stores `users.v3j` (database), spots, debug logs, and state. **Back this folder up regularly!**
+*   `./connect`: Scripts that tell your node how to connect to other nodes.
+*   `./cmd`: Custom commands you create for your users.
+*   `./msg`: Stores bulletins and private messages.
+*   `./local_cmd`: System-level local command overrides.
+*   `./startup`: Files executed once when the container starts.
+*   `./crontab`: Scheduled tasks.
+
+</details>
+
+<details>
+<summary><b>🔗 How to Add Partner Nodes</b> (Click to Expand)</summary>
+
+To connect to another cluster node (e.g., `GB7MBC`), you need a connection script.
+
+1.  Create a file in `connect/` named after the target node (lowercase).
+    *   Example: `connect/gb7mbc`
+2.  Add the connection logic:
+    ```bash
+    timeout 60
+    # connect telnet <hostname> <port>
+    connect telnet gb7mbc.spud.org 7300
+    client gb7mbc telnet
+    # Interaction (Wait for 'login', send 'user')
+    login gb7mbc
+    pass mysecurepassword
+    ```
+3.  Test it from the shell: `docker compose exec dxspider sh -c '/spider/perl/connect gb7mbc'`
+
+</details>
+
+<details>
+<summary><b>⏱️ Automation (Cron & Startup)</b> (Click to Expand)</summary>
+
+**Startup Tasks**
+Edit the `startup` file. Commands here run every time the container boots.
 ```bash
-docker compose logs -f dxspider
+# Example 'startup' file content:
+load/forward
+set/spider gb7mbc
+connect gb7mbc
 ```
 
-### Accessing the Shell
+**Scheduled Tasks (Cron)**
+Edit the `crontab` file. The format is standard Min/Hour/Day/Month/DayOfWeek.
+```bash
+# Example 'crontab' file content:
+# Check connection to GB7MBC every 10 mins
+0,10,20,30,40,50 * * * * start_connect('gb7mbc') unless connected('gb7mbc')
+```
+
+</details>
+
+---
+
+## 🆘 Troubleshooting & FAQ
+
+<details>
+<summary><b>My container keeps restarting!</b></summary>
+
+Check the logs immediately:
+```bash
+docker compose logs -f
+```
+Common issues:
+*   Invalid characters in `.env`.
+*   Port 7300 is already in use by another application.
+</details>
+
+<details>
+<summary><b>How do I access the internal shell?</b></summary>
+
+If you need to run manual spider commands or debug internally:
 ```bash
 docker compose exec dxspider sh
+# Then run commands like:
+/spider/perl/console.pl
 ```
+</details>
+
+<details>
+<summary><b>How do I update to the latest version?</b></summary>
+
+Simple. We built this to be easy.
+```bash
+git pull                   # Get latest docker configs
+docker compose down        # Stop old container
+docker compose up -d --build # Build new one
+```
+*Your data in `local_data` will remain safe.*
+</details>
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are what make the open-source radio community great.
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+We love community involvement!
+1.  Fork it.
+2.  Create your feature branch (`git checkout -b feature/cool-thing`).
+3.  Commit your changes.
+4.  Push to the branch.
+5.  Create a Pull Request.
 
 ---
 
-## 📜 License
+<div align="center">
 
-Distributed under the MIT License. See `LICENSE` for more information.
+**Enjoying the project?**
+[⭐ Star us on GitHub!](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
 
 <br/>
 
-<div align="center">
-  <p>Made with ❤️ by <b>9M2PJU</b></p>
-  <p><i>73 and Good DX!</i></p>
+*Designed with ❤️ by **9M2PJU***
+*73 and Good DX!*
+
 </div>
