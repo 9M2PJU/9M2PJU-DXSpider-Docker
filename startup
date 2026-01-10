@@ -1,3 +1,6 @@
 load/forward
 set/spider 9m2pju-2
 connect 9m2pju-2
+set/var $Internet::allow = 1
+set/var $Internet::contest_host = "contest.dxtron.com"
+set/var $main::reqreg = 1 # user must register to use spot function !!
