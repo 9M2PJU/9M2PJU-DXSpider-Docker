@@ -1,9 +1,3 @@
-<div align="center">
-
-<img src="assets/logo.png" alt="DXSpider Logo" width="200" height="200" style="border-radius: 20px; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);" />
-
-<br/><br/>
-
 <img src="assets/header.png" alt="DXSpider Docker Hero" width="100%" style="border-radius: 10px;" />
 
 # 🌐 DXSpider Docker
