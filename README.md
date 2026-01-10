@@ -61,7 +61,7 @@ graph TD
         DB["🗃️ Local Data"]
     end
 
-    User Clients -- Port 7300 --> DXSpider
+    UserClients["User Clients"] -- Port 7300 --> DXSpider
     Sysop -- Port 7300 --> DXSpider
     DXSpider -- Internet --> GlobalCluster["🌐 Global DX Cluster Network"]
     
