@@ -1,3 +1,4 @@
+<div align="center">
 <img src="assets/header.png" alt="DXSpider Docker Hero" width="100%" style="border-radius: 10px;" />
 
 # 🌐 DXSpider Docker
