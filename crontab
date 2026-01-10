@@ -1,2 +1,14 @@
 0,5,10,20,30,40,50 * * * * start_connect('9m2pju-2') unless connected('9m2pju-2')
 
+# badip
+30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torexit')
+30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torrelay')
+30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.global')
+32 * * * * run_cmd('load/badip')
+
+# baddx, badspotter, badnode, badword
+33 * * * * spawn('cd /spider/local_data; wget -qN -O baddx.run https://github.com/EA3CV/dxspider_info/blob/main/download/baddx')
+33 * * * * spawn('cd /spider/local_data; wget -qN -O badspotter.run https://github.com/EA3CV/dxspider_info/blob/main/download/badspotter')
+33 * * * * spawn('cd /spider/local_data; wget -qN -O badnode.run https://github.com/EA3CV/dxspider_info/blob/main/download/badnode')
+33 * * * * spawn('cd /spider/local_data; wget -qN -O badword.new.run https://github.com/EA3CV/dxspider_info/blob/main/download/badword.new')
+#35 * * * * run_cmd('load/badwords')
