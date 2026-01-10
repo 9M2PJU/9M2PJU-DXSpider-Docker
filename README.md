@@ -240,6 +240,27 @@ docker compose up -d --build # Build new one
 
 ---
 
+---
+
+## 🏛️ History & Legacy
+
+To understand why this project exists, we must look back at the rich history of Amateur Radio networking.
+
+### The Dawn: Packet Clusters
+In the late 1980s, **Dick Newell (AK1A)** revolutionized DX hunting by creating the **PacketCluster** software. Before this, DX spots could only be shared via voice repeaters or local shouting. AK1A's software allowed spots to be distributed over **Packet Radio (AX.25)** networks. A "Sysop" would run a node, and users would connect via radio to see a live stream of DX spots.
+
+### The Evolution: DXSpider
+By the late 1990s, the internet was emerging, and the original DOS-based AK1A software was showing its age. **Dirk Koopman (G1TLH)** saw the need for a more flexible, modern solution that could bridge the gap between RF networks and the Internet.
+
+He chose **Perl** for its robust text handling and modularity, creating **DXSpider**. It was designed to be:
+*   **Compatible**: It spoke the exact same protocol as AK1A, so users didn't need to change their client software.
+*   **Scalable**: It could handle hundreds of simultaneous internet connections, something the old PC-based clusters couldn't dream of.
+*   **Open**: It allowed the community to contribute and extend the software.
+
+Today, DXSpider powers a vast majority of the world's DX Cluster nodes, silently processing millions of spots a year and keeping the global amateur radio community connected. **9M2PJU-DXSpider-Docker** is simply the next step in this evolution—packaging this history into a container for the future.
+
+---
+
 ## 🤝 Contributing
 
 We love community involvement!
