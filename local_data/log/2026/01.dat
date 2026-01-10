@@ -1,0 +1,25 @@
+1768004368^cluster^DXSpider v1.57 build 633 (git: mojo/6f0fc50[r]) using perl v5.38.5 on linux started
+1768004368^cluster^Copyright (c) 1998-2026 Dirk Koopman G1TLH
+1768004368^cluster^Capabilities: ve7cc rbn
+1768004368^DXCommand^9M2PJU-10 cmd: 'set/external_ip' not found
+1768004369^DXProt^DXCIDR::reload reload database
+1768004369^DXProt^DXCIDR::reload: badip.local read containing 0 ip addresses
+1768004369^DXProt^DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1768004370^DXProt^9M2PJU-2 connected from 175.139.62.68
+1768004522^cluster^DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux started
+1768004522^cluster^Copyright (c) 1998-2026 Dirk Koopman G1TLH
+1768004522^cluster^Capabilities: ve7cc rbn
+1768004522^DXCommand^9M2PJU-10 cmd: 'set/external_ip' not found
+1768004524^DXProt^DXCIDR::reload reload database
+1768004524^DXProt^DXCIDR::reload: badip.local read containing 0 ip addresses
+1768004524^DXProt^DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 1 badip files
+1768004524^DXProt^9M2PJU-2 connected from 175.139.62.68
+1768005722^DXProt^9M2PJU-2 Disconnected
+1768006200^DXProt^9M2PJU-2 connected from 175.139.62.68
+1768007402^DXProt^9M2PJU-2 Disconnected
+1768008000^DXProt^9M2PJU-2 connected from 175.139.62.68
+1768009203^DXProt^9M2PJU-2 Disconnected
+1768009800^DXProt^9M2PJU-2 connected from 175.139.62.68
+1768011003^DXProt^9M2PJU-2 Disconnected
+1768011600^DXProt^9M2PJU-2 connected from 175.139.62.68
+1768012803^DXProt^9M2PJU-2 Disconnected
