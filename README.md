@@ -107,7 +107,6 @@ cd 9M2PJU-DXSpider-Docker
 **2. Configure Identity**
 Open `.env` and tell the cluster who you are.
 ```bash
-cp .env.example .env
 nano .env
 # Set CLUSTER_CALLSIGN, CLUSTER_SYSOP_CALLSIGN, etc.
 ```
