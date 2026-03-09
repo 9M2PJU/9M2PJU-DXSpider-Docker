@@ -55,7 +55,9 @@ sed -i "/\$Internet::contest_host/s/'//g" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
 
 
 cd ${SPIDER_INSTALL_DIR}/perl && \
-./create_sysop.pl && \
+if [ ! -s ${SPIDER_INSTALL_DIR}/local_data/users.v3j ]; then
+    ./create_sysop.pl
+fi && \
 ./cluster.pl &
 
 sleep 3
