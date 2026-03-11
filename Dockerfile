@@ -12,6 +12,7 @@ ARG SPIDER_UID=${SPIDER_UID:-1000}
 
 RUN apk update \
     && apk add \
+    bash \
     gcc \
     git \ 
     make \
@@ -49,7 +50,10 @@ RUN apk update \
     && cpanm --no-wget Data::Structure::Util \
     && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
-    && git clone -b ${SPIDER_VERSION} ${SPIDER_GIT_REPOSITORY} ${SPIDER_INSTALL_DIR} \
+    && git clone --depth 1 -b mojo ${SPIDER_GIT_REPOSITORY} ${SPIDER_INSTALL_DIR} \
+    && cd /spider \
+    && git reset --hard \
+    && git pull \
     && mkdir -p ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_cmd ${SPIDER_INSTALL_DIR}/local_data \
     && find ${SPIDER_INSTALL_DIR}/. -type d -exec chmod 2775 {} \; \ 
     && find ${SPIDER_INSTALL_DIR}/. -type f -name '*.pl' -exec chmod 775 {} \; \
