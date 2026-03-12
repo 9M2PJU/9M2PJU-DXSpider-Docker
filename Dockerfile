@@ -47,7 +47,6 @@ RUN apk add --no-cache \
     && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
     && git clone -b mojo https://github.com/EA3CV/dxspider ${SPIDER_INSTALL_DIR} \
-    && git rev-parse --short HEAD > ${SPIDER_INSTALL_DIR}/.version \
     && mkdir -p ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_cmd ${SPIDER_INSTALL_DIR}/local_data \
 # Set permissions
     && chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR} \
