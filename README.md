@@ -172,8 +172,10 @@ Edit these in your `.env` file. We've set sensible defaults for everything else.
 | `CLUSTER_PORT` | The user-facing Telnet port. | `7300` |
 | `CLUSTER_SYSOP_PORT` | The Web Console port. | `8080` |
 | `OVERWRITE_CONFIG` | Set to `yes` to force-regenerate DXVars.pm. | `no` |
-| `CLUSTER_DBUSER` | Admin username for Web Console. | `sysop` |
-| `CLUSTER_DBPASS` | Admin password for Web Console. | `supersecret` |
+| `WEB_USER` | Username for the Web Console. | `sysop` |
+| `WEB_PASS` | Password for the Web Console. | `supersecret` |
+| `CLUSTER_DBUSER` | Username for the MariaDB database. | `sysop` |
+| `CLUSTER_DBPASS` | Password for the MariaDB database. | `password` |
 
 ---
 

@@ -17,12 +17,25 @@ use vars qw(@listen);
 EOF
 fi
 
+# Signal handling for graceful shutdown
+function cleanup() {
+    echo "Stopping DXSpider Cluster..."
+    pkill -f "cluster.pl"
+    exit 0
+}
+
+trap cleanup SIGTERM SIGINT
+
 # Format calls and locator
 CLUSTER_CALLSIGN=$(echo ${CLUSTER_CALLSIGN} | tr '[a-z]' '[A-Z]')
 CLUSTER_SYSOP_CALLSIGN=$(echo ${CLUSTER_SYSOP_CALLSIGN} | tr '[a-z]' '[A-Z]')
 CLUSTER_LOCATOR=$(echo ${CLUSTER_LOCATOR} | tr '[a-z]' '[A-Z]')
-CLUSTER_SYSOP_EMAIL=$(echo ${CLUSTER_SYSOP_EMAIL} | sed 's/\@/\\\\@/g')
-CLUSTER_SYSOP_BBS_ADDRESS=$(echo ${CLUSTER_SYSOP_BBS_ADDRESS} | sed 's/\@/\\\\@/g')
+CLUSTER_SYSOP_EMAIL=$(echo ${CLUSTER_SYSOP_EMAIL} | sed 's/@/\\@/g')
+CLUSTER_SYSOP_BBS_ADDRESS=$(echo ${CLUSTER_SYSOP_BBS_ADDRESS} | sed 's/@/\\@/g')
+
+# Web Console Credentials (fallback to DB credentials for compatibility)
+WEB_USER=${WEB_USER:-${CLUSTER_DBUSER}}
+WEB_PASS=${WEB_PASS:-${CLUSTER_DBPASS}}
 
 # Generate DXVars.pm
 if [ ! -f ${SPIDER_INSTALL_DIR}/local/DXVars.pm ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
@@ -65,5 +78,8 @@ if ! pgrep -f "cluster.pl" > /dev/null; then
 fi
 
 echo "Starting Web Console..."
-# Run ttyd as foreground process to keep container alive
-exec ttyd -p ${CLUSTER_SYSOP_PORT:-8080} -u 1000 -t fontSize=16 -c "${CLUSTER_DBUSER}:${CLUSTER_DBPASS}" perl /spider/perl/console.pl
+# Run ttyd as foreground process
+ttyd -p ${CLUSTER_SYSOP_PORT:-8080} -u 1000 -t fontSize=16 -c "${WEB_USER}:${WEB_PASS}" perl /spider/perl/console.pl &
+
+# Wait for children to handle traps
+wait

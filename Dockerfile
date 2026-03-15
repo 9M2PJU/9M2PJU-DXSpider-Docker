@@ -3,6 +3,13 @@ FROM alpine:3.23
 ARG SPIDER_INSTALL_DIR=/spider
 ARG SPIDER_USERNAME=sysop
 ARG SPIDER_UID=1000
+ARG SPIDER_VERSION=mojo
+
+LABEL org.opencontainers.image.title="DXSpider Docker" \
+      org.opencontainers.image.description="High-performance DXSpider Amateur Radio Cluster in a container" \
+      org.opencontainers.image.authors="9M2PJU" \
+      org.opencontainers.image.source="https://github.com/9M2PJU/9M2PJU-DXSpider-Docker" \
+      org.opencontainers.image.licenses="GPL-3.0"
 
 WORKDIR ${SPIDER_INSTALL_DIR}
 
@@ -46,7 +53,7 @@ RUN apk add --no-cache \
     && cpanm Net::MQTT::Simple File::Copy::Recursive Authen::SASL \
     && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
-    && git clone -b mojo https://github.com/EA3CV/dxspider ${SPIDER_INSTALL_DIR} \
+    && git clone -b ${SPIDER_VERSION} https://github.com/EA3CV/dxspider ${SPIDER_INSTALL_DIR} \
     && mkdir -p ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_cmd ${SPIDER_INSTALL_DIR}/local_data \
 # Set permissions
     && chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR} \
@@ -65,4 +72,8 @@ RUN chmod +x /entrypoint.sh
 
 # Start as root so entrypoint.sh can fix any volume permissions, 
 # but the script will drop to the sysop user for the app.
+# Healthcare check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+  CMD nc -z localhost ${CLUSTER_PORT:-7300} || exit 1
+
 ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]

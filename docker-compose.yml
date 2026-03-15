@@ -9,8 +9,8 @@ services:
         - "linux/arm/v7"
         - "linux/arm/v6"
       args:
-        - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH}
-        - SPIDER_USERNAME=${CLUSTER_DB_USER}
+        - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH:-mojo}
+        - SPIDER_USERNAME=${CLUSTER_DB_USER:-sysop}
     privileged: true
     environment:
       - SPIDER_INSTALL_DIR=/spider
@@ -29,6 +29,8 @@ services:
       - CLUSTER_DBPASS=${CLUSTER_DB_PASS}
       - CLUSTER_PORT=${CLUSTER_PORT}
       - CLUSTER_SYSOP_PORT=${CLUSTER_SYSOP_PORT}
+      - WEB_USER=${WEB_USER:-sysop}
+      - WEB_PASS=${WEB_PASS:-sysoppassword}
     healthcheck:
       test: ["CMD", "nc", "-z", "-v", "localhost", "${CLUSTER_PORT}"]
       interval: 10s
