@@ -1,0 +1,22 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: dxspider-web
+  annotations:
+    run.googleapis.com/client-name: cloud-console
+spec:
+  template:
+    spec:
+      containers:
+      - image: ghcr.io/9m2pju/9m2pju-dxspider-docker:main
+        ports:
+        - containerPort: 8080
+        env:
+        - name: CLUSTER_CALLSIGN
+          value: "N0CALL-2"
+        - name: CLUSTER_SYSOP_CALLSIGN
+          value: "N0CALL"
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi

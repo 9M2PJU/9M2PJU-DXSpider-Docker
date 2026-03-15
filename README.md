@@ -235,6 +235,39 @@ Edit the `crontab` file. The format is standard Min/Hour/Day/Month/DayOfWeek.
 
 ---
 
+## ☁️ Cloud Deployment
+
+DXSpider Docker is built to run anywhere. Here is how to deploy it to major cloud providers.
+
+### 🟠 AWS (Amazon Web Services)
+**Recommended: EC2 with Docker Compose**
+1.  Launch an **EC2 Instance** (t3.micro or t4g.small for ARM64).
+2.  Install Docker and Docker Compose.
+3.  Clone this repo and follow the [Quick Start](#-quick-start).
+4.  **Security Group**: Open ports `7300` (Telnet) and `8080` (Web) to your desired IP ranges.
+
+**Advanced: ECS Fargate**
+- Use our sample task definition: [ecs-task-def.json](deploy/ecs-task-def.json).
+- Mount an **EFS (Elastic File System)** volume to `/spider/local_data` for persistent storage.
+
+### 🔵 Google Cloud Platform (GCP)
+**Recommended: Compute Engine**
+1.  Create a VM instance (e2-micro is sufficient).
+2.  Use a "Container Optimized OS" or standard Ubuntu with Docker.
+3.  Deploy via Docker Compose.
+
+**Alternative: Cloud Run (Web Console Only)**
+- If you only need the **Web Console**, you can deploy directly to Cloud Run using our template: [cloud-run.yaml](deploy/cloud-run.yaml).
+- *Note: Cloud Run is serverless and works best for stateless web traffic; use with Cloud SQL or persistent disks for full functionality.*
+
+### 💾 Persistent Storage in the Cloud
+When running in the cloud, **never** store your data inside the container or on a temporary local disk.
+- **AWS**: Use **EFS**.
+- **GCP**: Use **Filestore** or **Persistent Disks**.
+- **Azure**: Use **Azure Files**.
+
+---
+
 ## 🆘 Troubleshooting & FAQ
 
 <details>
