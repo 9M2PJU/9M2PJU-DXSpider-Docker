@@ -95,8 +95,6 @@ Follow these simple steps to join the global network.
 ### Prerequisites
 *   Docker & Docker Compose installed.
 
-
-
 ### 1-Minute Setup
 
 **1. Get the Code**
@@ -259,7 +257,7 @@ DXSpider Docker is built to run anywhere. Here is how to deploy it to major clou
 ### 🔵 Google Cloud Platform (GCP)
 **Recommended: Compute Engine**
 1.  Create a VM instance (e2-micro is sufficient).
-2.  Use a "Container Optimized OS" or standard Ubuntu with Docker.
+2.  Use **Container-Optimized OS (COS)** or standard Ubuntu with Docker.
 3.  Deploy via Docker Compose.
 
 **Alternative: Cloud Run (Web Console Only)**
@@ -381,8 +379,6 @@ docker compose up -d --build # Build new one
 ```
 *Your data in `local_data` will remain safe.*
 </details>
-
----
 
 ---
 
