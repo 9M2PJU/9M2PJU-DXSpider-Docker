@@ -51,6 +51,7 @@ Welcome to **9M2PJU-DXSpider-Docker**. We've taken the legendary DXSpider softwa
 | Feature | Description |
 | :--- | :--- |
 | **🚀 Instant Launch** | Type 3 lines of code, and you are live. Literally. |
+| **🌐 Web Console** | Built-in web terminal for easy administration without SSH. |
 | **🔒 Iron-Clad** | Runs with minimal privileges. Hardened for the modern web. |
 | **💾 Data Safety** | Your user database and spots are safe in persistent volumes. |
 | **🌍 Universal** | Runs on your powerful server OR your customized Raspberry Pi. |
@@ -116,10 +117,9 @@ nano .env
 docker compose up -d --build
 ```
 
-🎉 **You are live!** Connect to your node:
-```bash
-telnet localhost 7300
-```
+🎉 **You are live!** Access your node:
+*   **Web Console**: `http://localhost:8080` (Use admin credentials set in `.env`)
+*   **Telnet**: `telnet localhost 7300`
 
 ---
 
@@ -135,6 +135,10 @@ Edit these in your `.env` file. We've set sensible defaults for everything else.
 | `CLUSTER_LATITUDE` | Your Latitude. | `+03 08` |
 | `CLUSTER_LONGITUDE` | Your Longitude. | `+101 41` |
 | `CLUSTER_PORT` | The user-facing Telnet port. | `7300` |
+| `CLUSTER_SYSOP_PORT` | The Web Console port. | `8080` |
+| `OVERWRITE_CONFIG` | Set to `yes` to force-regenerate DXVars.pm. | `no` |
+| `CLUSTER_DBUSER` | Admin username for Web Console. | `sysop` |
+| `CLUSTER_DBPASS` | Admin password for Web Console. | `supersecret` |
 
 ---
 
