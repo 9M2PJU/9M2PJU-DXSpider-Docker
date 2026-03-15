@@ -266,6 +266,28 @@ When running in the cloud, **never** store your data inside the container or on 
 - **GCP**: Use **Filestore** or **Persistent Disks**.
 - **Azure**: Use **Azure Files**.
 
+### 🟦 Microsoft Azure
+**Best for: Mission-Critical Enterprise Hosting**
+
+Azure Container Instances (ACI) provide a great environment for DXSpider.
+
+1.  **Azure Portal**: Go to "Container Instances" -> Create.
+2.  **CLI (Quick Start)**:
+    ```bash
+    az container create \
+      --resource-group myResourceGroup \
+      --name dxspider-cluster \
+      --image ghcr.io/9m2pju/9m2pju-dxspider-docker:main \
+      --dns-name-label myclustersite \
+      --ports 7300 8080 \
+      --azure-file-volume-account-name myStorageAccount \
+      --azure-file-volume-account-key myStorageKey \
+      --azure-file-volume-share-name dxspider-data \
+      --azure-file-volume-mount-path /opt/spider/local_data
+    ```
+3.  **Template**: Use our [Azure ACI Template](deploy/azure-aci.json) for automated deployment.
+4.  **Storage**: Use **Azure Files** for `local_data` to ensure persistence across container restarts.
+
 ---
 
 ## 🖥️ Virtualization (On-Premises)

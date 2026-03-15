@@ -1,0 +1,117 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "containerGroupName": {
+      "type": "string",
+      "defaultValue": "dxspider-cluster",
+      "metadata": {
+        "description": "Name for the container group."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "image": {
+      "type": "string",
+      "defaultValue": "ghcr.io/9m2pju/9m2pju-dxspider-docker:main",
+      "metadata": {
+        "description": "Container image to deploy."
+      }
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure Storage Account for persistent data."
+      }
+    },
+    "storageAccountKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Azure Storage Account Key."
+      }
+    },
+    "shareName": {
+      "type": "string",
+      "defaultValue": "dxspider-data",
+      "metadata": {
+        "description": "Azure File Share name."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "apiVersion": "2021-09-01",
+      "name": "[parameters('containerGroupName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "containers": [
+          {
+            "name": "dxspider",
+            "properties": {
+              "image": "[parameters('image')]",
+              "ports": [
+                {
+                  "port": 7300,
+                  "protocol": "TCP"
+                },
+                {
+                  "port": 8080,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 1.0,
+                  "memoryInGB": 1.5
+                }
+              },
+              "volumeMounts": [
+                {
+                  "name": "dxspider-storage",
+                  "mountPath": "/opt/spider/local_data"
+                }
+              ]
+            }
+          }
+        ],
+        "osType": "Linux",
+        "restartPolicy": "Always",
+        "ipAddress": {
+          "type": "Public",
+          "ports": [
+            {
+              "port": 7300,
+              "protocol": "TCP"
+            },
+            {
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ]
+        },
+        "volumes": [
+          {
+            "name": "dxspider-storage",
+            "azureFile": {
+              "shareName": "[parameters('shareName')]",
+              "storageAccountName": "[parameters('storageAccountName')]",
+              "storageAccountKey": "[parameters('storageAccountKey')]"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+    "containerIPv4Address": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', parameters('containerGroupName'))).ipAddress.ip]"
+    }
+  }
+}
