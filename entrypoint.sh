@@ -3,7 +3,7 @@
 SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR:-/spider}
 
 # Fix permissions for mounted volumes at runtime
-chown -R sysop:sysop ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_data 2>/dev/null
+chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_data 2>/dev/null
 
 # Generate Listeners.pm
 if [ ! -f ${SPIDER_INSTALL_DIR}/local/Listeners.pm ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
@@ -65,10 +65,10 @@ rm -f ${SPIDER_INSTALL_DIR}/local_data/cluster.lck 2>/dev/null
 cd ${SPIDER_INSTALL_DIR}/perl
 
 # Switch to sysop user for execution
-su-exec sysop ./create_sysop.pl
+su-exec ${SPIDER_USERNAME} ./create_sysop.pl
 
 echo "Starting DXSpider Cluster..."
-su-exec sysop ./cluster.pl &
+su-exec ${SPIDER_USERNAME} ./cluster.pl &
 
 # Give it a moment to start and check if process exists
 sleep 5
@@ -79,7 +79,7 @@ fi
 
 echo "Starting Web Console..."
 # Run ttyd as foreground process
-ttyd -p ${CLUSTER_SYSOP_PORT:-8080} -u 1000 -t fontSize=16 -c "${WEB_USER}:${WEB_PASS}" perl /spider/perl/console.pl &
+ttyd -p ${CLUSTER_SYSOP_PORT:-8080} -u ${SPIDER_UID} -t fontSize=16 -c "${WEB_USER}:${WEB_PASS}" perl ${SPIDER_INSTALL_DIR}/perl/console.pl &
 
 # Wait for children to handle traps
 wait

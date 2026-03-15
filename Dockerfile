@@ -11,6 +11,10 @@ LABEL org.opencontainers.image.title="DXSpider Docker" \
       org.opencontainers.image.source="https://github.com/9M2PJU/9M2PJU-DXSpider-Docker" \
       org.opencontainers.image.licenses="GPL-3.0"
 
+ENV SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR}
+ENV SPIDER_USERNAME=${SPIDER_USERNAME}
+ENV SPIDER_UID=${SPIDER_UID}
+
 WORKDIR ${SPIDER_INSTALL_DIR}
 
 # Install system dependencies and available perl-apk packages

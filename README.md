@@ -153,7 +153,7 @@ services:
 To build for all platforms manually using Docker Buildx:
 
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 -t 9M2PJU/dxspider-docker:latest --push .
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 -t 9M2PJU/9M2PJU-DXSpider-Docker:latest --push .
 ```
 
 ---
@@ -289,7 +289,7 @@ Azure Container Instances (ACI) provide a great environment for DXSpider.
       --azure-file-volume-account-name myStorageAccount \
       --azure-file-volume-account-key myStorageKey \
       --azure-file-volume-share-name dxspider-data \
-      --azure-file-volume-mount-path /opt/spider/local_data
+      --azure-file-volume-mount-path /spider/local_data
     ```
 3.  **Template**: Use our [Azure ACI Template](deploy/azure-aci.json) for automated deployment.
 4.  **Storage**: Use **Azure Files** for `local_data` to ensure persistence across container restarts.
