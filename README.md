@@ -123,6 +123,26 @@ docker compose up -d --build
 
 ---
 
+## 🚀 Multi-Architecture Support
+
+This project supports a wide range of CPU architectures, making it compatible with everything from high-end servers to Raspberry Pi Zero.
+
+**Supported Platforms:**
+- `linux/amd64` (Standard 64-bit PC)
+- `linux/arm64` (Raspberry Pi 4/5, Apple Silicon, AWS Graviton)
+- `linux/386` (Legacy 32-bit PC)
+- `linux/arm/v7` (Raspberry Pi 2/3, 32-bit)
+- `linux/arm/v6` (Raspberry Pi Zero/1)
+
+### Building for Multiple Platforms
+You can build your own multi-platform images using `docker buildx`:
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7,linux/arm/v6 -t yourusername/dxspider-docker:latest --push .
+```
+
+---
+
 ## ⚙️ Configuration Reference
 
 Edit these in your `.env` file. We've set sensible defaults for everything else.
