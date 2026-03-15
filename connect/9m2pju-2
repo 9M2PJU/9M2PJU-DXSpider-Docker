@@ -1,4 +1,6 @@
 timeout 15
 connect telnet 9m2pju.hamradio.my 7300
-'login:' '9m2pju-10'
+'login:' 'YOURCALL'
+
+# P/S: to connect with 9M2PJU-2 DX Cluster node, please email to 9m2pju@gmail.com
 
