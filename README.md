@@ -148,8 +148,14 @@ services:
     # remove the 'build' section if using the pre-built image
 ```
 
+### 🛠️ Manual Multi-Arch Build (Advanced)
+> [!NOTE]  
+> This is **optional**. Our GitHub Actions automatically build and push these images for you. Use this only if you want to build a custom version locally.
+
+To build for all platforms manually using Docker Buildx:
+
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 -t yourusername/dxspider-docker:latest --push .
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 -t 9M2PJU/dxspider-docker:latest --push .
 ```
 
 ---
