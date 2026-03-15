@@ -2,5 +2,5 @@ timeout 15
 connect telnet 9m2pju.hamradio.my 7300
 'login:' 'YOURCALL'
 
-# # P/S: To connect with the 9M2PJU-2 DX Cluster node, please email 9m2pju@gmail.com. Remove this line if necessary.
+# P/S: To connect with the 9M2PJU-2 DX Cluster node, please email 9m2pju@gmail.com. Remove this line if necessary.
 
