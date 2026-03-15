@@ -26,7 +26,7 @@
 **Experience the future of Amateur Radio Networking.**
 *Deploy a professional-grade DX Cluster node in minutes, not hours.*
 
-[✨ Features](#-key-features) • [🚀 Quick Start](#-quick-start) • [⚙️ Configuration](#%EF%B8%8F-configuration) • [📚 Deep Dive](#-deep-dive-documentation) • [🆘 Support](#-troubleshooting--faq)
+[✨ Features](#-key-features) • [🚀 Quick Start](#-quick-start) • [⚙️ Configuration](#-configuration-reference) • [📚 Documentation](#-deep-dive-documentation) • [🆘 FAQ](#-troubleshooting--faq)
 
 </div>
 
