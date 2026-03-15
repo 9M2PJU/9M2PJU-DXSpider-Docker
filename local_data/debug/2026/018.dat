@@ -1,0 +1,278 @@
+1768720386^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1768720387^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 624.
+1768720387^(*)  at ./cluster.pl line 624.
+1768720387^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 624.
+1768720387^(*)  at ./cluster.pl line 624.
+1768720387^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux started
+1768720387^(cluster) Copyright (c) 1998-2026 Dirk Koopman G1TLH
+1768720387^(cluster) Capabilities: ve7cc rbn
+1768720387^(*) loading prefixes ...
+1768720387^(*) US Database not loaded
+1768720387^(*) loading band data ...
+1768720387^(*) loading user file system ...
+1768720387^(*) starting listeners ...
+1768720387^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1768720387^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1768720387^(*) Starting Dupe system
+1768720387^(*) Read in Messages
+1768720387^(*) Read in Aliases
+1768720387^(*) Start Protocol Engines ...
+1768720387^(DXCommand) 9M2PJU-98 cmd: 'set/external_ip' not found
+1768720387^(progress) CMD: 'load/forward ' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768720387^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 1mS
+1768720387^(connect) connect 3: timeout set to 60
+1768720387^(connect) connect 3: timeout set to 15
+1768720387^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1768720387^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1768720387^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 1mS
+1768720387^(progress) CMD: 'set/var $Internet::allow = 1' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768720387^(progress) CMD: 'set/var $Internet::contest_host = "contest.dxtron.com"' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768720387^(progress) CMD: 'set/var $main::reqreg = 1 # user must register to use spot function !!' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768720387^(*) Operation successful
+1768720387^(*) 9M2PJU-2 set as DXSpider style Node
+1768720387^(*) connection to 9M2PJU-2 started
+1768720387^(*) Ok, $Internet::allow = '1'
+1768720387^(*) Ok, $Internet::contest_host = '"contest.dxtron.com"'
+1768720387^(*) Ok, $main::reqreg = '1 # user must register to use spot function !!'
+1768720387^(*) Start WWV system
+1768720387^(*) WWV read in last 0 records into cache in 0mS
+1768720387^(*) Start WCY system
+1768720387^(*) WCY read in last 0 records into cache 0mS
+1768720387^(*) Start Announce and Talk system
+1768720387^(*) AnnTalk: loaded last 1 announcements into cache in 119mS
+1768720387^(*) Use of uninitialized value $version in multiplication (*) at ./cluster.pl line 757.
+1768720387^(*)  at ./cluster.pl line 757.
+1768720387^(*) Starting DX Spot system
+1768720387^(*) Spot::init 2 files of spots read into cache in 1mS
+1768720387^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1768720387^(*)  at /spider/perl/DXSql.pm line 63.
+1768720387^(*) Reading existing Message/Bulletine headers ...
+1768720387^(*) load badmsg: Ok
+1768720387^(*) load forward: Ok
+1768720387^(*) load swop: Ok
+1768720387^(*) Reading cron jobs ...
+1768720387^(cron) DXCron::cread reading /spider/cmd/crontab
+1768720387^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1768720387^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1768720387^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1768720387^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1768720387^(cron) DXCron::cread: adding 0,5,10,20,30,40,50 * * * * start_connect('9m2pju-2') unless connected('9m2pju-2')
+1768720387^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torexit')
+1768720387^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torrelay')
+1768720387^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.global')
+1768720387^(cron) DXCron::cread: adding 32 * * * * run_cmd('load/badip')
+1768720387^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O baddx.run https://github.com/EA3CV/dxspider_info/blob/main/download/baddx')
+1768720387^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badspotter.run https://github.com/EA3CV/dxspider_info/blob/main/download/badspotter')
+1768720387^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badnode.run https://github.com/EA3CV/dxspider_info/blob/main/download/badnode')
+1768720387^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badword.new.run https://github.com/EA3CV/dxspider_info/blob/main/download/badword.new')
+1768720387^(*) Reading database descriptors ...
+1768720387^(*) Starting RBN ...
+1768720387^(*) RBN::checkcache '/spider/local_data/rbn_cache' created  8h 18m 9s ago is too old (> 4m), ignored
+1768720387^(*) Starting DXQsl system
+1768720387^(*) BadWords: Found new style badword.new file
+1768720388^(*) BadWords: 130 new style badwords read
+1768720388^(DXProt) DXCIDR::reload reload database
+1768720388^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 34: '    :root {' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 35: '      --tab-size-preference: 4;' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.global line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768720388^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.global at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768720388^(DXProt) DXCIDR::reload: badip.global read containing 0 ip addresses
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 34: '    :root {' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 35: '      --tab-size-preference: 4;' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torrelay line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768720388^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torrelay at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768720388^(DXProt) DXCIDR::reload: badip.torrelay read containing 0 ip addresses
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 34: '    :root {' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 35: '      --tab-size-preference: 4;' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768720388^(err) DXCIDR: /spider/local_data/badip.torexit line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768720388^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torexit at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768720388^(DXProt) DXCIDR::reload: badip.torexit read containing 0 ip addresses
+1768720388^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 4 badip files
+1768720388^(*) Doing local initialisations ...
+1768720388^(*) Orft we jolly well go ...
+1768720388^(*) Before Web::start_node
+1768720388^(connect) ExtMsg connected 3:172.19.0.2 to 175.139.62.68:7300
+1768720388^(connect) connect 3: login: 
+1768720388^(connect) connect 3: expecting: "login:" received: "login: "
+1768720388^(connect) connect 3: got: "login:" sending: "9m2pju-10"
+1768720388^(connect) connect 3: Hello 9M2PJU-10, this is 9M2PJU-2 in Kuala Lumpur, Malaysia%0D
+1768720388^(connect) running DXSpider V build %0D
+1768720388^(connect) Capabilities: ve7cc rbn%0D
+1768720388^(connect) ////////////////////////////////////////////////////////////////////////////////%0D
+1768720388^(connect) //                                                                            //%0D
+1768720388^(connect) //   [!] ACCESS RESTRICTED: UNAUTHORIZED USER DETECTED                        //%0D
+1768720388^(connect) //                                                                            //%0D
+1768720388^(connect) ////////////////////////////////////////////////////////////////////////////////%0D
+1768720388^(connect) //                                                                            //%0D
+1768720388^(connect) //    %E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%97 %E2%96%88%E2%96%88%E2%96%88%E2%95%97   %E2%96%88%E2%96%88%E2%96%88%E2%95%97%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%97 %E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%97      %E2%96%88%E2%96%88%E2%95%97%E2%96%88%E2%96%88%E2%95%97   %E2%96%88%E2%96%88%E2%95%97                     //%0D
+1768720388^(connect) //   %E2%96%88%E2%96%88%E2%95%94%E2%95%90%E2%95%90%E2%96%88%E2%96%88%E2%95%97%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%97 %E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%91%E2%95%9A%E2%95%90%E2%95%90%E2%95%90%E2%95%90%E2%96%88%E2%96%88%E2%95%97%E2%96%88%E2%96%88%E2%95%94%E2%95%90%E2%95%90%E2%96%88%E2%96%88%E2%95%97     %E2%96%88%E2%96%88%E2%95%91%E2%96%88%E2%96%88%E2%95%91   %E2%96%88%E2%96%88%E2%95%91                     //%0D
+1768720388^(connect) //   %E2%95%9A%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%91%E2%96%88%E2%96%88%E2%95%94%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%94%E2%96%88%E2%96%88%E2%95%91 %E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%94%E2%95%9D%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%94%E2%95%9D     %E2%96%88%E2%96%88%E2%95%91%E2%96%88%E2%96%88%E2%95%91   %E2%96%88%E2%96%88%E2%95%91                     //%0D
+1768720388^(connect) //    %E2%95%9A%E2%95%90%E2%95%90%E2%95%90%E2%96%88%E2%96%88%E2%95%91%E2%96%88%E2%96%88%E2%95%91%E2%95%9A%E2%96%88%E2%96%88%E2%95%94%E2%95%9D%E2%96%88%E2%96%88%E2%95%91%E2%96%88%E2%96%88%E2%95%94%E2%95%90%E2%95%90%E2%95%90%E2%95%9D %E2%96%88%E2%96%88%E2%95%94%E2%95%90%E2%95%90%E2%95%90%E2%95%9D %E2%96%88%E2%96%88   %E2%96%88%E2%96%88%E2%95%91%E2%96%88%E2%96%88%E2%95%91   %E2%96%88%E2%96%88%E2%95%91                     //%0D
+1768720388^(connect) //    %E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%94%E2%95%9D%E2%96%88%E2%96%88%E2%95%91 %E2%95%9A%E2%95%90%E2%95%9D %E2%96%88%E2%96%88%E2%95%91%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%97%E2%96%88%E2%96%88%E2%95%91     %E2%95%9A%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%94%E2%95%9D%E2%95%9A%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%96%88%E2%95%94%E2%95%9D                     //%0D
+1768720388^(connect) //    %E2%95%9A%E2%95%90%E2%95%90%E2%95%90%E2%95%90%E2%95%9D %E2%95%9A%E2%95%90%E2%95%9D     %E2%95%9A%E2%95%90%E2%95%9D%E2%95%9A%E2%95%90%E2%95%90%E2%95%90%E2%95%90%E2%95%90%E2%95%90%E2%95%9D%E2%95%9A%E2%95%90%E2%95%9D      %E2%95%9A%E2%95%90%E2%95%90%E2%95%90%E2%95%90%E2%95%9D  %E2%95%9A%E2%95%90%E2%95%90%E2%95%90%E2%95%90%E2%95%90%E2%95%9D                      //%0D
+1768720388^(connect) //                                                                            //%0D
+1768720388^(connect) ////////////////////////////////////////////////////////////////////////////////%0D
+1768720388^(connect) ---%0D
+1768720388^(connect) >> ERROR: SPOT FUNCTION LOCKED <<%0D
+1768720388^(connect) ---%0D
+1768720388^(connect) You are currently connected to the 9M2PJU-10 DX Spider Node as a GUEST.%0D
+1768720388^(connect) To maintain network purity and eliminate spam interference, your %0D
+1768720388^(connect) transmission rights are currently set to [READ-ONLY].%0D
+1768720388^(connect) --------------------------------------------------------------------------------%0D
+1768720388^(connect) [ SECURITY PROTOCOL: REGISTRATION REQUIRED ]%0D
+1768720388^(connect) --------------------------------------------------------------------------------%0D
+1768720388^(connect) To unlock the [SPOT] function and gain full operator privileges:%0D
+1768720388^(connect) [%F0%9F%93%A7] EMAIL: 9m2pju@hamradio.my%0D
+1768720388^(connect) Include your CALLSIGN and Operator Details to authorize your uplink.%0D
+1768720388^(connect) --------------------------------------------------------------------------------%0D
+1768720388^(connect) [ OPERATIONAL DIRECTIVES ]%0D
+1768720388^(connect) --------------------------------------------------------------------------------%0D
+1768720388^(connect) * DATA INTEGRITY: Share only accurate and relevant DX intel.%0D
+1768720388^(connect) * GRID DISCIPLINE: Respect the shared bandwidth of the community.%0D
+1768720388^(connect) * GLOBAL LINK: Stay connected, stay respectful, stay signal-pure.%0D
+1768720388^(connect) --------------------------------------------------------------------------------%0D
+1768720388^(connect) [ ARCHIVE & RESOURCES ]%0D
+1768720388^(connect) --------------------------------------------------------------------------------%0D
+1768720388^(connect) %F0%9F%8C%90 CENTRAL HUB: https://hamradio.my%0D
+1768720388^(connect) %F0%9F%9A%80 POWERED BY: 9M2PJU-2 DXSPIDER%0D
+1768720388^(connect) [SYSTEM]: PLEASE REGISTER TO RESTORE FULL SIGNAL FUNCTIONALITY...%0D
+1768720388^(connect) --------------------------------------------------------------------------------%0D
+1768720388^(connect) Nodes: 17/405 Users [Loc/Clr]: 7/4870 Max: 24/7490 - Uptime:  1d 6h 34m%0D
+1768720388^(connect) Please enter your name, set/name <your name>%0D
+1768720388^(connect) Please enter your QTH, set/qth <your qth>%0D
+1768720388^(connect) Please enter your Home Node, set/homenode <your home DX Cluster>%0D
+1768720388^(connect) 9M2PJU-10 de 9M2PJU-2 18-Jan-2026 0713Z dxspider >%0D
+1768720388^(state) 9M2PJU-2 channel func  state 0 -> init
+1768720389^(msg) queue msg (0)
+1768720390^(connect) ExtMsg accept 4:127.0.0.1 from 127.0.0.1:48272
+1768720390^(connect) ExtMsg connect 4: login: 
+1768720390^(connect) connect 4: timeout set to 60
+1768720400^(connect) ExtMsg accept 5:127.0.0.1 from 127.0.0.1:52832
+1768720400^(connect) ExtMsg connect 5: login: 
+1768720400^(connect) connect 5: timeout set to 60
+1768720410^(connect) ExtMsg accept 6:127.0.0.1 from 127.0.0.1:43556
+1768720410^(connect) ExtMsg connect 6: login: 
+1768720410^(connect) connect 6: timeout set to 60
+1768720420^(connect) ExtMsg accept 7:127.0.0.1 from 127.0.0.1:33336
+1768720420^(connect) ExtMsg connect 7: login: 
+1768720420^(connect) connect 7: timeout set to 60
+1768720430^(connect) ExtMsg accept 8:127.0.0.1 from 127.0.0.1:37772
+1768720430^(connect) ExtMsg connect 8: login: 
+1768720430^(connect) connect 8: timeout set to 60
+1768720440^(connect) ExtMsg accept 9:127.0.0.1 from 127.0.0.1:35814
+1768720440^(connect) ExtMsg connect 9: login: 
+1768720440^(connect) connect 9: timeout set to 60
+1768720448^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1768720449^(msg) queue msg (0)
+1768720450^(connect) connect 4: timed out after 60 seconds
+1768720450^(connect) ExtMsg accept 10:127.0.0.1 from 127.0.0.1:41890
+1768720450^(connect) ExtMsg connect 10: login: 
+1768720450^(connect) connect 10: timeout set to 60
+1768720460^(connect) connect 5: timed out after 60 seconds
+1768720460^(connect) ExtMsg accept 11:127.0.0.1 from 127.0.0.1:41920
+1768720460^(connect) ExtMsg connect 11: login: 
+1768720460^(connect) connect 11: timeout set to 60
+1768720461^(connect) connect 5: timed out after 60 seconds
+1768720470^(connect) connect 6: timed out after 60 seconds
+1768720470^(connect) ExtMsg accept 12:127.0.0.1 from 127.0.0.1:53572
+1768720470^(connect) ExtMsg connect 12: login: 
+1768720470^(connect) connect 12: timeout set to 60
+1768720471^(connect) connect 6: timed out after 60 seconds
+1768720480^(connect) connect 7: timed out after 60 seconds
+1768720480^(connect) ExtMsg accept 13:127.0.0.1 from 127.0.0.1:33466
+1768720480^(connect) ExtMsg connect 13: login: 
+1768720480^(connect) connect 13: timeout set to 60
+1768720481^(connect) connect 7: timed out after 60 seconds
+1768720490^(connect) connect 8: timed out after 60 seconds
+1768720490^(connect) ExtMsg accept 14:127.0.0.1 from 127.0.0.1:38692
+1768720490^(connect) ExtMsg connect 14: login: 
+1768720490^(connect) connect 14: timeout set to 60
+1768720491^(connect) connect 8: timed out after 60 seconds
+1768720500^(connect) connect 9: timed out after 60 seconds
+1768720500^(connect) ExtMsg accept 15:127.0.0.1 from 127.0.0.1:54708
+1768720500^(connect) ExtMsg connect 15: login: 
+1768720500^(connect) connect 15: timeout set to 60
+1768720501^(connect) connect 9: timed out after 60 seconds
+1768720508^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 0 mS
+1768720509^(msg) queue msg (0)
+1768720510^(connect) connect 10: timed out after 60 seconds
+1768720511^(connect) ExtMsg accept 16:127.0.0.1 from 127.0.0.1:49136
+1768720511^(connect) ExtMsg connect 16: login: 
+1768720511^(connect) connect 16: timeout set to 60
+1768720511^(connect) connect 10: timed out after 60 seconds
+1768720520^(connect) connect 11: timed out after 60 seconds
+1768720521^(connect) ExtMsg accept 17:127.0.0.1 from 127.0.0.1:46326
+1768720521^(connect) ExtMsg connect 17: login: 
+1768720521^(connect) connect 17: timeout set to 60
+1768720521^(connect) connect 11: timed out after 60 seconds
+1768720530^(connect) connect 12: timed out after 60 seconds
+1768720531^(connect) ExtMsg accept 18:127.0.0.1 from 127.0.0.1:47202
+1768720531^(connect) ExtMsg connect 18: login: 
+1768720531^(connect) connect 18: timeout set to 60
+1768720531^(connect) connect 12: timed out after 60 seconds
+1768720540^(connect) connect 13: timed out after 60 seconds
+1768720541^(connect) ExtMsg accept 19:127.0.0.1 from 127.0.0.1:60882
+1768720541^(connect) ExtMsg connect 19: login: 
+1768720541^(connect) connect 19: timeout set to 60
+1768720541^(connect) connect 13: timed out after 60 seconds
+1768720550^(connect) connect 14: timed out after 60 seconds
+1768720551^(connect) ExtMsg accept 20:127.0.0.1 from 127.0.0.1:51940
+1768720551^(connect) ExtMsg connect 20: login: 
+1768720551^(connect) connect 20: timeout set to 60
+1768720551^(connect) connect 14: timed out after 60 seconds
+1768720560^(connect) connect 15: timed out after 60 seconds
+1768720561^(connect) ExtMsg accept 21:127.0.0.1 from 127.0.0.1:48636
+1768720561^(connect) ExtMsg connect 21: login: 
+1768720561^(connect) connect 21: timeout set to 60
+1768720561^(connect) connect 15: timed out after 60 seconds
+1768720568^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1768720569^(msg) queue msg (0)
+1768720570^(connect) connect 16: timed out after 60 seconds
+1768720571^(connect) ExtMsg accept 22:127.0.0.1 from 127.0.0.1:48352
+1768720571^(connect) ExtMsg connect 22: login: 
+1768720571^(connect) connect 22: timeout set to 60
+1768720580^(connect) connect 17: timed out after 60 seconds
+1768720581^(connect) ExtMsg accept 23:127.0.0.1 from 127.0.0.1:38272
+1768720581^(connect) ExtMsg connect 23: login: 
+1768720581^(connect) connect 23: timeout set to 60
+1768720581^(connect) connect 17: timed out after 60 seconds
+1768720590^(connect) connect 18: timed out after 60 seconds
+1768720591^(connect) ExtMsg accept 24:127.0.0.1 from 127.0.0.1:53938
+1768720591^(connect) ExtMsg connect 24: login: 
+1768720591^(connect) connect 24: timeout set to 60
+1768720591^(connect) connect 18: timed out after 60 seconds
+1768720600^(connect) connect 19: timed out after 60 seconds
+1768720601^(connect) connect 19: timed out after 60 seconds
+1768720601^(connect) ExtMsg accept 25:127.0.0.1 from 127.0.0.1:50450
+1768720601^(connect) ExtMsg connect 25: login: 
+1768720601^(connect) connect 25: timeout set to 60
+1768720610^(connect) connect 20: timed out after 60 seconds
+1768720611^(connect) connect 20: timed out after 60 seconds
+1768720611^(connect) ExtMsg accept 26:127.0.0.1 from 127.0.0.1:35054
+1768720611^(connect) ExtMsg connect 26: login: 
+1768720611^(connect) connect 26: timeout set to 60

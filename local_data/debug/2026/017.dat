@@ -1,0 +1,542 @@
+1768609430^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1768609430^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 624.
+1768609430^(*)  at ./cluster.pl line 624.
+1768609430^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 624.
+1768609430^(*)  at ./cluster.pl line 624.
+1768609430^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux started
+1768609430^(cluster) Copyright (c) 1998-2026 Dirk Koopman G1TLH
+1768609430^(cluster) Capabilities: ve7cc rbn
+1768609430^(*) loading prefixes ...
+1768609430^(*) US Database not loaded
+1768609430^(*) loading band data ...
+1768609430^(*) loading user file system ...
+1768609430^(*) starting listeners ...
+1768609430^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1768609430^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1768609430^(*) Starting Dupe system
+1768609430^(*) Read in Messages
+1768609430^(*) Read in Aliases
+1768609430^(*) Start Protocol Engines ...
+1768609430^(DXCommand) 9M2PJU-98 cmd: 'set/external_ip' not found
+1768609430^(progress) CMD: 'load/forward ' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609430^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609430^(connect) connect 3: timeout set to 60
+1768609430^(connect) connect 3: timeout set to 15
+1768609430^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1768609430^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1768609430^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 1mS
+1768609430^(progress) CMD: 'set/var $Internet::allow = 1' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609430^(progress) CMD: 'set/var $Internet::contest_host = "contest.dxtron.com"' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609430^(progress) CMD: 'set/var $main::reqreg = 1 # user must register to use spot function !!' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609430^(*) Operation successful
+1768609430^(*) 9M2PJU-2 set as DXSpider style Node
+1768609430^(*) connection to 9M2PJU-2 started
+1768609430^(*) Ok, $Internet::allow = '1'
+1768609430^(*) Ok, $Internet::contest_host = '"contest.dxtron.com"'
+1768609430^(*) Ok, $main::reqreg = '1 # user must register to use spot function !!'
+1768609430^(*) Start WWV system
+1768609430^(*) WWV read in last 0 records into cache in 0mS
+1768609430^(*) Start WCY system
+1768609430^(*) WCY read in last 0 records into cache 0mS
+1768609430^(*) Start Announce and Talk system
+1768609430^(*) AnnTalk: loaded last 1 announcements into cache in 107mS
+1768609430^(*) Use of uninitialized value $version in multiplication (*) at ./cluster.pl line 757.
+1768609430^(*)  at ./cluster.pl line 757.
+1768609430^(*) Starting DX Spot system
+1768609430^(*) Spot::init 2 files of spots read into cache in 1mS
+1768609430^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1768609430^(*)  at /spider/perl/DXSql.pm line 63.
+1768609430^(*) Reading existing Message/Bulletine headers ...
+1768609430^(*) load badmsg: Ok
+1768609430^(*) load forward: Ok
+1768609430^(*) load swop: Ok
+1768609430^(*) Reading cron jobs ...
+1768609430^(cron) DXCron::cread reading /spider/cmd/crontab
+1768609430^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1768609430^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1768609430^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1768609430^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1768609430^(cron) DXCron::cread: adding 0,5,10,20,30,40,50 * * * * start_connect('9m2pju-2') unless connected('9m2pju-2')
+1768609430^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torexit')
+1768609430^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torrelay')
+1768609430^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.global')
+1768609430^(cron) DXCron::cread: adding 32 * * * * run_cmd('load/badip')
+1768609430^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O baddx.run https://github.com/EA3CV/dxspider_info/blob/main/download/baddx')
+1768609430^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badspotter.run https://github.com/EA3CV/dxspider_info/blob/main/download/badspotter')
+1768609430^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badnode.run https://github.com/EA3CV/dxspider_info/blob/main/download/badnode')
+1768609430^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badword.new.run https://github.com/EA3CV/dxspider_info/blob/main/download/badword.new')
+1768609430^(*) Reading database descriptors ...
+1768609430^(*) Starting RBN ...
+1768609430^(*) RBN::checkcache '/spider/local_data/rbn_cache' created  13h 41m 32s ago is too old (> 4m), ignored
+1768609430^(*) Starting DXQsl system
+1768609430^(*) BadWords: Found new style badword.new file
+1768609431^(*) BadWords: 130 new style badwords read
+1768609431^(DXProt) DXCIDR::reload reload database
+1768609431^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 34: '    :root {' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 35: '      --tab-size-preference: 4;' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.global line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768609431^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.global at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768609431^(DXProt) DXCIDR::reload: badip.global read containing 0 ip addresses
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 34: '    :root {' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 35: '      --tab-size-preference: 4;' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torrelay line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768609431^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torrelay at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768609431^(DXProt) DXCIDR::reload: badip.torrelay read containing 0 ip addresses
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 34: '    :root {' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 35: '      --tab-size-preference: 4;' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768609431^(err) DXCIDR: /spider/local_data/badip.torexit line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768609431^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torexit at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768609431^(DXProt) DXCIDR::reload: badip.torexit read containing 0 ip addresses
+1768609431^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 4 badip files
+1768609431^(*) Doing local initialisations ...
+1768609436^(*) Try again
+1768609436^(*) Can't call method "sockhost" on an undefined value at /spider/perl/DXUtil.pm line 737.
+1768609436^(*)  at /spider/perl/DXUtil.pm line 737.
+1768609436^(*) 	DXUtil::find_local_ipaddr() called at ./cluster.pl line 812
+1768609436^(*) 	main::setup_start() called at ./cluster.pl line 936
+1768609436^(*) DXSpider Ceasing
+1768609436^(*) DXQSL finished
+1768609436^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1768609436^(*) DXDupe finishing
+1768609436^(*) DXUser finished
+1768609436^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 490.
+1768609436^(*)  at ./cluster.pl line 490.
+1768609436^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 490.
+1768609436^(*)  at ./cluster.pl line 490.
+1768609436^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux ended
+1768609436^(*) bye bye everyone - bye bye
+1768609436^###
+1768609436^### RINGBUFFER START at line 0 (zero base)
+1768609436^###
+1768609436^RING: 00:23:50^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1768609436^RING: 00:23:50^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 624.
+1768609436^RING: 00:23:50^(*)  at ./cluster.pl line 624.
+1768609436^RING: 00:23:50^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 624.
+1768609436^RING: 00:23:50^(*)  at ./cluster.pl line 624.
+1768609436^RING: 00:23:50^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux started
+1768609436^RING: 00:23:50^(cluster) Copyright (c) 1998-2026 Dirk Koopman G1TLH
+1768609436^RING: 00:23:50^(cluster) Capabilities: ve7cc rbn
+1768609436^RING: 00:23:50^(*) loading prefixes ...
+1768609436^RING: 00:23:50^(*) US Database not loaded
+1768609436^RING: 00:23:50^(*) loading band data ...
+1768609436^RING: 00:23:50^(*) loading user file system ...
+1768609436^RING: 00:23:50^(*) starting listeners ...
+1768609436^RING: 00:23:50^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1768609436^RING: 00:23:50^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1768609436^RING: 00:23:50^(*) Starting Dupe system
+1768609436^RING: 00:23:50^(*) Read in Messages
+1768609436^RING: 00:23:50^(*) Read in Aliases
+1768609436^RING: 00:23:50^(*) Start Protocol Engines ...
+1768609436^RING: 00:23:50^(chan) DXChannel 9M2PJU-98 created (1)
+1768609436^RING: 00:23:50^(DXCommand) 9M2PJU-98 cmd: 'set/external_ip' not found
+1768609436^RING: 00:23:50^(progress) CMD: 'load/forward ' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609436^RING: 00:23:50^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609436^RING: 00:23:50^(connect) connect 3: timeout set to 60
+1768609436^RING: 00:23:50^(connect) connect 3: timeout set to 15
+1768609436^RING: 00:23:50^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1768609436^RING: 00:23:50^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1768609436^RING: 00:23:50^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 1mS
+1768609436^RING: 00:23:50^(progress) CMD: 'set/var $Internet::allow = 1' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609436^RING: 00:23:50^(progress) CMD: 'set/var $Internet::contest_host = "contest.dxtron.com"' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609436^RING: 00:23:50^(progress) CMD: 'set/var $main::reqreg = 1 # user must register to use spot function !!' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768609436^RING: 00:23:50^(*) Operation successful
+1768609436^RING: 00:23:50^(*) 9M2PJU-2 set as DXSpider style Node
+1768609436^RING: 00:23:50^(*) connection to 9M2PJU-2 started
+1768609436^RING: 00:23:50^(*) Ok, $Internet::allow = '1'
+1768609436^RING: 00:23:50^(*) Ok, $Internet::contest_host = '"contest.dxtron.com"'
+1768609436^RING: 00:23:50^(*) Ok, $main::reqreg = '1 # user must register to use spot function !!'
+1768609436^RING: 00:23:50^(*) Start WWV system
+1768609436^RING: 00:23:50^(*) WWV read in last 0 records into cache in 0mS
+1768609436^RING: 00:23:50^(*) Start WCY system
+1768609436^RING: 00:23:50^(*) WCY read in last 0 records into cache 0mS
+1768609436^RING: 00:23:50^(*) Start Announce and Talk system
+1768609436^RING: 00:23:50^(*) AnnTalk: loaded last 1 announcements into cache in 107mS
+1768609436^RING: 00:23:50^(*) Use of uninitialized value $version in multiplication (*) at ./cluster.pl line 757.
+1768609436^RING: 00:23:50^(*)  at ./cluster.pl line 757.
+1768609436^RING: 00:23:50^(*) Starting DX Spot system
+1768609436^RING: 00:23:50^(*) Spot::init 2 files of spots read into cache in 1mS
+1768609436^RING: 00:23:50^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1768609436^RING: 00:23:50^(*)  at /spider/perl/DXSql.pm line 63.
+1768609436^RING: 00:23:50^(*) Reading existing Message/Bulletine headers ...
+1768609436^RING: 00:23:50^(*) load badmsg: Ok
+1768609436^RING: 00:23:50^(*) load forward: Ok
+1768609436^RING: 00:23:50^(*) load swop: Ok
+1768609436^RING: 00:23:50^(*) Reading cron jobs ...
+1768609436^RING: 00:23:50^(cron) DXCron::cread reading /spider/cmd/crontab
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1768609436^RING: 00:23:50^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 0,5,10,20,30,40,50 * * * * start_connect('9m2pju-2') unless connected('9m2pju-2')
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torexit')
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torrelay')
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.global')
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 32 * * * * run_cmd('load/badip')
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O baddx.run https://github.com/EA3CV/dxspider_info/blob/main/download/baddx')
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badspotter.run https://github.com/EA3CV/dxspider_info/blob/main/download/badspotter')
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badnode.run https://github.com/EA3CV/dxspider_info/blob/main/download/badnode')
+1768609436^RING: 00:23:50^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badword.new.run https://github.com/EA3CV/dxspider_info/blob/main/download/badword.new')
+1768609436^RING: 00:23:50^(*) Reading database descriptors ...
+1768609436^RING: 00:23:50^(*) Starting RBN ...
+1768609436^RING: 00:23:50^(*) RBN::checkcache '/spider/local_data/rbn_cache' created  13h 41m 32s ago is too old (> 4m), ignored
+1768609436^RING: 00:23:50^(*) Starting DXQsl system
+1768609436^RING: 00:23:50^(*) BadWords: Found new style badword.new file
+1768609436^RING: 00:23:51^(*) BadWords: 130 new style badwords read
+1768609436^RING: 00:23:51^(DXProt) DXCIDR::reload reload database
+1768609436^RING: 00:23:51^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 34: '    :root {' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 35: '      --tab-size-preference: 4;' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.global line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.global at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768609436^RING: 00:23:51^(DXProt) DXCIDR::reload: badip.global read containing 0 ip addresses
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 34: '    :root {' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 35: '      --tab-size-preference: 4;' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torrelay line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torrelay at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768609436^RING: 00:23:51^(DXProt) DXCIDR::reload: badip.torrelay read containing 0 ip addresses
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 34: '    :root {' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 35: '      --tab-size-preference: 4;' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: /spider/local_data/badip.torexit line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768609436^RING: 00:23:51^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torexit at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768609436^RING: 00:23:51^(DXProt) DXCIDR::reload: badip.torexit read containing 0 ip addresses
+1768609436^RING: 00:23:51^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 4 badip files
+1768609436^RING: 00:23:51^(*) Doing local initialisations ...
+1768609436^RING: 00:23:56^(*) Try again
+1768609436^RING: 00:23:56^(*) Can't call method "sockhost" on an undefined value at /spider/perl/DXUtil.pm line 737.
+1768609436^RING: 00:23:56^(*)  at /spider/perl/DXUtil.pm line 737.
+1768609436^RING: 00:23:56^(*) 	DXUtil::find_local_ipaddr() called at ./cluster.pl line 812
+1768609436^RING: 00:23:56^(*) 	main::setup_start() called at ./cluster.pl line 936
+1768609436^RING: 00:23:56^(*) DXSpider Ceasing
+1768609436^RING: 00:23:56^(*) DXQSL finished
+1768609436^RING: 00:23:56^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1768609436^RING: 00:23:56^(*) DXDupe finishing
+1768609436^RING: 00:23:56^(*) DXUser finished
+1768609436^RING: 00:23:56^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 490.
+1768609436^RING: 00:23:56^(*)  at ./cluster.pl line 490.
+1768609436^RING: 00:23:56^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 490.
+1768609436^RING: 00:23:56^(*)  at ./cluster.pl line 490.
+1768609436^RING: 00:23:56^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux ended
+1768609436^RING: 00:23:56^(*) bye bye everyone - bye bye
+1768609436^###
+1768609436^### RINGBUFFER END 133 debug lines written
+1768609436^###
+1768690490^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1768690490^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 624.
+1768690490^(*)  at ./cluster.pl line 624.
+1768690490^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 624.
+1768690490^(*)  at ./cluster.pl line 624.
+1768690490^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux started
+1768690490^(cluster) Copyright (c) 1998-2026 Dirk Koopman G1TLH
+1768690490^(cluster) Capabilities: ve7cc rbn
+1768690490^(*) loading prefixes ...
+1768690490^(*) US Database not loaded
+1768690490^(*) loading band data ...
+1768690490^(*) loading user file system ...
+1768690490^(*) starting listeners ...
+1768690490^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1768690490^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1768690490^(*) Starting Dupe system
+1768690491^(*) Read in Messages
+1768690491^(*) Read in Aliases
+1768690491^(*) Start Protocol Engines ...
+1768690491^(DXCommand) 9M2PJU-98 cmd: 'set/external_ip' not found
+1768690491^(progress) CMD: 'load/forward ' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768690491^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 4mS
+1768690491^(connect) connect 3: timeout set to 60
+1768690491^(connect) connect 3: timeout set to 15
+1768690491^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1768690491^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1768690491^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 1mS
+1768690491^(progress) CMD: 'set/var $Internet::allow = 1' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768690491^(progress) CMD: 'set/var $Internet::contest_host = "contest.dxtron.com"' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768690491^(progress) CMD: 'set/var $main::reqreg = 1 # user must register to use spot function !!' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768690491^(*) Operation successful
+1768690491^(*) 9M2PJU-2 set as DXSpider style Node
+1768690491^(*) connection to 9M2PJU-2 started
+1768690491^(*) Ok, $Internet::allow = '1'
+1768690491^(*) Ok, $Internet::contest_host = '"contest.dxtron.com"'
+1768690491^(*) Ok, $main::reqreg = '1 # user must register to use spot function !!'
+1768690491^(*) Start WWV system
+1768690491^(*) WWV read in last 0 records into cache in 0mS
+1768690491^(*) Start WCY system
+1768690491^(*) WCY read in last 0 records into cache 0mS
+1768690491^(*) Start Announce and Talk system
+1768690491^(*) AnnTalk: loaded last 1 announcements into cache in 269mS
+1768690491^(*) Use of uninitialized value $version in multiplication (*) at ./cluster.pl line 757.
+1768690491^(*)  at ./cluster.pl line 757.
+1768690491^(*) Starting DX Spot system
+1768690491^(*) Spot::init 2 files of spots read into cache in 1mS
+1768690491^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1768690491^(*)  at /spider/perl/DXSql.pm line 63.
+1768690491^(*) Reading existing Message/Bulletine headers ...
+1768690491^(*) load badmsg: Ok
+1768690491^(*) load forward: Ok
+1768690491^(*) load swop: Ok
+1768690491^(*) Reading cron jobs ...
+1768690491^(cron) DXCron::cread reading /spider/cmd/crontab
+1768690491^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1768690491^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1768690491^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1768690491^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1768690491^(cron) DXCron::cread: adding 0,5,10,20,30,40,50 * * * * start_connect('9m2pju-2') unless connected('9m2pju-2')
+1768690491^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torexit')
+1768690491^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torrelay')
+1768690491^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.global')
+1768690491^(cron) DXCron::cread: adding 32 * * * * run_cmd('load/badip')
+1768690491^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O baddx.run https://github.com/EA3CV/dxspider_info/blob/main/download/baddx')
+1768690491^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badspotter.run https://github.com/EA3CV/dxspider_info/blob/main/download/badspotter')
+1768690491^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badnode.run https://github.com/EA3CV/dxspider_info/blob/main/download/badnode')
+1768690491^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badword.new.run https://github.com/EA3CV/dxspider_info/blob/main/download/badword.new')
+1768690491^(*) Reading database descriptors ...
+1768690491^(*) Starting RBN ...
+1768690491^(*) RBN::checkcache '/spider/local_data/rbn_cache' created  22h 30m 54s ago is too old (> 4m), ignored
+1768690491^(*) Starting DXQsl system
+1768690491^(*) BadWords: Found new style badword.new file
+1768690492^(*) BadWords: 130 new style badwords read
+1768690492^(DXProt) DXCIDR::reload reload database
+1768690492^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 34: '    :root {' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 35: '      --tab-size-preference: 4;' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.global line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768690492^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.global at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768690492^(DXProt) DXCIDR::reload: badip.global read containing 0 ip addresses
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 34: '    :root {' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 35: '      --tab-size-preference: 4;' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torrelay line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768690492^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torrelay at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768690492^(DXProt) DXCIDR::reload: badip.torrelay read containing 0 ip addresses
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 34: '    :root {' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 35: '      --tab-size-preference: 4;' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768690492^(err) DXCIDR: /spider/local_data/badip.torexit line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768690492^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torexit at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768690492^(DXProt) DXCIDR::reload: badip.torexit read containing 0 ip addresses
+1768690492^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 4 badip files
+1768690492^(*) Doing local initialisations ...
+1768690497^(*) Try again
+1768690497^(*) Can't call method "sockhost" on an undefined value at /spider/perl/DXUtil.pm line 737.
+1768690497^(*)  at /spider/perl/DXUtil.pm line 737.
+1768690497^(*) 	DXUtil::find_local_ipaddr() called at ./cluster.pl line 812
+1768690497^(*) 	main::setup_start() called at ./cluster.pl line 936
+1768690497^(*) DXSpider Ceasing
+1768690497^(*) DXQSL finished
+1768690497^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1768690497^(*) DXDupe finishing
+1768690497^(*) DXUser finished
+1768690497^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 490.
+1768690497^(*)  at ./cluster.pl line 490.
+1768690497^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 490.
+1768690497^(*)  at ./cluster.pl line 490.
+1768690497^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux ended
+1768690497^(*) bye bye everyone - bye bye
+1768690497^###
+1768690497^### RINGBUFFER START at line 0 (zero base)
+1768690497^###
+1768690497^RING: 22:54:50^(*) Perl path: .:/spider/local:/spider/perl:/spider/perl5lib:/usr/local/lib/perl5/site_perl:/usr/local/share/perl5/site_perl:/usr/lib/perl5/vendor_perl:/usr/share/perl5/vendor_perl:/usr/lib/perl5/core_perl:/usr/share/perl5/core_perl
+1768690497^RING: 22:54:50^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 624.
+1768690497^RING: 22:54:50^(*)  at ./cluster.pl line 624.
+1768690497^RING: 22:54:50^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 624.
+1768690497^RING: 22:54:50^(*)  at ./cluster.pl line 624.
+1768690497^RING: 22:54:50^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux started
+1768690497^RING: 22:54:50^(cluster) Copyright (c) 1998-2026 Dirk Koopman G1TLH
+1768690497^RING: 22:54:50^(cluster) Capabilities: ve7cc rbn
+1768690497^RING: 22:54:50^(*) loading prefixes ...
+1768690497^RING: 22:54:50^(*) US Database not loaded
+1768690497^RING: 22:54:50^(*) loading band data ...
+1768690497^RING: 22:54:50^(*) loading user file system ...
+1768690497^RING: 22:54:50^(*) starting listeners ...
+1768690497^RING: 22:54:50^(*) Internal port: 127.0.0.1 27754 using IntMsg
+1768690497^RING: 22:54:50^(*) External Port: 0.0.0.0 7300 using ExtMsg::login
+1768690497^RING: 22:54:50^(*) Starting Dupe system
+1768690497^RING: 22:54:51^(*) Read in Messages
+1768690497^RING: 22:54:51^(*) Read in Aliases
+1768690497^RING: 22:54:51^(*) Start Protocol Engines ...
+1768690497^RING: 22:54:51^(chan) DXChannel 9M2PJU-98 created (1)
+1768690497^RING: 22:54:51^(DXCommand) 9M2PJU-98 cmd: 'set/external_ip' not found
+1768690497^RING: 22:54:51^(progress) CMD: 'load/forward ' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768690497^RING: 22:54:51^(progress) CMD: 'set/spider 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 4mS
+1768690497^RING: 22:54:51^(connect) connect 3: timeout set to 60
+1768690497^RING: 22:54:51^(connect) connect 3: timeout set to 15
+1768690497^RING: 22:54:51^(connect) CONNECT 3 sort: telnet command: 9m2pju.hamradio.my 7300
+1768690497^RING: 22:54:51^(connect) Connected 3 to 9m2pju.hamradio.my 7300
+1768690497^RING: 22:54:51^(progress) CMD: 'connect 9m2pju-2' by 9M2PJU-98 ip: 127.0.0.1 1mS
+1768690497^RING: 22:54:51^(progress) CMD: 'set/var $Internet::allow = 1' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768690497^RING: 22:54:51^(progress) CMD: 'set/var $Internet::contest_host = "contest.dxtron.com"' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768690497^RING: 22:54:51^(progress) CMD: 'set/var $main::reqreg = 1 # user must register to use spot function !!' by 9M2PJU-98 ip: 127.0.0.1 0mS
+1768690497^RING: 22:54:51^(*) Operation successful
+1768690497^RING: 22:54:51^(*) 9M2PJU-2 set as DXSpider style Node
+1768690497^RING: 22:54:51^(*) connection to 9M2PJU-2 started
+1768690497^RING: 22:54:51^(*) Ok, $Internet::allow = '1'
+1768690497^RING: 22:54:51^(*) Ok, $Internet::contest_host = '"contest.dxtron.com"'
+1768690497^RING: 22:54:51^(*) Ok, $main::reqreg = '1 # user must register to use spot function !!'
+1768690497^RING: 22:54:51^(*) Start WWV system
+1768690497^RING: 22:54:51^(*) WWV read in last 0 records into cache in 0mS
+1768690497^RING: 22:54:51^(*) Start WCY system
+1768690497^RING: 22:54:51^(*) WCY read in last 0 records into cache 0mS
+1768690497^RING: 22:54:51^(*) Start Announce and Talk system
+1768690497^RING: 22:54:51^(*) AnnTalk: loaded last 1 announcements into cache in 269mS
+1768690497^RING: 22:54:51^(*) Use of uninitialized value $version in multiplication (*) at ./cluster.pl line 757.
+1768690497^RING: 22:54:51^(*)  at ./cluster.pl line 757.
+1768690497^RING: 22:54:51^(*) Starting DX Spot system
+1768690497^RING: 22:54:51^(*) Spot::init 2 files of spots read into cache in 1mS
+1768690497^RING: 22:54:51^(*) DBI connect('::','sysop',...) failed: Can't connect to local server through socket '/run/mysqld/mysqld.sock' (2) at /spider/perl/DXSql.pm line 63.
+1768690497^RING: 22:54:51^(*)  at /spider/perl/DXSql.pm line 63.
+1768690497^RING: 22:54:51^(*) Reading existing Message/Bulletine headers ...
+1768690497^RING: 22:54:51^(*) load badmsg: Ok
+1768690497^RING: 22:54:51^(*) load forward: Ok
+1768690497^RING: 22:54:51^(*) load swop: Ok
+1768690497^RING: 22:54:51^(*) Reading cron jobs ...
+1768690497^RING: 22:54:51^(cron) DXCron::cread reading /spider/cmd/crontab
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 1 0 * * 3 DXUser::export("$main::data/user_asc")
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 5 0 * * * DXDebug::dbgclean()
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 0 3 * * * Spot::daily()
+1768690497^RING: 22:54:51^(cron) DXCron::cread reading /spider/local_cmd/crontab
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 0,5,10,20,30,40,50 * * * * start_connect('9m2pju-2') unless connected('9m2pju-2')
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torexit')
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.torrelay')
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 30 * * * * spawn('cd /spider/local_data; wget -qN https://github.com/EA3CV/dxspider_info/blob/main/download/badip.global')
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 32 * * * * run_cmd('load/badip')
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O baddx.run https://github.com/EA3CV/dxspider_info/blob/main/download/baddx')
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badspotter.run https://github.com/EA3CV/dxspider_info/blob/main/download/badspotter')
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badnode.run https://github.com/EA3CV/dxspider_info/blob/main/download/badnode')
+1768690497^RING: 22:54:51^(cron) DXCron::cread: adding 33 * * * * spawn('cd /spider/local_data; wget -qN -O badword.new.run https://github.com/EA3CV/dxspider_info/blob/main/download/badword.new')
+1768690497^RING: 22:54:51^(*) Reading database descriptors ...
+1768690497^RING: 22:54:51^(*) Starting RBN ...
+1768690497^RING: 22:54:51^(*) RBN::checkcache '/spider/local_data/rbn_cache' created  22h 30m 54s ago is too old (> 4m), ignored
+1768690497^RING: 22:54:51^(*) Starting DXQsl system
+1768690497^RING: 22:54:51^(*) BadWords: Found new style badword.new file
+1768690497^RING: 22:54:52^(*) BadWords: 130 new style badwords read
+1768690497^RING: 22:54:52^(DXProt) DXCIDR::reload reload database
+1768690497^RING: 22:54:52^(DXProt) DXCIDR::reload: badip.local read containing 0 ip addresses
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 34: '    :root {' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 35: '      --tab-size-preference: 4;' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.global line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.global at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768690497^RING: 22:54:52^(DXProt) DXCIDR::reload: badip.global read containing 0 ip addresses
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 34: '    :root {' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 35: '      --tab-size-preference: 4;' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torrelay line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torrelay at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768690497^RING: 22:54:52^(DXProt) DXCIDR::reload: badip.torrelay read containing 0 ip addresses
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 21: '  <link rel="dns-prefetch" href="https://github.githubassets.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 22: '  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 23: '  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 24: '  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 25: '  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 26: '  <link rel="preconnect" href="https://avatars.githubusercontent.com">' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 31: '  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="light" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light-dac525bbd821.css" /><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-56ccf4057897.css" /><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-0e24752a7d2b.css" /><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast-412af2517363.css" /><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6186e83663dc.css" /><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast-9d33c7aea2e7.css" /><link data-color-theme="dark" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark-784387e86ac0.css" /><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-79bd5fd84a86.css" /><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-75db11311555.css" /><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast-f2c1045899a2.css" /><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-f46d293c6ff3.css" /><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast-e4b5684db29d.css" /><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-72c58078e707.css" /><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast-956cb5dfcb85.css" />' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 34: '    :root {' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 35: '      --tab-size-preference: 4;' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 39: '      tab-size: var(--tab-size-preference);' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: /spider/local_data/badip.torexit line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' not an ip address
+1768690497^RING: 22:54:52^(err) DXCIDR: More than 10 errors in /spider/local_data/badip.torexit at/after line 43: '    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-c37d781e2da5.css" />' - INVALID INPUT FILE
+1768690497^RING: 22:54:52^(DXProt) DXCIDR::reload: badip.torexit read containing 0 ip addresses
+1768690497^RING: 22:54:52^(DXProt) DXCIDR::reload 0 ip addresses found (IPV4: 0 IPV6: 0) in 4 badip files
+1768690497^RING: 22:54:52^(*) Doing local initialisations ...
+1768690497^RING: 22:54:57^(*) Try again
+1768690497^RING: 22:54:57^(*) Can't call method "sockhost" on an undefined value at /spider/perl/DXUtil.pm line 737.
+1768690497^RING: 22:54:57^(*)  at /spider/perl/DXUtil.pm line 737.
+1768690497^RING: 22:54:57^(*) 	DXUtil::find_local_ipaddr() called at ./cluster.pl line 812
+1768690497^RING: 22:54:57^(*) 	main::setup_start() called at ./cluster.pl line 936
+1768690497^RING: 22:54:57^(*) DXSpider Ceasing
+1768690497^RING: 22:54:57^(*) DXQSL finished
+1768690497^RING: 22:54:57^(*) RBN:WRITE_CACHE size: 0.013KB time to write: 1 mS
+1768690497^RING: 22:54:57^(*) DXDupe finishing
+1768690497^RING: 22:54:57^(*) DXUser finished
+1768690497^RING: 22:54:57^(*) Use of uninitialized value $version in concatenation (.) or string at ./cluster.pl line 490.
+1768690497^RING: 22:54:57^(*)  at ./cluster.pl line 490.
+1768690497^RING: 22:54:57^(*) Use of uninitialized value $build in concatenation (.) or string at ./cluster.pl line 490.
+1768690497^RING: 22:54:57^(*)  at ./cluster.pl line 490.
+1768690497^RING: 22:54:57^(cluster) DXSpider v build  (git: mojo/none) using perl v5.38.5 on linux ended
+1768690497^RING: 22:54:57^(*) bye bye everyone - bye bye
+1768690497^###
+1768690497^### RINGBUFFER END 133 debug lines written
+1768690497^###

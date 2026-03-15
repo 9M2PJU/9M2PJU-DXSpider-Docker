@@ -19,7 +19,7 @@
 [![Language](https://img.shields.io/badge/Written%20in-Perl-0073a1?style=for-the-badge&logo=perl&logoColor=white)](https://www.perl.org/)
 <br/>
 [![Uptime](https://img.shields.io/badge/Uptime-99.9%25-green?style=for-the-badge&logo=activity)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
-[![Platform](https://img.shields.io/badge/Platform-ARM64%20%7C%20AMD64-blueviolet?style=for-the-badge&logo=docker)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
+[![Platform](https://img.shields.io/badge/Platform-Multi--Arch-blueviolet?style=for-the-badge&logo=docker)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
 
 <br/>
 
@@ -130,7 +130,6 @@ This project supports a wide range of CPU architectures, making it compatible wi
 **Supported Platforms:**
 - `linux/amd64` (Standard 64-bit PC)
 - `linux/arm64` (Raspberry Pi 4/5, Apple Silicon, AWS Graviton)
-- `linux/386` (Legacy 32-bit PC)
 - `linux/arm/v7` (Raspberry Pi 2/3, 32-bit)
 - `linux/arm/v6` (Raspberry Pi Zero/1)
 
@@ -149,11 +148,8 @@ services:
     # remove the 'build' section if using the pre-built image
 ```
 
-### Building for Multiple Platforms (Manual)
-If you prefer to build your own multi-platform images, use `docker buildx`:
-
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64,linux/386,linux/arm/v7,linux/arm/v6 -t yourusername/dxspider-docker:latest --push .
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 -t yourusername/dxspider-docker:latest --push .
 ```
 
 ---
