@@ -12,7 +12,6 @@ RUN apk add --no-cache \
     git \
     nano \
     netcat-openbsd \
-    perl-db_file \
     perl-digest-sha1 \
     perl-io-socket-ssl \
     perl-net-telnet \
@@ -41,9 +40,10 @@ RUN apk add --no-cache \
     perl-app-cpanminus \
     perl-dev \
     mysql-dev \
+    db-dev \
 # Install ONLY the modules not found in APK
     && cpanm --no-wget EV Date::Manip JSON::XS Data::Structure::Util \
-    && cpanm Net::MQTT::Simple File::Copy::Recursive Authen::SASL \
+    && cpanm DB_File Net::MQTT::Simple File::Copy::Recursive Authen::SASL \
     && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
     && git clone -b mojo https://github.com/EA3CV/dxspider ${SPIDER_INSTALL_DIR} \
