@@ -295,6 +295,28 @@ You can run Docker inside LXC, but it requires specific settings:
 
 ---
 
+## 🪟 Windows Support
+
+Windows users can run DXSpider Docker easily using WSL2 or traditional virtualization.
+
+### 🐳 WSL2 (Recommended)
+This is the fastest and most efficient way to run Docker on Windows.
+1.  Install **Docker Desktop** and enable the **WSL2 Backend**.
+2.  Install a Linux distribution (e.g., Ubuntu) from the Microsoft Store.
+3.  **Performance Tip**: Clone this repository *inside* the WSL2 file system (e.g., `~/dxspider`) rather than on the Windows C: drive (`/mnt/c/`). This significantly speeds up disk operations.
+4.  Follow the [Quick Start](#-quick-start) from within your WSL2 terminal.
+
+### 💻 Hyper-V
+If you prefer not to use Docker Desktop:
+1.  Enable the **Hyper-V** feature in Windows.
+2.  Create a Linux Virtual Machine.
+3.  Install Docker and follow the standard Linux instructions.
+
+### 📁 Windows Path Note
+When using `.env` or Volume mappings on Windows, use forward slashes `/` or escaped backslashes `\\` to avoid path resolution errors.
+
+---
+
 ## 🆘 Troubleshooting & FAQ
 
 <details>
