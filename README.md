@@ -268,6 +268,33 @@ When running in the cloud, **never** store your data inside the container or on 
 
 ---
 
+## 🖥️ Virtualization (On-Premises)
+
+If you are running your own home lab or data center, DXSpider Docker works perfectly on major hypervisors.
+
+### 🟣 VMware (ESXi / Workstation / Fusion)
+**Best Practice: Linux VM**
+1.  Create a Virtual Machine running **Ubuntu Server** or **Debian**.
+2.  Enable **Hardware Virtualization** in the VM settings (for better performance).
+3.  Install Docker and follow the [Quick Start](#-quick-start).
+4.  **Network**: Use "Bridged" networking if you want your DX Cluster to have its own dedicated IP address on your LAN.
+
+### 🟠 Proxmox VE
+**Method A: Linux VM (Recommended)**
+- Create a standard VM and install Docker. This is the most stable and isolated method.
+
+**Method B: LXC Container (Advanced)**
+You can run Docker inside LXC, but it requires specific settings:
+1.  Check **"nesting"** and **"keyctl"** in the Container Features.
+2.  Ensure the container is **unprivileged** for better security (though privileged may be needed for some advanced networking).
+3.  Mount your data volumes from the Proxmox host to keep cluster data persistent even if the LXC is deleted.
+
+### 🌐 Networking Tips for Virt/Cloud
+- **Port Forwarding**: Ensure your router/firewall forwards port `7300` (TCP) to your VM/Container's IP.
+- **Failover**: If running on Proxmox/VMware clusters, HA (High Availability) will work out-of-the-box since all state is stored in the mapped volumes.
+
+---
+
 ## 🆘 Troubleshooting & FAQ
 
 <details>
