@@ -1,5 +1,6 @@
 services:
   dxspider:
+    image: ghcr.io/9m2pju/9m2pju-dxspider-docker:main
     build:
       context: .
       dockerfile: Dockerfile
