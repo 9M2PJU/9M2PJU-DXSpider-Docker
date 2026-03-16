@@ -437,7 +437,7 @@ Distributed under the GNU General Public License v3.0. See `LICENSE` for more in
 
 ## ☕ Support
  
-If you find this plugin useful, you can support its development by buying me a coffee:
+If you find this project useful, you can support its development by buying me a coffee:
  
 [![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/9m2pju)
 
