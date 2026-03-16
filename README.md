@@ -153,8 +153,9 @@ services:
 To build for all platforms manually using Docker Buildx:
 
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 -t 9M2PJU/9M2PJU-DXSpider-Docker:latest --push .
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 -t ghcr.io/9m2pju/9m2pju-dxspider-docker:latest --push .
 ```
+
 
 ---
 

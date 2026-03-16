@@ -1,9 +1,14 @@
 #!/bin/bash
 
 SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR:-/spider}
+SPIDER_USERNAME=${SPIDER_USERNAME:-sysop}
+SPIDER_UID=${SPIDER_UID:-1000}
+SPIDER_GROUP=${SPIDER_USERNAME}
+
 
 # Fix permissions for mounted volumes at runtime
-chown -R ${SPIDER_USERNAME}:${SPIDER_USERNAME} ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_data 2>/dev/null
+chown -R ${SPIDER_USERNAME}:${SPIDER_GROUP} ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_data 2>/dev/null
+
 
 # Generate Listeners.pm
 if [ ! -f ${SPIDER_INSTALL_DIR}/local/Listeners.pm ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
@@ -33,9 +38,10 @@ CLUSTER_LOCATOR=$(echo ${CLUSTER_LOCATOR} | tr '[a-z]' '[A-Z]')
 CLUSTER_SYSOP_EMAIL=$(echo ${CLUSTER_SYSOP_EMAIL} | sed 's/@/\\@/g')
 CLUSTER_SYSOP_BBS_ADDRESS=$(echo ${CLUSTER_SYSOP_BBS_ADDRESS} | sed 's/@/\\@/g')
 
-# Web Console Credentials (fallback to DB credentials for compatibility)
-WEB_USER=${WEB_USER:-${CLUSTER_DBUSER}}
-WEB_PASS=${WEB_PASS:-${CLUSTER_DBPASS}}
+# Web Console Credentials (fallback to DB credentials or 'sysop' for compatibility)
+WEB_USER=${WEB_USER:-${CLUSTER_DBUSER:-sysop}}
+WEB_PASS=${WEB_PASS:-${CLUSTER_DBPASS:-sysoppassword}}
+
 
 # Generate DXVars.pm
 if [ ! -f ${SPIDER_INSTALL_DIR}/local/DXVars.pm ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
@@ -79,7 +85,8 @@ fi
 
 echo "Starting Web Console..."
 # Run ttyd as foreground process
-ttyd -p ${CLUSTER_SYSOP_PORT:-8080} -u ${SPIDER_UID} -t fontSize=16 -c "${WEB_USER}:${WEB_PASS}" perl ${SPIDER_INSTALL_DIR}/perl/console.pl &
+ttyd -p ${CLUSTER_SYSOP_PORT:-8080} -u ${SPIDER_UID} -t fontSize=16 -W -c "${WEB_USER}:${WEB_PASS}" perl ${SPIDER_INSTALL_DIR}/perl/console.pl &
+
 
 # Wait for children to handle traps
 wait
