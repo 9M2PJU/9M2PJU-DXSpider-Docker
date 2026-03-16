@@ -202,11 +202,16 @@ We map several folders from your host machine into the container using Docker Vo
 <details>
 <summary><b>🔗 How to Add Partner Nodes</b> (Click to Expand)</summary>
 
-To connect to another cluster node (e.g., `GB7MBC`), you need a connection script.
+Connecting to the global DX Cluster network is a social and technical process. Follow these steps to link your node:
 
-1.  Create a file in `connect/` named after the target node (lowercase).
+> [!IMPORTANT]
+> **Ask Before You Link**: You cannot simply "connect" to any node. You MUST contact the Sysop of the partner node (e.g., via email or DX message) to ask for a "partner link." They need to configure their cluster to accept your connection while you configure yours to dial them.
+
+1.  **Coordinate with a Sysop**: Find a nearby or reliable node and request an inter-node link.
+2.  **Use a Password**: **Highly Recommended.** Always agree on a connection password with your partner. This prevents unauthorized users from spoofing your node and protects the network from spam.
+3.  **Create a Connection Script**: Create a file in `connect/` named after the target node (lowercase).
     *   Example: `connect/gb7mbc`
-2.  Add the connection logic:
+4.  **Add the Connection Logic**:
     ```bash
     timeout 60
     # connect telnet <hostname> <port>
@@ -214,9 +219,9 @@ To connect to another cluster node (e.g., `GB7MBC`), you need a connection scrip
     client gb7mbc telnet
     # Interaction (Wait for 'login', send 'user')
     login gb7mbc
-    pass mysecurepassword
+    pass mysecurepassword  # agreed upon with the partner sysop
     ```
-3.  Test it from the shell: `docker compose exec dxspider sh -c '/spider/perl/connect gb7mbc'`
+5.  **Test it**: Run from the host shell: `docker compose exec dxspider sh -c '/spider/perl/connect gb7mbc'`
 
 </details>
 
