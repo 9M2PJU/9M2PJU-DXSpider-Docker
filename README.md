@@ -131,20 +131,22 @@ This project supports a wide range of CPU architectures, making it compatible wi
 - `linux/arm/v7` (Raspberry Pi 2/3, 32-bit)
 - `linux/arm/v6` (Raspberry Pi Zero/1)
 
-### Using Pre-built Images
-We automatically build and push images for all major architectures to the GitHub Container Registry. To use them, you can pull directly:
+### 🐳 Standalone Docker Run
+If you prefer not to use Docker Compose, you can run the cluster with a single `docker run` command. This is useful for quick testing or cloud environments like AWS ECS or Azure ACI.
 
 ```bash
-docker pull ghcr.io/9m2pju/9m2pju-dxspider-docker:main
+docker run -d \
+  --name dxspider \
+  -p 7300:7300 \
+  -p 8080:8080 \
+  -e CLUSTER_CALLSIGN=9M2PJU-2 \
+  -e CLUSTER_SYSOP_CALLSIGN=9M2PJU \
+  -v $(pwd)/local_data:/spider/local_data \
+  ghcr.io/9m2pju/9m2pju-dxspider-docker:main
 ```
 
-Or update your `docker-compose.yml` to use the image:
-```yaml
-services:
-  dxspider:
-    image: ghcr.io/9m2pju/9m2pju-dxspider-docker:main
-    # remove the 'build' section if using the pre-built image
-```
+> [!TIP]
+> **Persistent Data**: Always ensure you mount a volume to `/spider/local_data` to keep your user database and spots persistent!
 
 ### 🛠️ Manual Multi-Arch Build (Advanced)
 > [!NOTE]  
