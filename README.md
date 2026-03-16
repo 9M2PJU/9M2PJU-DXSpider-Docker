@@ -435,6 +435,12 @@ Distributed under the GNU General Public License v3.0. See `LICENSE` for more in
 
 <br/>
 
+## ☕ Support
+ 
+If you find this plugin useful, you can support its development by buying me a coffee:
+ 
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/9m2pju)
+
 *Designed with ❤️ by **9M2PJU***
 *73 and Good DX!*
 
