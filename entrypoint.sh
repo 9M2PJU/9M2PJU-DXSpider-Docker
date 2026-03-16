@@ -31,12 +31,14 @@ function cleanup() {
 
 trap cleanup SIGTERM SIGINT
 
-# Format calls and locator
-CLUSTER_CALLSIGN=$(echo ${CLUSTER_CALLSIGN} | tr '[a-z]' '[A-Z]')
-CLUSTER_SYSOP_CALLSIGN=$(echo ${CLUSTER_SYSOP_CALLSIGN} | tr '[a-z]' '[A-Z]')
-CLUSTER_LOCATOR=$(echo ${CLUSTER_LOCATOR} | tr '[a-z]' '[A-Z]')
-CLUSTER_SYSOP_EMAIL=$(echo ${CLUSTER_SYSOP_EMAIL} | sed 's/@/\\@/g')
-CLUSTER_SYSOP_BBS_ADDRESS=$(echo ${CLUSTER_SYSOP_BBS_ADDRESS} | sed 's/@/\\@/g')
+# Format calls and locator with robust defaults
+CLUSTER_CALLSIGN=$(echo ${CLUSTER_CALLSIGN:-GB7DJK} | tr '[a-z]' '[A-Z]')
+CLUSTER_SYSOP_CALLSIGN=$(echo ${CLUSTER_SYSOP_CALLSIGN:-G1TLH} | tr '[a-z]' '[A-Z]')
+CLUSTER_SYSOP_NAME=${CLUSTER_SYSOP_NAME:-"DXSpider Sysop"}
+CLUSTER_QTH=${CLUSTER_QTH:-"DXSpider Node"}
+CLUSTER_LOCATOR=$(echo ${CLUSTER_LOCATOR:-JO01aa} | tr '[a-z]' '[A-Z]')
+CLUSTER_SYSOP_EMAIL=$(echo ${CLUSTER_SYSOP_EMAIL:-"sysop@localhost"} | sed 's/@/\\@/g')
+CLUSTER_SYSOP_BBS_ADDRESS=$(echo ${CLUSTER_SYSOP_BBS_ADDRESS:-"bbs@localhost"} | sed 's/@/\\@/g')
 
 # Web Console Credentials (fallback to DB credentials or 'sysop' for compatibility)
 WEB_USER=${WEB_USER:-${CLUSTER_DBUSER:-sysop}}
