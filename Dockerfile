@@ -1,4 +1,4 @@
-# Optimized DXSpider Dockerfile - Built for multi-arch reliability
+# Optimized DXSpider Dockerfile - v2.5.9-9M2PJU-Final
 FROM alpine:3.23
 
 ARG SPIDER_INSTALL_DIR=/spider
