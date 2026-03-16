@@ -9,6 +9,20 @@ SPIDER_GROUP=${SPIDER_USERNAME}
 # Fix permissions for mounted volumes at runtime
 chown -R ${SPIDER_USERNAME}:${SPIDER_GROUP} ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_data 2>/dev/null
 
+# Ensure persistence for critical data by symlinking to local_data
+# This covers spot logs, cluster logs, and debug data
+for dir in log spots debug; do
+    mkdir -p ${SPIDER_INSTALL_DIR}/local_data/${dir}
+    # If the internal data dir is a real directory, move its content to local_data first
+    if [ -d ${SPIDER_INSTALL_DIR}/data/${dir} ] && [ ! -L ${SPIDER_INSTALL_DIR}/data/${dir} ]; then
+        cp -an ${SPIDER_INSTALL_DIR}/data/${dir}/. ${SPIDER_INSTALL_DIR}/local_data/${dir}/ 2>/dev/null
+        rm -rf ${SPIDER_INSTALL_DIR}/data/${dir}
+    fi
+    # Link internal data dir to persistent local_data
+    ln -sf ${SPIDER_INSTALL_DIR}/local_data/${dir} ${SPIDER_INSTALL_DIR}/data/${dir}
+    chown -R ${SPIDER_USERNAME}:${SPIDER_GROUP} ${SPIDER_INSTALL_DIR}/local_data/${dir}
+done
+
 
 # Generate Listeners.pm
 if [ ! -f ${SPIDER_INSTALL_DIR}/local/Listeners.pm ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
