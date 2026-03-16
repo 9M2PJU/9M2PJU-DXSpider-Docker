@@ -39,6 +39,12 @@ RUN apk add --no-cache \
     perl-net-cidr-lite \
     perl-date-calc \
     perl-list-moreutils \
+    perl-ev \
+    perl-json-xs \
+    perl-date-manip \
+    perl-authen-sasl \
+    perl-net-mqtt-simple \
+    perl-file-copy-recursive \
     mysql-client \
     ttyd \
     wget \
@@ -52,9 +58,8 @@ RUN apk add --no-cache \
     perl-app-cpanminus \
     perl-dev \
     mysql-dev \
-# Install ONLY the modules not found in APK
-    && cpanm --no-wget EV Date::Manip JSON::XS Data::Structure::Util \
-    && cpanm Net::MQTT::Simple File::Copy::Recursive Authen::SASL \
+# Install ONLY the modules not found in APK (C-extensions are now native)
+    && cpanm --no-wget Data::Structure::Util \
     && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
     && git clone -b ${SPIDER_VERSION} https://github.com/EA3CV/dxspider ${SPIDER_INSTALL_DIR} \
