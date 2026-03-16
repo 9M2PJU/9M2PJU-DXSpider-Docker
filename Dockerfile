@@ -59,7 +59,7 @@ RUN apk add --no-cache \
     perl-dev \
     mysql-dev \
 # Install ONLY the modules not found in APK (C-extensions are now native)
-    && cpanm --no-wget Data::Structure::Util \
+    && cpanm --notest --no-wget Data::Structure::Util \
     && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
     && git clone -b ${SPIDER_VERSION} https://github.com/EA3CV/dxspider ${SPIDER_INSTALL_DIR} \
