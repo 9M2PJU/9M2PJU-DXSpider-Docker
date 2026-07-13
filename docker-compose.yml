@@ -1,22 +1,61 @@
+# =============================================================================
+#  DXSpider Docker — Docker Compose configuration
+#
+#  Defines the main dxspider service and an optional MariaDB backend.
+#  All configuration is driven by the .env file (see .env.example).
+#
+#  Usage:
+#    docker compose up -d --build              # start cluster only
+#    docker compose --profile with-db up -d    # start cluster + MariaDB
+# =============================================================================
+
 services:
+  # ===========================================================================
+  #  Main DXSpider cluster service
+  # ===========================================================================
   dxspider:
+    # Use the pre-built GHCR image by default; build locally if needed
     image: ghcr.io/9m2pju/9m2pju-dxspider-docker:main
     build:
       context: .
       dockerfile: Dockerfile
+      # Multi-arch build targets (matched by CI in docker-publish.yml)
       platforms:
         - "linux/amd64"
         - "linux/arm64"
         - "linux/arm/v7"
         - "linux/arm/v6"
       args:
+        # DXSpider git branch (mojo or master)
         - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH:-mojo}
+        # Pinned commit SHA for reproducible builds
+        - SPIDER_GIT_REF=${SPIDER_GIT_REF:-3e9b3621d94dd45c68702e4a0f896aac33f2a91d}
+        # Sysop user name and UID inside the container
         - SPIDER_USERNAME=${CLUSTER_DB_USER:-sysop}
         - SPIDER_UID=${SPIDER_UID:-1000}
 
-    privileged: true
+    # --- Security hardening ---
+    # The container starts as root (so entrypoint.sh can chown bind mounts),
+    # then drops to the sysop user via su-exec. No privileged mode is needed.
+    # We drop ALL Linux capabilities and add back only the minimum required:
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN        # chown on bind-mounted volumes (entrypoint step 1)
+      - FOWNER       # chmod on files not owned by root
+      - SETUID       # su-exec privilege drop (root → sysop)
+      - SETGID       # su-exec privilege drop (root → sysop)
+    security_opt:
+      - no-new-privileges:true   # prevent any privilege escalation
+
+    # --- Environment variables (passed to entrypoint.sh) ---
+    # Values are interpolated from .env at compose-up time.
     environment:
+      # Container internals
       - SPIDER_INSTALL_DIR=/spider
+      - SPIDER_USERNAME=${CLUSTER_DB_USER:-sysop}
+      - SPIDER_UID=${SPIDER_UID:-1000}
+      # Cluster identity
       - CLUSTER_CALLSIGN=${CLUSTER_CALLSIGN}
       - CLUSTER_LOCATOR=${CLUSTER_LOCATOR}
       - CLUSTER_QTH=${CLUSTER_QTH}
@@ -26,41 +65,89 @@ services:
       - CLUSTER_SYSOP_BBS_ADDRESS=${CLUSTER_SYSOP_BBS_ADDRESS}
       - CLUSTER_LATITUDE=${CLUSTER_LATITUDE}
       - CLUSTER_LONGITUDE=${CLUSTER_LONGITUDE}
-      - SPIDER_USERNAME=${CLUSTER_DB_USER:-sysop}
-      - SPIDER_UID=${SPIDER_UID:-1000}
-
-      - CLUSTER_DSN=dbi:mysql:${CLUSTER_DB_NAME}:${CLUSTER_DB_HOSTNAME}:${CLUSTER_DB_PORT}
-      - CLUSTER_DBUSER=${CLUSTER_DB_USER}
-      - CLUSTER_DBPASS=${CLUSTER_DB_PASS}
-      - CLUSTER_PORT=${CLUSTER_PORT}
-      - CLUSTER_SYSOP_PORT=${CLUSTER_SYSOP_PORT}
+      # Network ports
+      - CLUSTER_PORT=${CLUSTER_PORT:-7300}
+      - CLUSTER_SYSOP_PORT=${CLUSTER_SYSOP_PORT:-8080}
+      # Config regeneration control
+      - OVERWRITE_CONFIG=${OVERWRITE_CONFIG:-no}
+      # --- Optional MariaDB backend ---
+      # Leave CLUSTER_DB_HOSTNAME empty to use flat-file storage (default).
+      # The entrypoint only enables DB mode when CLUSTER_DB_HOSTNAME is set.
+      - CLUSTER_DSN=dbi:mysql:${CLUSTER_DB_NAME:-}:${CLUSTER_DB_HOSTNAME:-}:${CLUSTER_DB_PORT:-3306}
+      - CLUSTER_DBUSER=${CLUSTER_DB_USER:-}
+      - CLUSTER_DBPASS=${CLUSTER_DB_PASS:-}
+      - CLUSTER_DB_HOSTNAME=${CLUSTER_DB_HOSTNAME:-}
+      # --- Web Console (ttyd HTTP basic auth) ---
       - WEB_USER=${WEB_USER:-sysop}
       - WEB_PASS=${WEB_PASS:-sysoppassword}
+
+    # --- Health check: verify the cluster telnet port is listening ---
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "${CLUSTER_PORT:-7300}"]
-
       interval: 10s
-      start_period: 5s
+      start_period: 15s
       retries: 3
-      timeout: 60s
+      timeout: 10s
+
     restart: always
+
+    # --- Bind-mounted volumes (persistent across rebuilds) ---
+    # These host directories are mounted into the container, overriding
+    # the default files COPY'd into the image at build time. This means
+    # rebuilding the image does NOT change your configuration — the host
+    # files always take precedence. See README "Persistence" section.
     volumes:
-      - ./startup:/spider/scripts/startup:rw
-      - ./crontab:/spider/local_cmd/crontab:rw
-      - ./connect:/spider/connect:rw
-      - ./motd:/spider/local_data/motd:rw
-      - ./motd_nor:/spider/local_data/motd_nor:rw
-      - ./local_data:/spider/local_data:rw
-      - ./cmd:/spider/cmd:rw
-      - ./msg:/spider/msg:rw
+      - ./startup:/spider/scripts/startup:rw       # Boot-time commands
+      - ./local_cmd:/spider/local_cmd:rw           # Cron schedule + local command overrides
+      - ./connect:/spider/connect:rw               # Partner node connection scripts
+      - ./motd:/spider/local_data/motd:rw          # Message of the day (registered users)
+      - ./motd_nor:/spider/local_data/motd_nor:rw  # Message of the day (non-registered users)
+      - ./local_data:/spider/local_data:rw         # CRITICAL: user DB, spots, logs, state
+      - ./cmd:/spider/cmd:rw                       # Custom user commands
+      - ./msg:/spider/msg:rw                       # Bulletins and private messages
+
+    # --- Port mappings (host:container) ---
+    # Both ports use the same CLUSTER_* variable for host and container,
+    # so changing the port in .env updates both sides consistently.
     ports:
-      - ${CLUSTER_PORT}:${CLUSTER_PORT}
-      - ${CLUSTER_SYSOP_PORT}:${CLUSTER_SYSOP_PORT}
+      - "${CLUSTER_PORT:-7300}:${CLUSTER_PORT:-7300}"            # Telnet (user-facing)
+      - "${CLUSTER_SYSOP_PORT:-8080}:${CLUSTER_SYSOP_PORT:-8080}" # Web Console (ttyd)
     expose:
-      - ${CLUSTER_PORT}
-      - ${CLUSTER_SYSOP_PORT}
+      - "${CLUSTER_PORT:-7300}"
+      - "${CLUSTER_SYSOP_PORT:-8080}"
+
+    # --- Log rotation to prevent disk fill ---
     logging:
       driver: "json-file"
       options:
         max-size: "200k"
         max-file: "10"
+
+  # ===========================================================================
+  #  Optional MariaDB backend for spot logging
+  #
+  #  Enabled only with the "with-db" compose profile:
+  #    docker compose --profile with-db up -d
+  #
+  #  Requires CLUSTER_DB_HOSTNAME=db in your .env file.
+  #  Data is stored in a named Docker volume (db_data) for persistence.
+  # ===========================================================================
+  db:
+    profiles: ["with-db"]
+    image: mariadb:11
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=${CLUSTER_DB_ROOT_PWD:-changeme-root}
+      - MARIADB_DATABASE=${CLUSTER_DB_NAME:-spider}
+      - MARIADB_USER=${CLUSTER_DB_USER:-sysop}
+      - MARIADB_PASSWORD=${CLUSTER_DB_PASS:-sysoppassword}
+    volumes:
+      - db_data:/var/lib/mysql
+    # Only exposed internally (not published to the host) — the dxspider
+    # container accesses it via the Docker network using hostname "db".
+    expose:
+      - "3306"
+
+# Named volumes for the optional MariaDB service
+volumes:
+  db_data:

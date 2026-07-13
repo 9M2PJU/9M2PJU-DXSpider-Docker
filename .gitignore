@@ -1,0 +1,45 @@
+# =============================================================================
+#  Git Ignore Rules for DXSpider Docker
+#
+#  Prevents secrets, runtime data, and per-node configuration from being
+#  committed to version control. Use .env.example as the template for
+#  new deployments.
+# =============================================================================
+
+# --- Secrets / local environment ---
+# .env contains passwords and node-specific identity — never commit it.
+.env
+.env.local
+.env.*.local
+
+# --- Runtime data (persisted via Docker bind mounts, not in git) ---
+# local_data/ holds the user database, spots, logs, and filter lists.
+# These are runtime artifacts that should be backed up externally.
+local_data/*
+!local_data/.gitkeep
+
+# --- Per-node runtime artifacts ---
+# connect/ and msg/ contain node-specific scripts and messages.
+# Keep the directory structure but ignore generated content.
+connect/*
+!connect/.gitkeep
+msg/*
+!msg/.gitkeep
+
+# --- local_cmd/ contains the crontab and local command overrides ---
+# The crontab is tracked (it's a config file users edit), but any other
+# generated local commands are ignored.
+local_cmd/*
+!local_cmd/.gitkeep
+!local_cmd/crontab
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.bak
+*.tmp

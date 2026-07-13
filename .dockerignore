@@ -1,0 +1,45 @@
+# =============================================================================
+#  Docker Ignore Rules for DXSpider Docker
+#
+#  Excludes files not needed at build time to keep the build context small
+#  and prevent runtime data / secrets from leaking into image layers.
+#
+#  IMPORTANT: Do NOT exclude connect/, motd, motd_nor, startup,
+#  local_cmd/crontab, or entrypoint.sh — the Dockerfile COPYs them
+#  into the image at build time as fallback defaults.
+# =============================================================================
+
+# --- Version control / CI (not needed in the image) ---
+.git
+.github
+
+# --- Documentation and assets (not needed at runtime) ---
+assets
+deploy
+
+# --- Runtime data (persisted via bind mounts at runtime, not baked in) ---
+# local_data/ is bind-mounted at runtime; baking it into the image would
+# include the user database and logs, which is both wasteful and a privacy risk.
+local_data
+
+# --- Secrets (must never be in image layers) ---
+.env
+.env.*
+*.env
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.bak
+*.tmp
+
+# --- Documentation (not needed inside the image) ---
+*.md
+LICENSE
+.gitignore
+.dockerignore

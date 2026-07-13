@@ -1,6 +1,28 @@
+# =============================================================================
+#  DXSpider Startup Commands
+#
+#  This file is bind-mounted into the container at /spider/scripts/startup
+#  and is executed once when DXSpider starts (after the cluster daemon boots).
+#  Each line is a DXSpider console command.
+#
+#  Edit to suit your node, then restart:
+#    docker compose restart dxspider
+# =============================================================================
+
+# Load message forwarding configuration
 load/forward
+
+# Mark a partner node as a DXSpider-type node and connect to it.
+# Replace '9m2pju-2' with your partner's callsign (lowercase).
 set/spider 9m2pju-2
 connect 9m2pju-2
+
+# Allow inbound internet connections
 set/var $Internet::allow = 1
+
+# Set the contest DX cluster host for contest spot forwarding
 set/var $Internet::contest_host = "contest.dxtron.com"
-set/var $main::reqreg = 1 # user must register to use spot function !!
+
+# Require users to register before they can post spots.
+# This prevents anonymous spam spots on your node.
+set/var $main::reqreg = 1

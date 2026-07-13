@@ -1,0 +1,44 @@
+# =============================================================================
+#  DXSpider Cron Schedule
+#
+#  This file lives at local_cmd/crontab on the host and is bind-mounted
+#  into the container at /spider/local_cmd/crontab. It is read by
+#  DXSpider's internal cron scheduler (not system cron).
+#
+#  Format: minute hour day-of-month month day-of-week  command
+#  Use * for "every".  Commands are DXSpider Perl expressions.
+#
+#  Edit this file to suit your node. Restart the container to apply changes:
+#    docker compose restart dxspider
+# =============================================================================
+
+# --- Partner node reconnection ---
+# Reconnect to a partner node every 10 minutes if the link has dropped.
+# Replace 'partner-call' with your partner's callsign (lowercase).
+# 0,10,20,30,40,50 * * * * start_connect('partner-call') unless connected('partner-call')
+
+# =============================================================================
+#  Bad-IP / bad-word list updates (fetched hourly from EA3CV's repo)
+#
+#  These lists protect your node from known abusers, Tor exit nodes, and
+#  banned DX spotters. They are downloaded to local_data/ and loaded into
+#  DXSpider's filtering system.
+#
+#  IMPORTANT: Always use raw.githubusercontent.com, NOT github.com/.../blob/...
+#  The blob URLs return HTML pages, not the raw data files.
+# =============================================================================
+
+# --- Bad IP lists (Tor exits, Tor relays, global blacklist) ---
+30 * * * * spawn('cd /spider/local_data; wget -qN https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/badip.torexit')
+30 * * * * spawn('cd /spider/local_data; wget -qN https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/badip.torrelay')
+30 * * * * spawn('cd /spider/local_data; wget -qN https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/badip.global')
+# Load the updated IP lists into DXSpider 2 minutes after download
+32 * * * * run_cmd('load/badip')
+
+# --- Bad DX, bad spotter, bad node, bad word lists ---
+33 * * * * spawn('cd /spider/local_data; wget -qN -O baddx.run https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/baddx')
+33 * * * * spawn('cd /spider/local_data; wget -qN -O badspotter.run https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/badspotter')
+33 * * * * spawn('cd /spider/local_data; wget -qN -O badnode.run https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/badnode')
+33 * * * * spawn('cd /spider/local_data; wget -qN -O badword.new.run https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/badword.new')
+# Load the updated word/filter lists 2 minutes after download
+35 * * * * run_cmd('load/badwords')

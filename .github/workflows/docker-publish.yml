@@ -1,3 +1,18 @@
+# =============================================================================
+#  DXSpider Docker — CI/CD Pipeline
+#
+#  Triggers on:
+#    - Push to main branch
+#    - Version tags (v*.*.*)
+#    - Pull requests to main
+#
+#  Jobs:
+#    1. test  → Build amd64 image, run it, verify port 7300 is listening
+#    2. build → Multi-arch build (amd64/arm64/arm/v7/arm/v6) & push to GHCR
+#
+#  The build job only runs if the test job passes, preventing broken
+#  images from being published.
+# =============================================================================
 name: Docker Publish
 
 on:
@@ -9,26 +24,96 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
 
 jobs:
+  # ===========================================================================
+  #  Job 1: Smoke Test
+  #
+  #  Builds the image for amd64 only (fast), runs it, and verifies the
+  #  DXSpider cluster starts and listens on port 7300 within 30 seconds.
+  #  This catches regressions (missing Perl modules, broken entrypoint, etc.)
+  #  before publishing to GHCR.
+  # ===========================================================================
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Build for amd64 only (no QEMU needed) and load into local Docker
+      - name: Build image (amd64, no push)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          load: true
+          tags: dxspider-test:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+      # Run the container and poll port 7300 for up to 30 seconds.
+      # Uses minimal env vars — just enough for the cluster to boot.
+      - name: Smoke test — cluster listens on 7300
+        run: |
+          set -euo pipefail
+          docker run -d --name dxspider-smoke \
+            -e CLUSTER_CALLSIGN=TESTNODE \
+            -e CLUSTER_SYSOP_CALLSIGN=TESTSYSOP \
+            -e CLUSTER_LOCATOR=JO01AA \
+            -p 7300:7300 \
+            dxspider-test:latest
+
+          # Wait up to 30 seconds for the cluster to start listening
+          for i in $(seq 1 30); do
+            if nc -z localhost 7300 2>/dev/null; then
+              echo "SUCCESS: DXSpider is listening on port 7300"
+              docker logs dxspider-smoke
+              docker stop dxspider-smoke
+              exit 0
+            fi
+            echo "Waiting for cluster to start... ($i/30)"
+            sleep 1
+          done
+
+          echo "FAIL: DXSpider did not start within 30 seconds"
+          docker logs dxspider-smoke
+          docker stop dxspider-smoke || true
+          exit 1
+
+  # ===========================================================================
+  #  Job 2: Multi-arch Build & Push
+  #
+  #  Builds for all supported architectures and pushes to GHCR.
+  #  Only pushes on main pushes and version tags (not PRs).
+  #  Depends on the test job passing first.
+  # ===========================================================================
   build:
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       id-token: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # QEMU emulates non-amd64 architectures for the multi-arch build
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # Authenticate to GHCR using the built-in GITHUB_TOKEN
+      # Skipped on PRs (we don't push images for PR builds)
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -37,9 +122,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # GHCR requires lowercase image names; GitHub repo names may have uppercase
       - name: Lowercase image name
         run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
+      # Generate image tags based on branch/tag/SHA
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -54,6 +141,9 @@ jobs:
             type=semver,pattern={{major}}
             type=sha
 
+      # Build and push for all 4 architectures.
+      # Uses GitHub Actions cache for layer caching across runs.
+      # provenance/sbom disabled for simpler image metadata.
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5
