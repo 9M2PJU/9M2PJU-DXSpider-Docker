@@ -594,9 +594,10 @@ Distributed under the GNU General Public License v3.0. See `LICENSE` for more in
 
 ## ☕ Support
 
-If you find this project useful, you can support its development by buying me a coffee:
+If you find this project useful, you can support its development:
 
 [![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/9m2pju)
+[![PayPal](https://img.shields.io/badge/PayPal-paypal.me%2F9m2pju-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/9m2pju)
 
 *Designed with care by **9M2PJU***
 *73 and Good DX!*
