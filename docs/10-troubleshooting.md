@@ -252,7 +252,8 @@ docker compose logs dxspider | grep -i connect
 - Set `OVERWRITE_CONFIG=yes` in `.env`, then:
   ```bash
   docker compose down
-  docker compose up -d --build
+  docker compose pull
+  docker compose up -d
   ```
 - Set `OVERWRITE_CONFIG=no` afterward to preserve manual edits.
 - Verify the env vars are reaching the container:
@@ -335,8 +336,9 @@ docker volume rm 9m2pju-dxspider-docker_db_data 2>/dev/null
 # Remove runtime data
 rm -rf local_data/
 
-# Rebuild and start
-docker compose up -d --build
+# Pull fresh image and start
+docker compose pull
+docker compose up -d
 ```
 
 ---

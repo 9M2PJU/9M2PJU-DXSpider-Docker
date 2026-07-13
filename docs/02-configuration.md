@@ -166,7 +166,8 @@ OVERWRITE_CONFIG=yes
 
 # Then restart:
 docker compose down
-docker compose up -d --build
+docker compose pull
+docker compose up -d
 
 # After verifying, set it back:
 # OVERWRITE_CONFIG=no

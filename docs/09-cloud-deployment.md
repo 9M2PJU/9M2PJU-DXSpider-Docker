@@ -66,7 +66,8 @@ A **static public IP** is strongly recommended. Partner nodes need to connect to
 
 5. **Launch**:
    ```bash
-   docker compose up -d --build
+   docker compose pull      # Download pre-built image from GHCR
+   docker compose up -d     # Start the cluster
    ```
 
 6. **Associate an Elastic IP** (static IP):

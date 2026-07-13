@@ -63,10 +63,13 @@ WEB_PASS=a-secure-password        # Web console password (CHANGE THIS!)
 ### Step 3: Launch
 
 ```bash
-docker compose up -d --build
+docker compose pull      # Download the pre-built image from GHCR (fast)
+docker compose up -d     # Start the cluster
 ```
 
-The first build takes a few minutes (it downloads and compiles DXSpider and all dependencies). Subsequent builds are much faster thanks to Docker layer caching.
+This downloads the pre-built multi-arch image from GitHub Container Registry — no local compilation needed. It takes seconds, not minutes.
+
+> **Prefer to build locally?** Use `docker compose up -d --build` instead. This compiles DXSpider and all Perl dependencies on your machine. The first build takes a few minutes; subsequent builds are faster thanks to Docker layer caching.
 
 ### Step 4: Verify It's Running
 
@@ -174,7 +177,11 @@ docker compose down
 # Start it again (no rebuild needed)
 docker compose up -d
 
-# Rebuild after updating code or config
+# Update to the latest pre-built image
+docker compose pull
+docker compose up -d
+
+# Rebuild locally after custom modifications
 docker compose up -d --build
 ```
 

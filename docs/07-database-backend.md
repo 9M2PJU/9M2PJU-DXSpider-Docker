@@ -169,7 +169,7 @@ To switch back to flat-file storage:
 1. **Stop everything**: `docker compose --profile with-db down`
 2. **Remove or comment out** the `CLUSTER_DB_HOSTNAME` line in `.env`
 3. **Set `OVERWRITE_CONFIG=yes`** in `.env`
-4. **Restart**: `docker compose up -d --build`
+4. **Restart**: `docker compose pull && docker compose up -d`
 5. **Set `OVERWRITE_CONFIG=no`** again
 
 The MariaDB data volume (`db_data`) is preserved. To delete it entirely:

@@ -159,10 +159,16 @@ nano .env
 #   WEB_PASS=a-secure-password
 ```
 
-**3. Launch!**
+**3. Pull & Launch!**
 ```bash
-docker compose up -d --build
+docker compose pull      # Download the pre-built image from GHCR (fast)
+docker compose up -d     # Start the cluster
 ```
+
+> [!TIP]
+> `docker compose pull` downloads the pre-built multi-arch image from GitHub Container Registry — no local build needed. This is much faster than `--build`.
+>
+> If you prefer to build locally (e.g., offline or custom modifications), use `docker compose up -d --build` instead.
 
 **You are live!** Access your node:
 - **Telnet**: `telnet localhost 7300` (users connect here)
@@ -517,11 +523,13 @@ docker compose exec dxspider sh
 
 Simple. We built this to be easy.
 ```bash
-git pull                     # Get latest docker configs
-docker compose down          # Stop old container
-docker compose up -d --build # Build new one
+git pull                  # Get latest docker configs
+docker compose pull       # Download the latest pre-built image from GHCR
+docker compose up -d      # Restart with the new image
 ```
 *Your data in `local_data/` will remain safe.*
+
+> If you build locally instead of pulling, use `docker compose up -d --build` in place of the `pull` + `up` steps.
 </details>
 
 <details>
@@ -540,7 +548,8 @@ Or set `SPIDER_UID` in `.env` to match your host user's UID.
 Set `OVERWRITE_CONFIG=yes` in your `.env` and restart:
 ```bash
 docker compose down
-docker compose up -d --build
+docker compose pull
+docker compose up -d
 ```
 Set it back to `no` afterward to preserve manual edits.
 </details>
