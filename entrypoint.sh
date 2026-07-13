@@ -94,8 +94,8 @@ trap cleanup SIGTERM SIGINT
 #  Email/BBS addresses need @ escaped for Perl string literals.
 #  All values fall back to upstream DXSpider defaults if unset.
 # =============================================================================
-CLUSTER_CALLSIGN=$(echo "${CLUSTER_CALLSIGN:-GB7DJK}" | tr 'a-z' 'A-Z')
-CLUSTER_SYSOP_CALLSIGN=$(echo "${CLUSTER_SYSOP_CALLSIGN:-G1TLH}" | tr 'a-z' 'A-Z')
+CLUSTER_CALLSIGN=$(echo "${CLUSTER_CALLSIGN:-9M2PJU-2}" | tr 'a-z' 'A-Z')
+CLUSTER_SYSOP_CALLSIGN=$(echo "${CLUSTER_SYSOP_CALLSIGN:-9M2PJU}" | tr 'a-z' 'A-Z')
 CLUSTER_SYSOP_NAME=${CLUSTER_SYSOP_NAME:-"DXSpider Sysop"}
 CLUSTER_QTH=${CLUSTER_QTH:-"DXSpider Node"}
 CLUSTER_LOCATOR=$(echo "${CLUSTER_LOCATOR:-JO01aa}" | tr 'a-z' 'A-Z')

@@ -279,8 +279,8 @@ Edit these in your `.env` file (copy from `.env.example`). All variables have se
 
 | Variable | Description | Default |
 | :--- | :--- | :--- |
-| `CLUSTER_CALLSIGN` | **Required**. The callsign of your node. | `GB7DJK` |
-| `CLUSTER_SYSOP_CALLSIGN` | **Required**. Your admin callsign. | `G1TLH` |
+| `CLUSTER_CALLSIGN` | **Required**. The callsign of your node. | `9M2PJU-2` |
+| `CLUSTER_SYSOP_CALLSIGN` | **Required**. Your admin callsign. | `9M2PJU` |
 | `CLUSTER_SYSOP_NAME` | Sysop's display name. | `DXSpider Sysop` |
 | `CLUSTER_SYSOP_EMAIL` | Sysop contact email. | `sysop@localhost` |
 | `CLUSTER_SYSOP_BBS_ADDRESS` | BBS forwarding address. | `bbs@localhost` |

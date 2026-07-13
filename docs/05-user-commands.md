@@ -32,7 +32,7 @@ Examples:
 ```
 dx 14.195 ZL2ABC Strong signal on 20m CW
 dx 7.090 VK9XYZ New DXCC on 40m SSB
-dx by G1TLH 14.025 ZL2ABC Nice CW signal
+dx by 9M2PJU 14.025 ZL2ABC Nice CW signal
 ```
 
 The `by` variant lets you post a spot on behalf of another operator.
@@ -100,8 +100,8 @@ sh/ann <from>-<to>   # Show range of announcements
 
 Send a one-line message to another station:
 ```
-talk G1TLH Hi Dirk, how are you?
-talk ZL2ABC > GB7DJK Hi via GB7DJK
+talk 9M2PJU Hi there, how are you?
+talk ZL2ABC > 9M2PJU-2 Hi via 9M2PJU-2
 ```
 
 View talk history:

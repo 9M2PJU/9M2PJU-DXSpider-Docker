@@ -125,7 +125,7 @@ Announce filters control which announcements you see.
 
 Accept announcements only from specific callsigns:
 ```
-accept/ann call G1TLH
+accept/ann call 9M2PJU
 ```
 
 Reject announcements containing certain words:
