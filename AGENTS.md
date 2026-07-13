@@ -14,6 +14,7 @@ Docker packaging of DXSpider (Perl-based DX Cluster software), using the `mojo` 
 - **Container capabilities**: `CHOWN, FOWNER, SETUID, SETGID` (cap_drop: ALL)
 - **Default storage**: Flat-file (DB_File + SQLite); MariaDB optional
 - **Ports**: 7300 (telnet), 8080 (web console/ttyd)
+- **Placeholder callsign**: `9M2PJU-2` (node) / `9M2PJU` (sysop) — used in Dockerfile, entrypoint.sh, .env.example, README, and all docs. Historical references to Dirk Koopman (G1TLH) as DXSpider creator are preserved.
 
 ### Configuration Flow
 
@@ -87,17 +88,21 @@ docker compose exec dxspider /spider/perl/console.pl
 ### CI
 
 - `.github/workflows/docker-publish.yml` — Multi-arch build (amd64, arm64, arm/v7, arm/v6) + smoke test (verifies port 7300 listens) + push to GHCR
+- GHCR image: `ghcr.io/9m2pju/9m2pju-dxspider-docker:main` (auto-pushed on every merge to main)
+- Verified working: both test and build jobs pass, image manifest confirms all 4 architectures
 
 ### Previous Work Completed
 
 All fixes from prior sessions are committed:
 - `.gitignore` and `.dockerignore` created
 - `crontab` URLs fixed to use raw GitHub links
-- `docker-compose.yml`: privileged removed, security caps, env vars fixed, MariaDB profile
-- `Dockerfile`: DXSpider pinned to SHA, `perl-dbd-sqlite` added, healthcheck improved
-- `entrypoint.sh`: conditional DB config, signal handling, modernized `tr`
-- `.env.example`: comprehensive rewrite
+- `docker-compose.yml`: privileged removed, security caps, env vars fixed, MariaDB profile (`with-db`)
+- `Dockerfile`: DXSpider pinned to SHA, `perl-dbd-sqlite` added, healthcheck improved, placeholder callsign 9M2PJU-2/9M2PJU
+- `entrypoint.sh`: conditional DB config, signal handling, modernized `tr`, placeholder callsign 9M2PJU-2/9M2PJU
+- `.env.example`: comprehensive rewrite with 9M2PJU placeholder
 - `.env` and `local_data/` runtime files untracked from git
-- CI smoke test added
-- README rewritten with docs index
-- Full `docs/` directory created (10 files)
+- CI smoke test added and verified passing
+- README rewritten with "What is a DX Cluster?" intro, docs index table, beginner-friendly quick start
+- Full `docs/` directory created (10 files) covering all aspects of the project
+- Placeholder callsigns changed from GB7DJK/G1TLH to 9M2PJU-2/9M2PJU throughout (historical G1TLH references preserved)
+- AGENTS.md created for future session reference
