@@ -64,7 +64,8 @@ RUN apk add --no-cache \
     tini \
     su-exec \
     # --- Perl runtime modules (from Alpine packages, no CPAN needed) ---
-    perl-db_file \
+    # NOTE: perl-db_file is installed separately below — it is not packaged
+    # for all architectures (e.g., linux/386, ppc64le, s390x).
     perl-digest-sha1 \
     perl-io-socket-ssl \
     perl-net-telnet \
@@ -92,6 +93,8 @@ RUN apk add --no-cache \
     perl-authen-sasl \
     perl-net-mqtt-simple \
     perl-file-copy-recursive \
+    # --- Berkeley DB runtime (needed by DB_File, installed below) ---
+    db \
     # --- MariaDB client (for optional DB backend connectivity) ---
     mysql-client \
     # --- Web console (ttyd serves a web-based terminal) ---
@@ -104,7 +107,13 @@ RUN apk add --no-cache \
     perl-app-cpanminus \
     perl-dev \
     mysql-dev \
-    # Install ONLY the CPAN module not available as an Alpine package.
+    db-dev \
+    # --- Install DB_File ---
+    # perl-db_file is available as an Alpine package on amd64/arm64/arm/v7/arm/v6
+    # but NOT on 386/ppc64le/s390x. Try the Alpine package first (fast), then
+    # fall back to building from CPAN (works everywhere, just slower).
+    && (apk add --no-cache perl-db_file 2>/dev/null || cpanm --notest DB_File) \
+    # Install the CPAN module not available as an Alpine package.
     # Data::Structure::Util is a C extension (hence the build deps above).
     # --notest skips the test suite (test deps aren't installed on musl).
     && cpanm --notest --no-wget Data::Structure::Util \
