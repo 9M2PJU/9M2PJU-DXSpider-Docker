@@ -16,7 +16,7 @@
 <br/>
 [![GHCR Image](https://img.shields.io/badge/ghcr.io-9m2pju--dxspider--docker-blue?style=for-the-badge&logo=docker)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/pkgs/container/9m2pju-dxspider-docker)
 [![CI Smoke Test](https://img.shields.io/github/actions/workflow/status/9M2PJU/9M2PJU-DXSpider-Docker/docker-publish.yml?style=for-the-badge&label=CI&logo=githubactions)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/actions/workflows/docker-publish.yml)
-[![Platform](https://img.shields.io/badge/Arch-amd64%20%7C%20arm64%20%7C%20arm%2Fv7%20%7C%20arm%2Fv6-blueviolet?style=for-the-badge&logo=docker)](#-multi-architecture-support)
+[![Platform](https://img.shields.io/badge/Arch-amd64%20%7C%20arm64%20%7C%20arm%2Fv7%20%7C%20arm%2Fv6%20%7C%20386%20%7C%20ppc64le%20%7C%20s390x-blueviolet?style=for-the-badge&logo=docker)](#-multi-architecture-support)
 <br/>
 [![Repo Size](https://img.shields.io/github/repo-size/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&color=indigo)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
 [![Language](https://img.shields.io/badge/Written%20in-Perl-0073a1?style=for-the-badge&logo=perl&logoColor=white)](https://www.perl.org/)
@@ -52,7 +52,7 @@ A **DX Cluster** is a network of servers that share real-time "spots" — report
 | **Web Console** | Built-in web terminal (`ttyd`) for easy administration without SSH. |
 | **Hardened** | `cap_drop: ALL` + `no-new-privileges` — only the minimal kernel capabilities needed. |
 | **Data Safety** | User database, spots, and logs are safe in persistent bind-mounted volumes. |
-| **Universal** | Multi-arch images: amd64, arm64, arm/v7, arm/v6 — servers to Raspberry Pi Zero. |
+| **Universal** | Multi-arch images: amd64, arm64, arm/v7, arm/v6, 386, ppc64le, s390x — servers to Raspberry Pi Zero. |
 | **Automation** | Built-in Cron and Startup script support. |
 | **Optional DB** | Flat-file storage by default; optional MariaDB backend via compose profile. |
 | **CI Tested** | Every commit is smoke-tested in GitHub Actions before publishing. |
@@ -205,6 +205,9 @@ This project supports a wide range of CPU architectures, making it compatible wi
 | `linux/arm64` | Raspberry Pi 4/5, Apple Silicon, AWS Graviton |
 | `linux/arm/v7` | Raspberry Pi 2/3 (32-bit) |
 | `linux/arm/v6` | Raspberry Pi Zero/1 |
+| `linux/386` | 32-bit x86 PCs / older servers |
+| `linux/ppc64le` | IBM POWER servers |
+| `linux/s390x` | IBM Z / LinuxONE mainframes |
 
 Pre-built images are published automatically to GHCR on every push to `main`:
 
@@ -253,7 +256,7 @@ docker run -d \
 
 ```bash
 docker buildx build \
-  --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 \
+  --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6,linux/386,linux/ppc64le,linux/s390x \
   -t ghcr.io/9m2pju/9m2pju-dxspider-docker:latest \
   --push .
 ```
