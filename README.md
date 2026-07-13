@@ -595,12 +595,15 @@ Distributed under the GNU General Public License v3.0. See `LICENSE` for more in
 
 <br/>
 
-## ☕ Support
+### ☕ Support
 
 If you find this project useful, you can support its development:
 
-[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/9m2pju)
-[![PayPal](https://img.shields.io/badge/PayPal-paypal.me%2F9m2pju-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/9m2pju)
+<a href="https://buymeacoffee.com/9m2pju"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
+&nbsp;&nbsp;
+<a href="https://paypal.me/9m2pju"><img src="https://img.shields.io/badge/PayPal-paypal.me%2F9m2pju-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal" height="50"></a>
+
+<br/><br/>
 
 *Designed with care by **9M2PJU***
 *73 and Good DX!*
