@@ -21,8 +21,11 @@ local_data/*
 # --- Per-node runtime artifacts ---
 # connect/ and msg/ contain node-specific scripts and messages.
 # Keep the directory structure but ignore generated content.
+# Exception: connect/partner-call is a tracked template (renamed by users
+# to connect/<their-partner-callsign> when configuring a real link).
 connect/*
 !connect/.gitkeep
+!connect/partner-call
 msg/*
 !msg/.gitkeep
 

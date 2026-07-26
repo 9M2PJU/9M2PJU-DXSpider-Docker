@@ -189,5 +189,5 @@ docker volume rm 9m2pju-dxspider-docker_db_data
 | :--- | :--- |
 | `Can't connect to MySQL server` | Ensure the `db` container is running: `docker compose --profile with-db ps`. Check that `CLUSTER_DB_HOSTNAME=db` in `.env`. |
 | `Access denied for user` | Verify `CLUSTER_DB_USER` and `CLUSTER_DB_PASS` match the MariaDB credentials. |
-| DXSpider starts before MariaDB is ready | The entrypoint waits 30s for MariaDB. If your system is slow, increase the wait or restart DXSpider after MariaDB is healthy. |
+| DXSpider starts before MariaDB is ready | The `dxspider` service uses `depends_on: db: condition: service_healthy` (with `required: false`) so it waits for MariaDB's healthcheck to pass before starting. Requires Docker Compose v2.20+. If you're on an older Compose, restart DXSpider after MariaDB is healthy: `docker compose --profile with-db restart dxspider`. |
 | MariaDB won't start | Check `docker compose --profile with-db logs db`. Common cause: stale data volume from a previous install with different credentials. Remove the volume and retry. |

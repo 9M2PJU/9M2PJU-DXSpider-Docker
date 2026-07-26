@@ -21,6 +21,12 @@ deploy
 # local_data/ is bind-mounted at runtime; baking it into the image would
 # include the user database and logs, which is both wasteful and a privacy risk.
 local_data
+# cmd/ and msg/ are also bind-mounted at runtime. They are never COPY'd into
+# the image (the Dockerfile only COPYs connect/, motd, startup, crontab, and
+# entrypoint.sh). Excluding them shaves ~2 MB / 300+ files from the build
+# context, speeding up `docker build` and `docker compose up --build`.
+cmd
+msg
 
 # --- Secrets (must never be in image layers) ---
 .env

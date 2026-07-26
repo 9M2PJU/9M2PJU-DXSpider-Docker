@@ -1,27 +1,29 @@
 # =============================================================================
 #  DXSpider Partner Node Connection Script
 #
-#  This file is bind-mounted into the container at /spider/connect/9m2pju-2
-#  and tells DXSpider how to establish an inter-node link with 9M2PJU-2.
+#  This file is bind-mounted into the container at /spider/connect/partner-call
+#  and tells DXSpider how to establish an inter-node link with a partner node.
 #
-#  To connect to a DIFFERENT partner node:
-#    1. Copy this file to connect/<partner-callsign-lowercase>
+#  To connect to a real partner node:
+#    1. Rename this file to connect/<partner-callsign-lowercase>
+#       (e.g. connect/w1aw  for partner node W1AW)
 #    2. Update the hostname, port, login, and password below
 #    3. Coordinate with the partner sysop — they must configure their
 #       node to accept your connection (set/spider, agree on a password)
+#    4. Add matching lines to your `startup` file:
+#         set/spider <partner-callsign-lowercase>
+#         connect <partner-callsign-lowercase>
 #
 #  Test the connection from the host:
-#    docker compose exec dxspider sh -c '/spider/perl/connect 9m2pju-2'
+#    docker compose exec dxspider sh -c '/spider/perl/connect partner-call'
 # =============================================================================
 
 # Maximum time to wait for the connection to establish (seconds)
 timeout 15
 
 # Connect via telnet to the partner node's hostname and port
-connect telnet 9m2pju.hamradio.my 7300
+connect telnet partner.example.com 7300
 
 # Send our callsign when the partner prompts for 'login:'
+# Replace YOURCALL with your node's callsign (uppercase).
 'login:' 'YOURCALL'
-
-# P/S: To connect with the 9M2PJU-2 DX Cluster node, please email
-# 9m2pju@gmail.com. Remove this line once you have permission.

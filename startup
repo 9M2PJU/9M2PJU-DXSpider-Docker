@@ -13,9 +13,11 @@
 load/forward
 
 # Mark a partner node as a DXSpider-type node and connect to it.
-# Replace '9m2pju-2' with your partner's callsign (lowercase).
-set/spider 9m2pju-2
-connect 9m2pju-2
+# Replace 'partner-call' with the callsign of a DIFFERENT node (lowercase).
+# Do NOT put your own node's callsign here — that would make the cluster
+# try to connect to itself.
+set/spider partner-call
+connect partner-call
 
 # Allow inbound internet connections
 set/var $Internet::allow = 1

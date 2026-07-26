@@ -38,9 +38,7 @@
 
 A **DX Cluster** is a network of servers that share real-time "spots" — reports of rare or interesting amateur radio stations heard on the air. When someone hears a DX station, they post a spot to their local cluster node, which then propagates it to all connected nodes worldwide within seconds.
 
-**DXSpider** is the software that runs most of these cluster nodes. It was created by **Dirk Koopman (G1TLH)** in the late 1990s and is written in Perl. This project packages DXSpider into a Docker container so you can deploy it without manually installing Perl, CPAN modules, or configuring a server.
-
-> **Standing on Giant Shoulders**: A massive tribute to **Dirk Koopman (G1TLH)**, the creator of DXSpider, and to **EA3CV** for maintaining the active fork used here.
+**DXSpider** is the software that runs most of these cluster nodes. Originally created in the late 1990s and written in Perl, it has been actively maintained and extended by the amateur radio community for decades. This project packages DXSpider into a Docker container so you can deploy it without manually installing Perl, CPAN modules, or configuring a server.
 
 ---
 
@@ -432,7 +430,7 @@ connect gb7mbc
 0,10,20,30,40,50 * * * * start_connect('gb7mbc') unless connected('gb7mbc')
 ```
 
-The default crontab also fetches bad-IP, bad-DX, bad-spotter, bad-node, and bad-word lists hourly from [EA3CV's dxspider_info repo](https://github.com/EA3CV/dxspider_info) to keep your node protected from known abusers.
+The default crontab also fetches bad-IP, bad-DX, bad-spotter, bad-node, and bad-word lists hourly from the [dxspider_info repo](https://github.com/EA3CV/dxspider_info) to keep your node protected from known abusers.
 
 > See [Cron & Automation](docs/06-cron-and-automation.md) for the complete guide.
 
@@ -563,13 +561,13 @@ Set it back to `no` afterward to preserve manual edits.
 To understand why this project exists, we must look back at the rich history of Amateur Radio networking.
 
 ### The Dawn: Packet Clusters
-In the late 1980s, **Dick Newell (AK1A)** revolutionized DX hunting by creating the **PacketCluster** software. Before this, DX spots could only be shared via voice repeaters or local shouting. AK1A's software allowed spots to be distributed over **Packet Radio (AX.25)** networks. A "Sysop" would run a node, and users would connect via radio to see a live stream of DX spots.
+In the late 1980s, **PacketCluster** software revolutionized DX hunting. Before this, DX spots could only be shared via voice repeaters or local shouting. This software allowed spots to be distributed over **Packet Radio (AX.25)** networks. A "Sysop" would run a node, and users would connect via radio to see a live stream of DX spots.
 
 ### The Evolution: DXSpider
-By the late 1990s, the internet was emerging, and the original DOS-based AK1A software was showing its age. **Dirk Koopman (G1TLH)** saw the need for a more flexible, modern solution that could bridge the gap between RF networks and the Internet.
+By the late 1990s, the internet was emerging, and the original DOS-based PacketCluster software was showing its age. A new, more flexible solution was needed to bridge the gap between RF networks and the Internet.
 
-He chose **Perl** for its robust text handling and modularity, creating **DXSpider**. It was designed to be:
-*   **Compatible**: It spoke the exact same protocol as AK1A, so users didn't need to change their client software.
+**Perl** was chosen for its robust text handling and modularity, and **DXSpider** was born. It was designed to be:
+*   **Compatible**: It spoke the exact same protocol as the older software, so users didn't need to change their client software.
 *   **Scalable**: It could handle hundreds of simultaneous internet connections, something the old PC-based clusters couldn't dream of.
 *   **Open**: It allowed the community to contribute and extend the software.
 

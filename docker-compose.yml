@@ -92,6 +92,16 @@ services:
       retries: 3
       timeout: 10s
 
+    # When the optional MariaDB backend is enabled (via the with-db profile),
+    # wait for it to be healthy before starting the cluster. With flat-file
+    # storage (default), this dependency is skipped because the `db` service
+    # is not part of the active profile (required: false).
+    # Requires Docker Compose v2.20+ for the `required` field.
+    depends_on:
+      db:
+        condition: service_healthy
+        required: false
+
     restart: always
 
     # --- Bind-mounted volumes (persistent across rebuilds) ---
@@ -150,6 +160,15 @@ services:
     # container accesses it via the Docker network using hostname "db".
     expose:
       - "3306"
+    # Health check: MariaDB is ready to accept connections.
+    # The dxspider service waits for this before starting (see depends_on
+    # above), preventing "Can't connect to MySQL server" on first boot.
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized"]
+      interval: 10s
+      start_period: 30s
+      retries: 10
+      timeout: 10s
 
 # Named volumes for the optional MariaDB service
 volumes:
