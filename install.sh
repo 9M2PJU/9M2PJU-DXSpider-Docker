@@ -150,6 +150,22 @@ echo "$(c_bold '  9M2PJU DXSpider Docker — Installer')"
 echo "$(c_bold '========================================')"
 echo ""
 
+# --- Detect FreeBSD and branch to the native installer ---
+# Docker does NOT run on FreeBSD (requires Linux cgroups/namespaces).
+# The FreeBSD installer installs DXSpider natively via pkg + p5-* Perl modules.
+if [ "$(uname -s)" = "FreeBSD" ]; then
+    info "FreeBSD detected — Docker is not available on FreeBSD."
+    info "Switching to the native FreeBSD installer (no Docker, no container)..."
+
+    # If running from a clone, use the local script. Otherwise download it.
+    SCRIPT_DIR="$(cd "$(dirname "$0")" 2>/dev/null && pwd || echo .)"
+    if [ -f "$SCRIPT_DIR/install-freebsd.sh" ]; then
+        exec bash "$SCRIPT_DIR/install-freebsd.sh" "$@"
+    else
+        exec bash -c "$(curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install-freebsd.sh)"
+    fi
+fi
+
 # --- Step 1: Docker ---
 if have_docker && have_compose; then
     ok "Docker + Docker Compose detected."

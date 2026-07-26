@@ -16,9 +16,10 @@ A DX Cluster is a network of servers that share real-time "spots" — reports of
 
 Before you begin, you need:
 
-1. **A computer running Docker** — Linux, macOS, or Windows (via WSL2)
-   - Install Docker: https://docs.docker.com/get-docker/
-   - Install Docker Compose: https://docs.docker.com/compose/install/
+1. **A computer running Linux or FreeBSD**
+   - **Linux**: Docker + Docker Compose (the installer can install Docker for you on Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch)
+   - **FreeBSD**: No Docker needed — the installer installs DXSpider natively via `pkg` + Perl modules
+   - **macOS / Windows**: Install [Docker Desktop](https://docs.docker.com/get-docker/) and use the manual setup
 
 2. **An amateur radio callsign** — You need a valid callsign to identify your node and yourself as sysop.
 
@@ -33,13 +34,17 @@ Before you begin, you need:
 
 ### Option A: Quick Install (one command)
 
-The installer checks for Docker (installs it if missing on supported distros), clones the repo, prompts for your callsign/locator, and launches the cluster:
+The installer detects your OS and does the right thing:
+- **Linux**: installs Docker if missing, clones the repo, prompts for config, launches via `docker compose`
+- **FreeBSD**: installs DXSpider natively via `pkg` (no Docker), creates `rc.d` services, starts the cluster
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
 ```
 
-Supported OSes for automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other systems, install Docker manually first, then re-run the script.
+**Linux** — automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other Linux distros, install Docker manually first, then re-run.
+
+**FreeBSD** — the installer automatically switches to the native path. All Perl dependencies come from FreeBSD `pkg` packages. The cluster runs as a native `rc.d` service (`service dxspider start|stop|restart`).
 
 The installer installs to `/opt/dxspider` by default. Override with:
 ```bash

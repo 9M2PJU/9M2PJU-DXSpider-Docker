@@ -134,19 +134,25 @@ graph TB
 
 ### Prerequisites
 
-- **Docker & Docker Compose** installed ([Get Docker](https://docs.docker.com/get-docker/))
+- **Linux**: [Docker & Docker Compose](https://docs.docker.com/get-docker/) — or let the installer install Docker for you
+- **FreeBSD**: nothing pre-installed — the installer uses `pkg` for all dependencies (no Docker needed)
 - **An amateur radio callsign** — needed to identify your node
 - **Your Maidenhead grid square** — find it at https://www.amsat.org/tools/grid-square-locator/
 
 ### Quick Install (one command)
 
-The fastest way to get started — the installer checks for Docker (installs it if missing on supported distros), clones the repo, prompts for your callsign/locator, and launches the cluster:
+The fastest way to get started — the installer detects your OS and does the right thing automatically:
+
+- **Linux**: checks for Docker (installs it if missing on supported distros), clones the repo, prompts for your callsign/locator, and launches the cluster via `docker compose`
+- **FreeBSD**: installs DXSpider natively via `pkg` + Perl modules (no Docker — Docker doesn't run on FreeBSD), creates an `rc.d` service, and starts the cluster
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
 ```
 
-Supported OSes for automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other systems, install Docker manually first, then re-run the script.
+**Linux** — automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other Linux systems, install Docker manually first, then re-run the script.
+
+**FreeBSD** — the installer automatically switches to the native FreeBSD path (no Docker needed). All Perl dependencies are installed from FreeBSD `pkg` packages.
 
 ### 3-Step Setup (manual)
 
@@ -212,7 +218,7 @@ See the [User Commands Reference](docs/05-user-commands.md) for the full list.
 
 This project supports a wide range of CPU architectures, making it compatible with everything from high-end servers to Raspberry Pi Zero.
 
-**Supported Platforms:**
+**Docker (Linux) — Supported Platforms:**
 | Platform | Typical Hardware |
 | :--- | :--- |
 | `linux/amd64` | Standard 64-bit PC / servers |
@@ -222,6 +228,12 @@ This project supports a wide range of CPU architectures, making it compatible wi
 | `linux/386` | 32-bit x86 PCs / older servers |
 | `linux/ppc64le` | IBM POWER servers |
 | `linux/s390x` | IBM Z / LinuxONE mainframes |
+
+**Native (FreeBSD) — no Docker:**
+| Platform | Notes |
+| :--- | :--- |
+| FreeBSD amd64 | Installed natively via `pkg` + Perl modules, `rc.d` service |
+| FreeBSD arm64 | Same native install path |
 
 Pre-built images are published automatically to GHCR on every push to `main`:
 
