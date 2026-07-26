@@ -1,5 +1,5 @@
 # =============================================================================
-#  DXSpider Docker — Alpine-based DX Cluster container
+#  9M2PJU DXSpider Docker — Alpine-based DX Cluster container
 #  Image version: 2.6.0-9M2PJU
 #
 #  Packages DXSpider (https://github.com/EA3CV/dxspider) in a hardened
@@ -23,12 +23,13 @@ ARG SPIDER_VERSION=mojo
 ARG SPIDER_GIT_REF=3e9b3621d94dd45c68702e4a0f896aac33f2a91d
 
 # --- OCI image labels (consumed by registries like GHCR) ---
-LABEL org.opencontainers.image.title="DXSpider Docker" \
+LABEL org.opencontainers.image.title="9M2PJU DXSpider Docker" \
       org.opencontainers.image.description="High-performance DXSpider Amateur Radio Cluster in a container" \
       org.opencontainers.image.authors="9M2PJU" \
       org.opencontainers.image.source="https://github.com/9M2PJU/9M2PJU-DXSpider-Docker" \
       org.opencontainers.image.licenses="GPL-3.0" \
-      org.opencontainers.image.version="2.6.0"
+      org.opencontainers.image.version="2.6.0" \
+      org.opencontainers.image.url="https://hamradio.my"
 
 # --- Persist build args as runtime env (consumed by entrypoint.sh) ---
 ENV SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR}

@@ -1,6 +1,6 @@
 # Getting Started
 
-Welcome to DXSpider Docker! This guide will walk you through everything you need to get your DX Cluster node up and running in minutes.
+Welcome to 9M2PJU DXSpider Docker! This guide will walk you through everything you need to get your DX Cluster node up and running in minutes.
 
 ---
 
@@ -8,7 +8,7 @@ Welcome to DXSpider Docker! This guide will walk you through everything you need
 
 A DX Cluster is a network of servers that share real-time "spots" — reports of rare or interesting amateur radio stations heard on the air. When someone hears a DX station, they post a "spot" to their local cluster node, which then propagates it to all connected nodes worldwide within seconds.
 
-**DXSpider** is the software that runs most of these cluster nodes. It was created by Dirk Koopman (G1TLH) in the late 1990s and is written in Perl. This project packages DXSpider into a Docker container so you can deploy it without manually installing Perl, CPAN modules, or configuring a server.
+**DXSpider** is the software that runs most of these cluster nodes. Originally created in the late 1990s and written in Perl, it has been actively maintained and extended by the amateur radio community for decades. This project packages DXSpider into a Docker container so you can deploy it without manually installing Perl, CPAN modules, or configuring a server.
 
 ---
 
@@ -31,14 +31,33 @@ Before you begin, you need:
 
 ## Installation
 
-### Step 1: Get the Code
+### Option A: Quick Install (one command)
+
+The installer checks for Docker (installs it if missing on supported distros), clones the repo, prompts for your callsign/locator, and launches the cluster:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
+```
+
+Supported OSes for automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other systems, install Docker manually first, then re-run the script.
+
+The installer installs to `/opt/dxspider` by default. Override with:
+```bash
+curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | INSTALL_DIR=/home/me/dxspider bash
+```
+
+Skip to [Accessing Your Node](#accessing-your-node) after the installer finishes.
+
+### Option B: Manual Setup
+
+#### Step 1: Get the Code
 
 ```bash
 git clone https://github.com/9M2PJU/9M2PJU-DXSpider-Docker.git
 cd 9M2PJU-DXSpider-Docker
 ```
 
-### Step 2: Configure Your Node
+#### Step 2: Configure Your Node
 
 Copy the example configuration and edit it:
 
@@ -60,7 +79,7 @@ WEB_USER=admin                    # Web console username
 WEB_PASS=a-secure-password        # Web console password (CHANGE THIS!)
 ```
 
-### Step 3: Launch
+#### Step 3: Launch
 
 ```bash
 docker compose pull      # Download the pre-built image from GHCR (fast)
@@ -71,7 +90,7 @@ This downloads the pre-built multi-arch image from GitHub Container Registry —
 
 > **Prefer to build locally?** Use `docker compose up -d --build` instead. This compiles DXSpider and all Perl dependencies on your machine. The first build takes a few minutes; subsequent builds are faster thanks to Docker layer caching.
 
-### Step 4: Verify It's Running
+#### Step 4: Verify It's Running
 
 Check the container status:
 

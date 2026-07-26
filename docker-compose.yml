@@ -1,5 +1,5 @@
 # =============================================================================
-#  DXSpider Docker — Docker Compose configuration
+#  9M2PJU DXSpider Docker — Docker Compose configuration
 #
 #  Defines the main dxspider service and an optional MariaDB backend.
 #  All configuration is driven by the .env file (see .env.example).

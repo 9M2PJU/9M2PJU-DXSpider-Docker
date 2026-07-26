@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-#  DXSpider Docker — Container Entrypoint
+#  9M2PJU DXSpider Docker — Container Entrypoint
 #
 #  Responsibilities (in order):
 #    1. Fix ownership of bind-mounted volumes (runs as root)
@@ -99,7 +99,7 @@ CLUSTER_SYSOP_CALLSIGN=$(echo "${CLUSTER_SYSOP_CALLSIGN:-9M2PJU}" | tr 'a-z' 'A-
 CLUSTER_SYSOP_NAME=${CLUSTER_SYSOP_NAME:-"DXSpider Sysop"}
 CLUSTER_QTH=${CLUSTER_QTH:-"DXSpider Node"}
 CLUSTER_LOCATOR=$(echo "${CLUSTER_LOCATOR:-JO01aa}" | tr 'a-z' 'A-Z')
-CLUSTER_SYSOP_EMAIL=$(echo "${CLUSTER_SYSOP_EMAIL:-sysop@localhost}" | sed 's/@/\\@/g')
+CLUSTER_SYSOP_EMAIL=$(echo "${CLUSTER_SYSOP_EMAIL:-9m2pju@hamradio.my}" | sed 's/@/\\@/g')
 CLUSTER_SYSOP_BBS_ADDRESS=$(echo "${CLUSTER_SYSOP_BBS_ADDRESS:-bbs@localhost}" | sed 's/@/\\@/g')
 
 # Web Console credentials: fall back to DB creds, then to 'sysop' defaults.

@@ -1,7 +1,7 @@
 <div align="center">
-<img src="assets/header.png" alt="DXSpider Docker Hero" width="100%" style="border-radius: 10px;" />
+<img src="assets/header.png" alt="9M2PJU DXSpider Docker Hero" width="100%" style="border-radius: 10px;" />
 
-# DXSpider Docker
+# 9M2PJU DXSpider Docker
 ### The **Ultimate** Modern DX Cluster Solution
 
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)](LICENSE)
@@ -138,7 +138,17 @@ graph TB
 - **An amateur radio callsign** — needed to identify your node
 - **Your Maidenhead grid square** — find it at https://www.amsat.org/tools/grid-square-locator/
 
-### 3-Step Setup
+### Quick Install (one command)
+
+The fastest way to get started — the installer checks for Docker (installs it if missing on supported distros), clones the repo, prompts for your callsign/locator, and launches the cluster:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
+```
+
+Supported OSes for automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other systems, install Docker manually first, then re-run the script.
+
+### 3-Step Setup (manual)
 
 **1. Get the Code**
 ```bash
@@ -289,7 +299,7 @@ Edit these in your `.env` file (copy from `.env.example`). All variables have se
 | `CLUSTER_CALLSIGN` | **Required**. The callsign of your node. | `9M2PJU-2` |
 | `CLUSTER_SYSOP_CALLSIGN` | **Required**. Your admin callsign. | `9M2PJU` |
 | `CLUSTER_SYSOP_NAME` | Sysop's display name. | `DXSpider Sysop` |
-| `CLUSTER_SYSOP_EMAIL` | Sysop contact email. | `sysop@localhost` |
+| `CLUSTER_SYSOP_EMAIL` | Sysop contact email. | `9m2pju@hamradio.my` |
 | `CLUSTER_SYSOP_BBS_ADDRESS` | BBS forwarding address. | `bbs@localhost` |
 | `CLUSTER_QTH` | Your QTH description. | `DXSpider Node` |
 | `CLUSTER_LOCATOR` | Maidenhead grid square. | `JO01aa` |
@@ -438,7 +448,7 @@ The default crontab also fetches bad-IP, bad-DX, bad-spotter, bad-node, and bad-
 
 ## Cloud Deployment
 
-DXSpider Docker runs anywhere Docker runs. Quick references:
+9M2PJU DXSpider Docker runs anywhere Docker runs. Quick references:
 
 | Provider | Recommended Instance | Approx. Cost |
 | :--- | :--- | :--- |
@@ -456,7 +466,7 @@ DXSpider Docker runs anywhere Docker runs. Quick references:
 
 ## Virtualization (On-Premises)
 
-DXSpider Docker works perfectly on major hypervisors for home labs and data centers.
+9M2PJU DXSpider Docker works perfectly on major hypervisors for home labs and data centers.
 
 ### VMware (ESXi / Workstation / Fusion)
 1. Create a VM running **Ubuntu Server** or **Debian**.
@@ -475,7 +485,7 @@ DXSpider Docker works perfectly on major hypervisors for home labs and data cent
 
 ## Windows Support
 
-Windows users can run DXSpider Docker easily using WSL2 or traditional virtualization.
+Windows users can run 9M2PJU DXSpider Docker easily using WSL2 or traditional virtualization.
 
 ### WSL2 (Recommended)
 1. Install **Docker Desktop** and enable the **WSL2 Backend**.
@@ -611,6 +621,10 @@ If you find this project useful, you can support its development:
 <a href="https://wise.com/pay/me/faizulz13"><img src="https://img.shields.io/badge/Wise-%40faizulz13-006666?style=for-the-badge&logo=wise&logoColor=white" alt="Wise" height="50"></a>
 
 <br/><br/>
+
+📧 Contact: **9m2pju@hamradio.my** &nbsp;|&nbsp; 🌐 Website: **[hamradio.my](https://hamradio.my)**
+
+<br/>
 
 *Designed with care by **9M2PJU***
 *73 and Good DX!*

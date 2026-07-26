@@ -1,6 +1,6 @@
 # Configuration Reference
 
-This document covers every configuration option available in DXSpider Docker.
+This document covers every configuration option available in 9M2PJU DXSpider Docker.
 
 ---
 
@@ -29,7 +29,7 @@ All configuration is done through the `.env` file (copy from `.env.example`). Th
 
 | Variable | Required | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `CLUSTER_SYSOP_EMAIL` | No | `sysop@localhost` | Email where users can contact you for registration/support. |
+| `CLUSTER_SYSOP_EMAIL` | No | `9m2pju@hamradio.my` | Email where users can contact you for registration/support. |
 | `CLUSTER_SYSOP_BBS_ADDRESS` | No | `bbs@localhost` | BBS forwarding address for message routing. Leave as default if unsure. |
 
 ### Network Ports
@@ -75,7 +75,7 @@ By default, DXSpider uses flat-file storage (DB_File + SQLite). This is sufficie
 
 ## How Configuration Works
 
-DXSpider Docker uses a two-layer configuration system:
+9M2PJU DXSpider Docker uses a two-layer configuration system:
 
 ### Layer 1: Environment Variables (`.env`)
 

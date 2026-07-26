@@ -1,6 +1,6 @@
 # Database Backend
 
-By default, DXSpider Docker uses flat-file storage (DB_File + SQLite) for spot logging and user data. This is sufficient for most small-to-medium cluster nodes. For larger nodes or when you want to query spot history with SQL, you can enable a MariaDB backend.
+By default, 9M2PJU DXSpider Docker uses flat-file storage (DB_File + SQLite) for spot logging and user data. This is sufficient for most small-to-medium cluster nodes. For larger nodes or when you want to query spot history with SQL, you can enable a MariaDB backend.
 
 ---
 

@@ -1,6 +1,6 @@
 # Cloud Deployment
 
-This guide covers deploying DXSpider Docker on popular cloud providers (AWS, GCP, Azure) and VPS providers (DigitalOcean, Hetzner, Linode).
+This guide covers deploying 9M2PJU DXSpider Docker on popular cloud providers (AWS, GCP, Azure) and VPS providers (DigitalOcean, Hetzner, Linode).
 
 ---
 
