@@ -608,7 +608,7 @@ If you find this project useful, you can support its development:
 
 <a href="https://buymeacoffee.com/9m2pju"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
 &nbsp;&nbsp;
-<a href="https://paypal.me/9m2pju"><img src="https://img.shields.io/badge/PayPal-paypal.me%2F9m2pju-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal" height="50"></a>
+<a href="https://wise.com/pay/me/faizulz13"><img src="https://img.shields.io/badge/Wise-%40faizulz13-006666?style=for-the-badge&logo=wise&logoColor=white" alt="Wise" height="50"></a>
 
 <br/><br/>
 
