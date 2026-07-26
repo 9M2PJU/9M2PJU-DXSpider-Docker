@@ -135,6 +135,7 @@ graph TB
 ### Prerequisites
 
 - **Linux**: [Docker & Docker Compose](https://docs.docker.com/get-docker/) — or let the installer install Docker for you
+- **macOS**: [Docker Desktop](https://docs.docker.com/desktop/mac/) — or let the installer install it via Homebrew (`brew install --cask docker`)
 - **FreeBSD**: nothing pre-installed — the installer uses `pkg` for all dependencies (no Docker needed)
 - **An amateur radio callsign** — needed to identify your node
 - **Your Maidenhead grid square** — find it at https://www.amsat.org/tools/grid-square-locator/
@@ -144,6 +145,7 @@ graph TB
 The fastest way to get started — the installer detects your OS and does the right thing automatically:
 
 - **Linux**: checks for Docker (installs it if missing on supported distros), clones the repo, prompts for your callsign/locator, and launches the cluster via `docker compose`
+- **macOS**: checks for Docker Desktop (installs it via Homebrew if missing), then uses `docker compose` like Linux. Installs to `~/dxspider` (no root needed).
 - **FreeBSD**: installs DXSpider natively via `pkg` + Perl modules (no Docker — Docker doesn't run on FreeBSD), creates an `rc.d` service, and starts the cluster
 
 ```bash
@@ -151,6 +153,8 @@ curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/
 ```
 
 **Linux** — automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other Linux systems, install Docker manually first, then re-run the script.
+
+**macOS** — the installer installs Docker Desktop via Homebrew if needed. After the first install, you must open Docker Desktop from Applications, accept the license, wait for it to start, then re-run the script. Subsequent runs skip straight to `docker compose`.
 
 **FreeBSD** — the installer automatically switches to the native FreeBSD path (no Docker needed). All Perl dependencies are installed from FreeBSD `pkg` packages.
 

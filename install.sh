@@ -9,10 +9,13 @@
 #    bash install.sh
 #
 #  What this script does:
-#    1. Checks for Docker + Docker Compose (installs Docker if missing on
-#       supported distros: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma,
-#       Alpine, Arch)
-#    2. Clones the repo to /opt/dxspider (or a chosen directory)
+#    1. Detects your OS:
+#       - Linux: installs Docker if missing (Debian, Ubuntu, Fedora, CentOS,
+#         RHEL, Rocky, Alma, Alpine, Arch), then uses docker compose
+#       - macOS: installs Docker Desktop via Homebrew if missing, then uses
+#         docker compose (Docker Desktop runs a Linux VM under the hood)
+#       - FreeBSD: branches to install-freebsd.sh (native install, no Docker)
+#    2. Clones the repo to /opt/dxspider (Linux/FreeBSD) or ~/dxspider (macOS)
 #    3. Interactively prompts for your callsign, sysop callsign, locator, QTH
 #    4. Generates a .env file from your answers
 #    5. Pulls the pre-built image and starts the cluster with `docker compose up -d`
@@ -24,7 +27,13 @@ set -euo pipefail
 
 # --- Config ---
 REPO_URL="https://github.com/9M2PJU/9M2PJU-DXSpider-Docker.git"
-INSTALL_DIR="${INSTALL_DIR:-/opt/dxspider}"
+# Default install dir: /opt/dxspider on Linux/FreeBSD, ~/dxspider on macOS
+# (macOS users typically don't have /opt writable without root)
+if [ "$(uname -s)" = "Darwin" ]; then
+    INSTALL_DIR="${INSTALL_DIR:-$HOME/dxspider}"
+else
+    INSTALL_DIR="${INSTALL_DIR:-/opt/dxspider}"
+fi
 BRANCH="main"
 
 # --- Helpers ---
@@ -52,6 +61,8 @@ prompt() {
 }
 
 require_root_for_docker_install() {
+    # macOS never needs root — Docker Desktop installs via Homebrew (user-space)
+    [ "$(uname -s)" = "Darwin" ] && return
     if [ "$(id -u)" -ne 0 ]; then
         warn "Docker is not installed. Re-running with sudo to install it."
         exec sudo -E bash "$0" "$@"
@@ -60,6 +71,12 @@ require_root_for_docker_install() {
 
 # --- Detect OS ---
 detect_os() {
+    # macOS / Darwin
+    if [ "$(uname -s)" = "Darwin" ]; then
+        echo "macos"
+        return
+    fi
+    # Linux distros
     if [ -f /etc/os-release ]; then
         # shellcheck disable=SC1091
         . /etc/os-release
@@ -85,6 +102,10 @@ install_docker() {
     os="$(detect_os)"
     info "Detected OS: $os"
     case "$os" in
+        macos)
+            install_docker_macos
+            return
+            ;;
         debian|ubuntu|linuxmint|pop)
             info "Installing Docker via official apt repository..."
             apt-get update -y
@@ -130,7 +151,43 @@ Then re-run this script."
     systemctl enable --now docker 2>/dev/null || true
 }
 
+# --- macOS: install Docker Desktop via Homebrew ---
+install_docker_macos() {
+    # Homebrew is required to install Docker Desktop automatically
+    if ! command -v brew >/dev/null 2>&1; then
+        info "Installing Homebrew (the macOS package manager)..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # Add brew to PATH for this session (Homebrew installs to /opt/homebrew on Apple Silicon,
+        # /usr/local on Intel)
+        if [ -x /opt/homebrew/bin/brew ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [ -x /usr/local/bin/brew ]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+        command -v brew >/dev/null 2>&1 || die "Homebrew install failed. Install manually from https://brew.sh and re-run."
+    fi
+
+    info "Installing Docker Desktop via Homebrew..."
+    brew install --cask docker
+
+    # Docker Desktop needs to be launched manually the first time (it runs a
+    # Linux VM in the background). The `docker` CLI won't work until the GUI
+    # app has been started and the user has accepted the license agreement.
+    ok "Docker Desktop installed."
+    echo ""
+    warn "Docker Desktop must be started manually the first time:"
+    warn "  1. Open 'Docker' from Applications (or: open -a Docker)"
+    warn "  2. Accept the license agreement in the GUI"
+    warn "  3. Wait for the Docker whale icon in the menu bar to stop animating"
+    warn "  4. Re-run this script to continue:"
+    warn "     bash install.sh"
+    echo ""
+    die "Docker Desktop installed but not yet running. Start it, then re-run this script."
+}
+
 ensure_docker_group() {
+    # macOS: Docker Desktop handles permissions — no group needed
+    [ "$(uname -s)" = "Darwin" ] && return
     # Add current user to docker group so they can run docker without sudo
     local user
     user="$(id -un)"

@@ -16,10 +16,11 @@ A DX Cluster is a network of servers that share real-time "spots" — reports of
 
 Before you begin, you need:
 
-1. **A computer running Linux or FreeBSD**
+1. **A computer running Linux, macOS, or FreeBSD**
    - **Linux**: Docker + Docker Compose (the installer can install Docker for you on Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch)
+   - **macOS**: Docker Desktop (the installer can install it via Homebrew if missing)
    - **FreeBSD**: No Docker needed — the installer installs DXSpider natively via `pkg` + Perl modules
-   - **macOS / Windows**: Install [Docker Desktop](https://docs.docker.com/get-docker/) and use the manual setup
+   - **Windows**: Install [Docker Desktop](https://docs.docker.com/desktop/windows/) with WSL2 enabled, then use the manual setup
 
 2. **An amateur radio callsign** — You need a valid callsign to identify your node and yourself as sysop.
 
@@ -36,6 +37,7 @@ Before you begin, you need:
 
 The installer detects your OS and does the right thing:
 - **Linux**: installs Docker if missing, clones the repo, prompts for config, launches via `docker compose`
+- **macOS**: installs Docker Desktop via Homebrew if missing, then uses `docker compose` (installs to `~/dxspider`)
 - **FreeBSD**: installs DXSpider natively via `pkg` (no Docker), creates `rc.d` services, starts the cluster
 
 ```bash
@@ -43,6 +45,8 @@ curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/
 ```
 
 **Linux** — automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other Linux distros, install Docker manually first, then re-run.
+
+**macOS** — the installer installs Docker Desktop via Homebrew if needed. After the first install, open Docker Desktop from Applications, accept the license, wait for it to start, then re-run the script. Subsequent runs skip straight to `docker compose`.
 
 **FreeBSD** — the installer automatically switches to the native path. All Perl dependencies come from FreeBSD `pkg` packages. The cluster runs as a native `rc.d` service (`service dxspider start|stop|restart`).
 
