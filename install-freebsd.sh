@@ -164,7 +164,7 @@ echo "$(c_bold 'Configuration')"
 echo "Please answer the following. Press Enter to accept the [default]."
 echo ""
 
-CLUSTER_CALLSIGN=$(prompt "Node callsign (SSID allowed, e.g. -2)" "9M2PJU-2")
+CLUSTER_CALLSIGN=$(prompt "Node callsign (SSID allowed, e.g. -2)" "N0CALL-2")
 CLUSTER_SYSOP_CALLSIGN=$(prompt "Your sysop callsign" "9M2PJU")
 CLUSTER_SYSOP_NAME=$(prompt "Your name" "Sysop")
 CLUSTER_LOCATOR=$(prompt "Maidenhead grid locator" "OJ03UD")

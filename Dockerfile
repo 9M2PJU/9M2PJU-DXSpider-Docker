@@ -38,8 +38,8 @@ ENV SPIDER_UID=${SPIDER_UID}
 
 # --- Default cluster configuration ---
 # These are overridden at runtime via .env / docker -e flags.
-# Defaults match the project placeholder node (9M2PJU-2 / 9M2PJU).
-ENV CLUSTER_CALLSIGN=9M2PJU-2
+# Defaults use a generic placeholder node (N0CALL-2).
+ENV CLUSTER_CALLSIGN=N0CALL-2
 ENV CLUSTER_SYSOP_CALLSIGN=9M2PJU
 ENV CLUSTER_SYSOP_NAME="DXSpider Sysop"
 ENV CLUSTER_QTH="DXSpider Node"

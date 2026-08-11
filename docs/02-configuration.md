@@ -12,7 +12,7 @@ All configuration is done through the `.env` file (copy from `.env.example`). Th
 
 | Variable | Required | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `CLUSTER_CALLSIGN` | **Yes** | `9M2PJU-2` | The callsign of your DX Cluster node. Use uppercase. An SSID is allowed (e.g., `-2` for a cluster node). |
+| `CLUSTER_CALLSIGN` | **Yes** | `N0CALL-2` | The callsign of your DX Cluster node. Use uppercase. An SSID is allowed (e.g., `-2` for a cluster node). |
 | `CLUSTER_SYSOP_CALLSIGN` | **Yes** | `9M2PJU` | Your personal amateur radio callsign (the admin/sysop). Uppercase. |
 | `CLUSTER_SYSOP_NAME` | No | `DXSpider Sysop` | Your display name, shown in cluster info. |
 | `CLUSTER_QTH` | No | `DXSpider Node` | Human-readable location description (e.g., "Kuala Lumpur, Malaysia"). |
@@ -97,7 +97,7 @@ The `entrypoint.sh` script reads the environment variables and generates two DXS
 
 2. **`/spider/local/DXVars.pm`** — The main DXSpider configuration file, generated from the upstream template (`DXVars.pm.issue`) by substituting your env values into the Perl variables:
    ```perl
-   $mycall = "9M2PJU-2";
+   $mycall = "N0CALL-2";
    $myalias = "9M2PJU";
    $myname = "Piju";
    $myqth = "Kuala Lumpur, Malaysia";

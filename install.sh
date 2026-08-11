@@ -12,10 +12,13 @@
 #    1. Detects your OS:
 #       - Linux: installs Docker if missing (Debian, Ubuntu, Fedora, CentOS,
 #         RHEL, Rocky, Alma, Alpine, Arch), then uses docker compose
+#       - WSL2: uses Docker Desktop's WSL integration (Docker Desktop must be
+#         installed and running on Windows), then uses docker compose
 #       - macOS: installs Docker Desktop via Homebrew if missing, then uses
 #         docker compose (Docker Desktop runs a Linux VM under the hood)
 #       - FreeBSD: branches to install-freebsd.sh (native install, no Docker)
-#    2. Clones the repo to /opt/dxspider (Linux/FreeBSD) or ~/dxspider (macOS)
+#    2. Clones the repo to /opt/dxspider on Linux/FreeBSD or ~/dxspider on
+#       WSL2/macOS
 #    3. Interactively prompts for your callsign, sysop callsign, locator, QTH
 #    4. Generates a .env file from your answers
 #    5. Pulls the pre-built image and starts the cluster with `docker compose up -d`
@@ -25,11 +28,17 @@
 # =============================================================================
 set -euo pipefail
 
+is_wsl() {
+    [ "$(uname -s)" = "Linux" ] || return 1
+    [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
+    grep -qiE 'microsoft|wsl' /proc/version /proc/sys/kernel/osrelease 2>/dev/null
+}
+
 # --- Config ---
 REPO_URL="https://github.com/9M2PJU/9M2PJU-DXSpider-Docker.git"
-# Default install dir: /opt/dxspider on Linux/FreeBSD, ~/dxspider on macOS
+# Default install dir: /opt/dxspider on Linux/FreeBSD, ~/dxspider on WSL2/macOS
 # (macOS users typically don't have /opt writable without root)
-if [ "$(uname -s)" = "Darwin" ]; then
+if [ "$(uname -s)" = "Darwin" ] || is_wsl; then
     INSTALL_DIR="${INSTALL_DIR:-$HOME/dxspider}"
 else
     INSTALL_DIR="${INSTALL_DIR:-/opt/dxspider}"
@@ -56,13 +65,19 @@ prompt() {
     else
         printf "%s %s: " "$(c_bold '?')" "$question"
     fi
-    read -r var
+    if [ -r /dev/tty ]; then
+        read -r var </dev/tty
+    else
+        read -r var
+    fi
     echo "${var:-$default}"
 }
 
 require_root_for_docker_install() {
-    # macOS never needs root — Docker Desktop installs via Homebrew (user-space)
-    [ "$(uname -s)" = "Darwin" ] && return
+    # Docker Desktop is installed outside the Linux distro on macOS/WSL2.
+    if [ "$(uname -s)" = "Darwin" ] || is_wsl; then
+        return
+    fi
     if [ "$(id -u)" -ne 0 ]; then
         warn "Docker is not installed. Re-running with sudo to install it."
         exec sudo -E bash "$0" "$@"
@@ -71,6 +86,11 @@ require_root_for_docker_install() {
 
 # --- Detect OS ---
 detect_os() {
+    # WSL2 uses Docker Desktop's daemon instead of a Linux daemon in the distro.
+    if is_wsl; then
+        echo "wsl"
+        return
+    fi
     # macOS / Darwin
     if [ "$(uname -s)" = "Darwin" ]; then
         echo "macos"
@@ -97,11 +117,23 @@ have_compose() {
     docker compose version >/dev/null 2>&1
 }
 
+docker_daemon_ready() {
+    docker info >/dev/null 2>&1
+}
+
+install_docker_wsl() {
+    die "WSL detected, but Docker Desktop is not available. Install Docker Desktop for Windows, enable the WSL2 backend and WSL integration, start Docker Desktop, then run this command again."
+}
+
 install_docker() {
     local os
     os="$(detect_os)"
     info "Detected OS: $os"
     case "$os" in
+        wsl)
+            install_docker_wsl
+            return
+            ;;
         macos)
             install_docker_macos
             return
@@ -186,8 +218,10 @@ install_docker_macos() {
 }
 
 ensure_docker_group() {
-    # macOS: Docker Desktop handles permissions — no group needed
-    [ "$(uname -s)" = "Darwin" ] && return
+    # Docker Desktop handles permissions on macOS/WSL2 — no Linux group needed.
+    if [ "$(uname -s)" = "Darwin" ] || is_wsl; then
+        return
+    fi
     # Add current user to docker group so they can run docker without sudo
     local user
     user="$(id -un)"
@@ -239,6 +273,13 @@ See: https://docs.docker.com/compose/install/"
     ok "Docker installed successfully."
 fi
 
+if ! docker_daemon_ready; then
+    if is_wsl; then
+        die "Docker Desktop is installed but not running or WSL integration is disabled. Start Docker Desktop, enable Settings > Resources > WSL Integration for this distro, then re-run the installer."
+    fi
+    die "The Docker daemon is not running. Start Docker, then re-run the installer."
+fi
+
 # Drop root if we were elevated only for Docker install
 if [ "$(id -u)" -eq 0 ] && [ -n "${SUDO_USER:-}" ]; then
     info "Dropping back to user '$SUDO_USER'..."
@@ -276,7 +317,7 @@ echo "$(c_bold 'Configuration')"
 echo "Please answer the following. Press Enter to accept the [default]."
 echo ""
 
-CLUSTER_CALLSIGN=$(prompt "Node callsign (SSID allowed, e.g. -2)" "9M2PJU-2")
+CLUSTER_CALLSIGN=$(prompt "Node callsign (SSID allowed, e.g. -2)" "N0CALL-2")
 CLUSTER_SYSOP_CALLSIGN=$(prompt "Your sysop callsign" "9M2PJU")
 CLUSTER_SYSOP_NAME=$(prompt "Your name" "Sysop")
 CLUSTER_LOCATOR=$(prompt "Maidenhead grid locator (find at amsat.org/tools/grid-square-locator)" "OJ03UD")
@@ -293,6 +334,10 @@ WEB_PASS=$(prompt "Web console password (CHANGE THIS!)" "$(head -c 12 /dev/urand
 CLUSTER_CALLSIGN=$(echo "$CLUSTER_CALLSIGN" | tr 'a-z' 'A-Z')
 CLUSTER_SYSOP_CALLSIGN=$(echo "$CLUSTER_SYSOP_CALLSIGN" | tr 'a-z' 'A-Z')
 CLUSTER_LOCATOR=$(echo "$CLUSTER_LOCATOR" | tr 'a-z' 'A-Z')
+
+if [ "$CLUSTER_CALLSIGN" = "$CLUSTER_SYSOP_CALLSIGN" ]; then
+    die "Node callsign and sysop callsign must be different. For example: node ${CLUSTER_SYSOP_CALLSIGN}-2 and sysop ${CLUSTER_SYSOP_CALLSIGN}."
+fi
 
 cat > "$ENV_FILE" <<EOF
 # Generated by install.sh on $(date)
@@ -333,17 +378,29 @@ docker compose up -d
 
 # --- Step 5: Verify ---
 info "Waiting for cluster to start listening on port $CLUSTER_PORT..."
+cluster_ready=0
 for i in $(seq 1 30); do
     if docker compose exec -T dxspider nc -z localhost "$CLUSTER_PORT" 2>/dev/null; then
         ok "DXSpider is listening on port $CLUSTER_PORT"
+        cluster_ready=1
         break
     fi
     sleep 1
-    [ "$i" -eq 30 ] && warn "Cluster did not start listening within 30s. Check: docker compose logs"
 done
 
+if [ "$cluster_ready" -ne 1 ]; then
+    warn "Cluster did not start listening within 30 seconds. Current status and logs:"
+    docker compose ps -a || true
+    docker compose logs --tail=100 dxspider || true
+    die "DXSpider did not start. Fix the error above, then run: docker compose up -d"
+fi
+
 # --- Done ---
-HOST_IP=$(hostname -I 2>/dev/null | awk '{print $1}' || echo "localhost")
+if is_wsl; then
+    HOST_IP="localhost"
+else
+    HOST_IP=$(hostname -I 2>/dev/null | awk '{print $1}' || echo "localhost")
+fi
 echo ""
 echo "$(c_green '========================================')"
 echo "$(c_green '  Installation complete!')"
