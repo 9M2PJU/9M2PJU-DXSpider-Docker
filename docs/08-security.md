@@ -19,6 +19,7 @@ The container does **not** run in `--privileged` mode. It runs with a minimal se
 ```yaml
 cap_add:
   - CHOWN         # Change file ownership (for bind mounts)
+  - DAC_OVERRIDE  # Required for root to write into sysop-owned directories
   - SETUID        # Switch user (for the sysop user)
   - SETGID        # Switch group
   - FOWNER  # Override file ownership/perms (for bind mounts)
@@ -222,7 +223,7 @@ If you observe abuse from a connected user or node:
 | :--- | :--- | :--- |
 | `privileged` | `false` (not set) | Container cannot access host devices |
 | `user` | `sysop` (UID 1000) | Process runs as non-root |
-| `cap_add` | CHOWN, SETUID, SETGID, FOWNER | Minimal capabilities for bind mounts |
+| `cap_add` | CHOWN, DAC_OVERRIDE, FOWNER, SETUID, SETGID | Minimal capabilities for bind mounts |
 | `read_only` | not set | Writable layers needed for runtime data |
 | `security_opt` | `no-new-privileges:true` | Process cannot escalate privileges |
 | Network | Default bridge | Isolated from host network |
@@ -234,5 +235,5 @@ docker inspect dxspider --format '{{.HostConfig.Privileged}} {{.HostConfig.CapAd
 
 Expected output:
 ```
-false [CHOWN SETUID SETGID FOWNER]
+false [CHOWN DAC_OVERRIDE SETUID SETGID FOWNER]
 ```
