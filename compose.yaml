@@ -45,6 +45,7 @@ services:
       - ALL
     cap_add:
       - CHOWN        # chown on bind-mounted volumes (entrypoint step 1)
+      - DAC_OVERRIDE # required for root to write into sysop-owned directories
       - FOWNER       # chmod on files not owned by root
       - SETUID       # su-exec privilege drop (root → sysop)
       - SETGID       # su-exec privilege drop (root → sysop)
