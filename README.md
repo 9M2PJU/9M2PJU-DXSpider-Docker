@@ -141,7 +141,7 @@ graph TB
 - **An amateur radio callsign**: needed to identify your node
 - **Your Maidenhead grid square**: find it at https://www.amsat.org/tools/grid-square-locator/
 
-### Quick Install (one command)
+### Option A: Quick Install (one command)
 
 The fastest way to get started. The installer detects your OS and does the right thing automatically:
 
@@ -162,7 +162,9 @@ curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/
 
 **FreeBSD**: the installer automatically switches to the native FreeBSD path (no Docker needed). All Perl dependencies are installed from FreeBSD `pkg` packages.
 
-### 3-Step Setup (manual)
+Use this option or the manual setup below. Do not run both.
+
+### Option B: 3-Step Setup (manual)
 
 **1. Get the Code**
 ```bash
@@ -511,10 +513,7 @@ Windows users can run 9M2PJU DXSpider Docker easily using WSL2 or traditional vi
 1. Install **Docker Desktop** and enable the **WSL2 Backend**.
 2. Install a Linux distribution (e.g., Ubuntu) from the Microsoft Store.
 3. In Docker Desktop, enable **Settings > Resources > WSL Integration** for that distribution.
-4. Open the distribution's WSL terminal and run the one-line installer:
-   ```bash
-   curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
-   ```
+4. Open the distribution's WSL terminal and run the [Quick Install command above](#option-a-quick-install-one-command).
 5. Keep the installation inside the WSL2 filesystem (`~/dxspider`) rather than on the Windows C: drive.
 
 ### Hyper-V
