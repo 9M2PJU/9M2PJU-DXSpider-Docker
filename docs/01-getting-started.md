@@ -33,34 +33,7 @@ Before you begin, you need:
 
 ## Installation
 
-### Option A: Quick Install (one command)
-
-The installer detects your OS and does the right thing:
-- **Linux**: installs Docker if missing, clones the repo, prompts for config, launches via `docker compose`
-- **Windows + WSL2**: uses Docker Desktop's WSL integration, installs to `~/dxspider`, prompts for config, launches via `docker compose`
-- **macOS**: installs Docker Desktop via Homebrew if missing, then uses `docker compose` (installs to `~/dxspider`)
-- **FreeBSD**: installs DXSpider natively via `pkg` (no Docker), creates `rc.d` services, starts the cluster
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
-```
-
-**Linux** — automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other Linux distros, install Docker manually first, then re-run.
-
-**Windows + WSL2** — start Docker Desktop, enable **Settings > Resources > WSL Integration** for your distro, then run the command above from the WSL terminal. Keep the project inside `~/dxspider`, not under `/mnt/c/`.
-
-**macOS** — the installer installs Docker Desktop via Homebrew if needed. After the first install, open Docker Desktop from Applications, accept the license, wait for it to start, then re-run the script. Subsequent runs skip straight to `docker compose`.
-
-**FreeBSD** — the installer automatically switches to the native path. All Perl dependencies come from FreeBSD `pkg` packages. The cluster runs as a native `rc.d` service (`service dxspider start|stop|restart`).
-
-The installer installs to `/opt/dxspider` by default on Linux/FreeBSD and `~/dxspider` on WSL2/macOS. Override with:
-```bash
-curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | INSTALL_DIR=/home/me/dxspider bash
-```
-
-Skip to [Accessing Your Node](#accessing-your-node) after the installer finishes.
-
-### Option B: Manual Setup
+### Manual Setup
 
 #### Step 1: Get the Code
 

@@ -134,37 +134,18 @@ graph TB
 
 ### Prerequisites
 
-- **Linux**: [Docker & Docker Compose](https://docs.docker.com/get-docker/), or let the installer install Docker for you
-- **macOS**: [Docker Desktop](https://docs.docker.com/desktop/mac/), or let the installer install it via Homebrew (`brew install --cask docker`)
+- **Linux**: [Docker & Docker Compose](https://docs.docker.com/get-docker/)
+- **macOS**: [Docker Desktop](https://docs.docker.com/desktop/mac/)
 - **Windows**: [Docker Desktop](https://docs.docker.com/desktop/windows/) with the WSL2 backend and WSL integration enabled
-- **FreeBSD**: nothing pre-installed. The installer uses `pkg` for all dependencies (no Docker needed)
 - **An amateur radio callsign**: needed to identify your node
 - **Your Maidenhead grid square**: find it at https://www.amsat.org/tools/grid-square-locator/
 
-### Option A: Quick Install (one command)
+### 3-Step Setup
 
-The fastest way to get started. The installer detects your OS and does the right thing automatically:
-
-- **Linux**: checks for Docker (installs it if missing on supported distros), clones the repo, prompts for your callsign/locator, and launches the cluster via `docker compose`
-- **Windows + WSL2**: uses Docker Desktop's WSL integration, installs to `~/dxspider`, prompts for configuration, and launches via `docker compose`
-- **macOS**: checks for Docker Desktop (installs it via Homebrew if missing), then uses `docker compose` like Linux. Installs to `~/dxspider` (no root needed).
-- **FreeBSD**: installs DXSpider natively via `pkg` + Perl modules (no Docker; Docker does not run on FreeBSD), creates an `rc.d` service, and starts the cluster
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
-```
-
-**Linux**: automatic Docker install for Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, and Arch. On other Linux systems, install Docker manually first, then re-run the script.
-
-**Windows + WSL2**: install and start Docker Desktop first, enable **Settings > Resources > WSL Integration** for your WSL distribution, then run the command above from the WSL terminal. Keep the project inside the WSL filesystem (`~/dxspider`), not under `/mnt/c/`.
-
-**macOS**: the installer installs Docker Desktop via Homebrew if needed. After the first install, you must open Docker Desktop from Applications, accept the license, wait for it to start, then re-run the script. Subsequent runs skip straight to `docker compose`.
-
-**FreeBSD**: the installer automatically switches to the native FreeBSD path (no Docker needed). All Perl dependencies are installed from FreeBSD `pkg` packages.
-
-Use this option or the manual setup below. Do not run both.
-
-### Option B: 3-Step Setup (manual)
+> [!NOTE]
+> This guide uses `docker compose` (Docker Compose V2) which is the recommended method to manage the container and its configuration.
+> - If your system has the older Docker Compose V1, you can use `docker-compose` instead.
+> - If you prefer not to use Compose at all, you can use standard `docker` commands. See the **Standalone Docker Run** section below.
 
 **1. Get the Code**
 ```bash
@@ -173,6 +154,10 @@ cd 9M2PJU-DXSpider-Docker
 ```
 
 **2. Configure Identity**
+
+> [!IMPORTANT]
+> After cloning this repository, **make sure all configurations are correct** in your `.env` file before starting the cluster. An incorrectly configured node can cause routing loops or be rejected by the DXSpider network.
+
 ```bash
 cp .env.example .env
 nano .env
