@@ -71,7 +71,7 @@ This project includes a complete `docs/` directory with beginner-friendly guides
 | [Cron & Automation](docs/06-cron-and-automation.md) | Scheduled tasks, auto-reconnect, startup scripts |
 | [Database Backend](docs/07-database-backend.md) | Optional MariaDB setup for spot logging |
 | [Security](docs/08-security.md) | Hardening guide, capabilities, best practices |
-| [Cloud Deployment](docs/09-cloud-deployment.md) | AWS, GCP, Azure, DigitalOcean, Hetzner |
+
 | [Troubleshooting](docs/10-troubleshooting.md) | FAQ, debugging, common problems and solutions |
 
 > **New to DX Clusters?** Start with [Getting Started](docs/01-getting-started.md). It walks you through everything step by step.
@@ -138,7 +138,7 @@ graph TB
 - **macOS**: [Docker Desktop](https://docs.docker.com/desktop/mac/)
 - **Windows**: [Docker Desktop](https://docs.docker.com/desktop/windows/) with the WSL2 backend and WSL integration enabled
 - **An amateur radio callsign**: needed to identify your node
-- **Your Maidenhead grid square**: find it at https://www.amsat.org/tools/grid-square-locator/
+- **Your Maidenhead grid square**: find it at https://grid.radio/
 
 ### 3-Step Setup
 
@@ -160,7 +160,7 @@ cd 9M2PJU-DXSpider-Docker
 
 ```bash
 cp .env.example .env
-nano .env
+vi .env
 # At minimum, set:
 #   CLUSTER_CALLSIGN=YOURCALL-2
 #   CLUSTER_SYSOP_CALLSIGN=YOURCALL
@@ -454,42 +454,6 @@ The default crontab also fetches bad-IP, bad-DX, bad-spotter, bad-node, and bad-
 
 > See [Cron & Automation](docs/06-cron-and-automation.md) for the complete guide.
 
----
-
-## Cloud Deployment
-
-9M2PJU DXSpider Docker runs anywhere Docker runs. Quick references:
-
-| Provider | Recommended Instance | Approx. Cost |
-| :--- | :--- | :--- |
-| **Hetzner Cloud** | CX22 (2 vCPU, 4 GB) | ~€4/mo |
-| **DigitalOcean** | Basic Droplet (1 vCPU, 1 GB) | $6/mo |
-| **AWS EC2/Lightsail** | t3.micro / 1 GB plan | $5/mo |
-| **GCP Compute Engine** | e2-micro (2 vCPU, 1 GB) | ~$7/mo |
-| **Azure** | B1s (1 vCPU, 1 GB) | ~$4/mo |
-
-**Key requirements**: Open port 7300/tcp for users, restrict port 8080/tcp to your IP.
-
-> See [Cloud Deployment](docs/09-cloud-deployment.md) for step-by-step guides for each provider.
-
----
-
-## Virtualization (On-Premises)
-
-9M2PJU DXSpider Docker works perfectly on major hypervisors for home labs and data centers.
-
-### VMware (ESXi / Workstation / Fusion)
-1. Create a VM running **Ubuntu Server** or **Debian**.
-2. Install Docker and follow the [Quick Start](#-quick-start).
-3. Use "Bridged" networking for a dedicated IP on your LAN.
-
-### Proxmox VE
-- **Method A (Recommended)**: Create a standard VM and install Docker.
-- **Method B (Advanced)**: Run Docker inside an LXC container. Check "nesting" and "keyctl" in Container Features.
-
-### Networking Tips
-- **Port Forwarding**: Forward port `7300` (TCP) to your VM/Container's IP.
-- **Failover**: HA works out-of-the-box since all state is stored in mapped volumes.
 
 ---
 
