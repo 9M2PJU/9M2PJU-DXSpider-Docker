@@ -16,10 +16,9 @@ A DX Cluster is a network of servers that share real-time "spots" - reports of r
 
 Before you begin, you need:
 
-1. **A computer running Linux, macOS, FreeBSD, or Windows with WSL2**
-   - **Linux**: Docker + Docker Compose (the installer can install Docker for you on Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch)
-   - **macOS**: Docker Desktop (the installer can install it via Homebrew if missing)
-   - **FreeBSD**: No Docker needed - the installer installs DXSpider natively via `pkg` + Perl modules
+1. **A computer running Linux, macOS, or Windows with WSL2**
+   - **Linux**: Docker + Docker Compose (v2)
+   - **macOS**: Docker Desktop
    - **Windows + WSL2**: Docker Desktop with the WSL2 backend and WSL integration enabled
 
 2. **An amateur radio callsign** - You need a valid callsign to identify your node and yourself as sysop.

@@ -227,11 +227,6 @@ This project supports a wide range of CPU architectures, making it compatible wi
 | `linux/ppc64le` | IBM POWER servers |
 | `linux/s390x` | IBM Z / LinuxONE mainframes |
 
-**Native (FreeBSD): no Docker**
-| Platform | Notes |
-| :--- | :--- |
-| FreeBSD amd64 | Installed natively via `pkg` + Perl modules, `rc.d` service |
-| FreeBSD arm64 | Same native install path |
 
 Pre-built images are published automatically to GHCR on every push to `main`:
 
