@@ -36,7 +36,7 @@
 
 ## What is a DX Cluster?
 
-A **DX Cluster** is a network of servers that share real-time "spots" — reports of rare or interesting amateur radio stations heard on the air. When someone hears a DX station, they post a spot to their local cluster node, which then propagates it to all connected nodes worldwide within seconds.
+A **DX Cluster** is a network of servers that share real-time "spots", reports of rare or interesting amateur radio stations heard on the air. When someone hears a DX station, they post a spot to their local cluster node, which then propagates it to all connected nodes worldwide within seconds.
 
 **DXSpider** is the software that runs most of these cluster nodes. Originally created in the late 1990s and written in Perl, it has been actively maintained and extended by the amateur radio community for decades. This project packages DXSpider into a Docker container so you can deploy it without manually installing Perl, CPAN modules, or configuring a server.
 
@@ -48,9 +48,9 @@ A **DX Cluster** is a network of servers that share real-time "spots" — report
 | :--- | :--- |
 | **Instant Launch** | Three lines of code and you are live. Literally. |
 | **Web Console** | Built-in web terminal (`ttyd`) for easy administration without SSH. |
-| **Hardened** | `cap_drop: ALL` + `no-new-privileges` — only the minimal kernel capabilities needed. |
+| **Hardened** | `cap_drop: ALL` + `no-new-privileges`, with only the minimal kernel capabilities needed. |
 | **Data Safety** | User database, spots, and logs are safe in persistent bind-mounted volumes. |
-| **Universal** | Multi-arch images: amd64, arm64, arm/v7, arm/v6, 386, ppc64le, s390x — servers to Raspberry Pi Zero. |
+| **Universal** | Multi-arch images: amd64, arm64, arm/v7, arm/v6, 386, ppc64le, s390x, from servers to Raspberry Pi Zero. |
 | **Automation** | Built-in Cron and Startup script support. |
 | **Optional DB** | Flat-file storage by default; optional MariaDB backend via compose profile. |
 | **CI Tested** | Every commit is smoke-tested in GitHub Actions before publishing. |
@@ -74,7 +74,7 @@ This project includes a complete `docs/` directory with beginner-friendly guides
 | [Cloud Deployment](docs/09-cloud-deployment.md) | AWS, GCP, Azure, DigitalOcean, Hetzner |
 | [Troubleshooting](docs/10-troubleshooting.md) | FAQ, debugging, common problems and solutions |
 
-> **New to DX Clusters?** Start with [Getting Started](docs/01-getting-started.md) — it walks you through everything step by step.
+> **New to DX Clusters?** Start with [Getting Started](docs/01-getting-started.md). It walks you through everything step by step.
 
 ---
 
@@ -134,33 +134,33 @@ graph TB
 
 ### Prerequisites
 
-- **Linux**: [Docker & Docker Compose](https://docs.docker.com/get-docker/) — or let the installer install Docker for you
-- **macOS**: [Docker Desktop](https://docs.docker.com/desktop/mac/) — or let the installer install it via Homebrew (`brew install --cask docker`)
+- **Linux**: [Docker & Docker Compose](https://docs.docker.com/get-docker/), or let the installer install Docker for you
+- **macOS**: [Docker Desktop](https://docs.docker.com/desktop/mac/), or let the installer install it via Homebrew (`brew install --cask docker`)
 - **Windows**: [Docker Desktop](https://docs.docker.com/desktop/windows/) with the WSL2 backend and WSL integration enabled
-- **FreeBSD**: nothing pre-installed — the installer uses `pkg` for all dependencies (no Docker needed)
-- **An amateur radio callsign** — needed to identify your node
-- **Your Maidenhead grid square** — find it at https://www.amsat.org/tools/grid-square-locator/
+- **FreeBSD**: nothing pre-installed. The installer uses `pkg` for all dependencies (no Docker needed)
+- **An amateur radio callsign**: needed to identify your node
+- **Your Maidenhead grid square**: find it at https://www.amsat.org/tools/grid-square-locator/
 
 ### Quick Install (one command)
 
-The fastest way to get started — the installer detects your OS and does the right thing automatically:
+The fastest way to get started. The installer detects your OS and does the right thing automatically:
 
 - **Linux**: checks for Docker (installs it if missing on supported distros), clones the repo, prompts for your callsign/locator, and launches the cluster via `docker compose`
 - **Windows + WSL2**: uses Docker Desktop's WSL integration, installs to `~/dxspider`, prompts for configuration, and launches via `docker compose`
 - **macOS**: checks for Docker Desktop (installs it via Homebrew if missing), then uses `docker compose` like Linux. Installs to `~/dxspider` (no root needed).
-- **FreeBSD**: installs DXSpider natively via `pkg` + Perl modules (no Docker — Docker doesn't run on FreeBSD), creates an `rc.d` service, and starts the cluster
+- **FreeBSD**: installs DXSpider natively via `pkg` + Perl modules (no Docker; Docker does not run on FreeBSD), creates an `rc.d` service, and starts the cluster
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
 ```
 
-**Linux** — automatic Docker install: Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, Arch. On other Linux systems, install Docker manually first, then re-run the script.
+**Linux**: automatic Docker install for Debian, Ubuntu, Fedora, CentOS, RHEL, Rocky, Alma, Alpine, and Arch. On other Linux systems, install Docker manually first, then re-run the script.
 
-**Windows + WSL2** — install and start Docker Desktop first, enable **Settings > Resources > WSL Integration** for your WSL distribution, then run the command above from the WSL terminal. Keep the project inside the WSL filesystem (`~/dxspider`), not under `/mnt/c/`.
+**Windows + WSL2**: install and start Docker Desktop first, enable **Settings > Resources > WSL Integration** for your WSL distribution, then run the command above from the WSL terminal. Keep the project inside the WSL filesystem (`~/dxspider`), not under `/mnt/c/`.
 
-**macOS** — the installer installs Docker Desktop via Homebrew if needed. After the first install, you must open Docker Desktop from Applications, accept the license, wait for it to start, then re-run the script. Subsequent runs skip straight to `docker compose`.
+**macOS**: the installer installs Docker Desktop via Homebrew if needed. After the first install, you must open Docker Desktop from Applications, accept the license, wait for it to start, then re-run the script. Subsequent runs skip straight to `docker compose`.
 
-**FreeBSD** — the installer automatically switches to the native FreeBSD path (no Docker needed). All Perl dependencies are installed from FreeBSD `pkg` packages.
+**FreeBSD**: the installer automatically switches to the native FreeBSD path (no Docker needed). All Perl dependencies are installed from FreeBSD `pkg` packages.
 
 ### 3-Step Setup (manual)
 
@@ -188,7 +188,7 @@ docker compose up -d     # Start the cluster
 ```
 
 > [!TIP]
-> `docker compose pull` downloads the pre-built multi-arch image from GitHub Container Registry — no local build needed. This is much faster than `--build`.
+> `docker compose pull` downloads the pre-built multi-arch image from GitHub Container Registry. No local build is needed, and this is much faster than `--build`.
 >
 > If you prefer to build locally (e.g., offline or custom modifications), use `docker compose up -d --build` instead.
 
@@ -226,7 +226,7 @@ See the [User Commands Reference](docs/05-user-commands.md) for the full list.
 
 This project supports a wide range of CPU architectures, making it compatible with everything from high-end servers to Raspberry Pi Zero.
 
-**Docker (Linux) — Supported Platforms:**
+**Docker (Linux): Supported Platforms**
 | Platform | Typical Hardware |
 | :--- | :--- |
 | `linux/amd64` | Standard 64-bit PC / servers |
@@ -237,7 +237,7 @@ This project supports a wide range of CPU architectures, making it compatible wi
 | `linux/ppc64le` | IBM POWER servers |
 | `linux/s390x` | IBM Z / LinuxONE mainframes |
 
-**Native (FreeBSD) — no Docker:**
+**Native (FreeBSD): no Docker**
 | Platform | Notes |
 | :--- | :--- |
 | FreeBSD amd64 | Installed natively via `pkg` + Perl modules, `rc.d` service |
@@ -281,7 +281,7 @@ docker run -d \
 ```
 
 > [!TIP]
-> **Persistent Data**: Always mount all volumes. The `local_data` volume holds your user database and spots. The `connect`, `local_cmd`, `startup`, `motd`, and `motd_nor` volumes hold your node configuration — without them, rebuilding the image would reset your settings to the defaults baked into the image.
+> **Persistent Data**: Always mount all volumes. The `local_data` volume holds your user database and spots. The `connect`, `local_cmd`, `startup`, `motd`, and `motd_nor` volumes hold your node configuration. Without them, rebuilding the image would reset your settings to the defaults baked into the image.
 
 ### Manual Multi-Arch Build (Advanced)
 
@@ -308,7 +308,7 @@ docker buildx build \
 
 ## Configuration Reference
 
-Edit these in your `.env` file (copy from `.env.example`). All variables have sensible defaults — only `CLUSTER_CALLSIGN` and `CLUSTER_SYSOP_CALLSIGN` are truly required.
+Edit these in your `.env` file (copy from `.env.example`). All variables have sensible defaults. Only `CLUSTER_CALLSIGN` and `CLUSTER_SYSOP_CALLSIGN` are truly required.
 
 > For a complete explanation of every variable and how configuration works, see the [Configuration Reference](docs/02-configuration.md).
 
@@ -396,7 +396,7 @@ This container follows security best practices:
 All your node's configuration and data lives on the **host** filesystem, not inside the container. Docker bind mounts map host directories into the container, overriding the default files baked into the image. This means:
 
 - **Rebuilding the image does NOT change your configuration.** Your host files always take precedence over the image's defaults.
-- **Upgrading is safe.** Pull a new image, rebuild, and restart — your connect scripts, crontab, startup commands, MOTD, user database, and spots are all preserved on the host.
+- **Upgrading is safe.** Pull a new image, rebuild, and restart. Your connect scripts, crontab, startup commands, MOTD, user database, and spots are all preserved on the host.
 - **Backups are easy.** Just back up the project directory (especially `local_data/`).
 
 ### What is persistent?
@@ -428,7 +428,7 @@ If you need to persist these too (e.g., you manually edit `DXVars.pm` inside the
 
 ## Connecting to Partner Nodes
 
-To join the global DX Cluster network, your node needs to link to at least one other node. This is both a **technical** and **social** process — you need the other sysop's permission.
+To join the global DX Cluster network, your node needs to link to at least one other node. This is both a **technical** and **social** process. You need the other sysop's permission.
 
 > [!IMPORTANT]
 > **You cannot simply connect to any node without permission.** Contact the sysop of the node you want to link with, agree on a password, and then configure your connect script.
@@ -446,7 +446,7 @@ Quick steps:
 
 ## Automation (Cron & Startup)
 
-**Startup Tasks** — Edit the `startup` file. Commands here run every time the container boots:
+**Startup Tasks**: Edit the `startup` file. Commands here run every time the container boots:
 ```bash
 # Example 'startup' file content:
 load/forward
@@ -454,7 +454,7 @@ set/spider gb7mbc
 connect gb7mbc
 ```
 
-**Scheduled Tasks (Cron)** — Edit `local_cmd/crontab`. Standard cron format, but commands are Perl expressions:
+**Scheduled Tasks (Cron)**: Edit `local_cmd/crontab`. Standard cron format, but commands are Perl expressions:
 ```bash
 # Reconnect to GB7MBC every 10 mins if link dropped
 0,10,20,30,40,50 * * * * start_connect('gb7mbc') unless connected('gb7mbc')
@@ -605,7 +605,7 @@ By the late 1990s, the internet was emerging, and the original DOS-based PacketC
 *   **Scalable**: It could handle hundreds of simultaneous internet connections, something the old PC-based clusters couldn't dream of.
 *   **Open**: It allowed the community to contribute and extend the software.
 
-Today, DXSpider powers a vast majority of the world's DX Cluster nodes, silently processing millions of spots a year and keeping the global amateur radio community connected. **9M2PJU-DXSpider-Docker** is simply the next step in this evolution—packaging this history into a container for the future.
+Today, DXSpider powers a vast majority of the world's DX Cluster nodes, silently processing millions of spots a year and keeping the global amateur radio community connected. **9M2PJU-DXSpider-Docker** is simply the next step in this evolution, packaging this history into a container for the future.
 
 ---
 
@@ -619,7 +619,7 @@ We love community involvement!
 5.  Create a Pull Request.
 
 > [!TIP]
-> Every PR is automatically smoke-tested by CI — the cluster must boot and listen on port 7300 before images are published.
+> Every PR is automatically smoke-tested by CI. The cluster must boot and listen on port 7300 before images are published.
 
 ---
 
