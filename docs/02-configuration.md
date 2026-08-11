@@ -21,7 +21,7 @@ All configuration is done through the `.env` file (copy from `.env.example`). Th
 
 | Variable | Required | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `CLUSTER_LOCATOR` | Recommended | `JO01aa` | Your Maidenhead grid square (uppercase). Used for distance/bearing calculations. Find yours at https://www.amsat.org/tools/grid-square-locator/ |
+| `CLUSTER_LOCATOR` | Recommended | `JO01aa` | Your Maidenhead grid square (uppercase). Used for distance/bearing calculations. Find yours at https://grid.radio/ |
 | `CLUSTER_LATITUDE` | No | `0` | Latitude in decimal degrees. `+` = North, `-` = South. Example: `+03.08` |
 | `CLUSTER_LONGITUDE` | No | `0` | Longitude in decimal degrees. `+` = East, `-` = West. Example: `+101.41` |
 

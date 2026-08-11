@@ -25,7 +25,7 @@ Before you begin, you need:
 2. **An amateur radio callsign** - You need a valid callsign to identify your node and yourself as sysop.
 
 3. **Your Maidenhead grid square** - Used for distance/bearing calculations.
-   - Find yours at: https://www.amsat.org/tools/grid-square-locator/
+   - Find yours at: https://grid.radio/
 
 4. **A partner node to connect to** - To join the global DX Cluster network, you need another sysop to agree to link with you. See [Connecting to Partner Nodes](03-connecting-to-partners.md).
 
