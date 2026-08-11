@@ -92,7 +92,7 @@ sudo ufw enable
 
 Instead of exposing port 8080, access it through SSH:
 
-1. Remove the `8080:8080` port mapping from `docker-compose.yml` (or bind it to localhost only):
+1. Remove the `8080:8080` port mapping from `compose.yaml` (or bind it to localhost only):
    ```yaml
    ports:
      - "127.0.0.1:8080:8080"

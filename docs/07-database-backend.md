@@ -34,7 +34,7 @@ CLUSTER_DB_ROOT_PWD=choose-a-different-strong-password
 
 ### Step 2: Start with the DB Profile
 
-The `docker-compose.yml` defines a `with-db` profile that includes a MariaDB service. Start it with:
+The `compose.yaml` defines a `with-db` profile that includes a MariaDB service. Start it with:
 
 ```bash
 docker compose --profile with-db up -d --build
@@ -91,7 +91,7 @@ When `CLUSTER_DB_HOSTNAME` is **not** set (or empty), `entrypoint.sh`:
 
 ## MariaDB Service Details
 
-The MariaDB service in `docker-compose.yml`:
+The MariaDB service in `compose.yaml`:
 
 ```yaml
 db:

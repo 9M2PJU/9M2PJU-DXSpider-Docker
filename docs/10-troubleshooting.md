@@ -84,7 +84,7 @@ docker compose ps
 
 **Solutions**:
 - Verify `CLUSTER_PORT=7300` in `.env`.
-- Verify `ports: - "7300:7300"` in `docker-compose.yml`.
+- Verify `ports: - "7300:7300"` in `compose.yaml`.
 - Check host firewall: `sudo ufw status` or `sudo iptables -L`.
 - If running in the cloud, check the security group / firewall rules.
 
@@ -233,7 +233,7 @@ docker compose logs dxspider | grep -i connect
   ```
 - Clean old debug logs: `DXDebug::dbgclean()` (in crontab).
 - Reduce log retention in DXVars.pm.
-- Set Docker log rotation in `docker-compose.yml`:
+- Set Docker log rotation in `compose.yaml`:
   ```yaml
   logging:
     driver: "json-file"

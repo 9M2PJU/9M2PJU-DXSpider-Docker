@@ -6,7 +6,7 @@ This document covers every configuration option available in 9M2PJU DXSpider Doc
 
 ## Environment Variables (`.env`)
 
-All configuration is done through the `.env` file (copy from `.env.example`). These values are read by `docker-compose.yml` and passed to the container's `entrypoint.sh`, which generates the DXSpider configuration files.
+All configuration is done through the `.env` file (copy from `.env.example`). These values are read by `compose.yaml` and passed to the container's `entrypoint.sh`, which generates the DXSpider configuration files.
 
 ### Cluster Identity
 
@@ -189,7 +189,7 @@ docker compose restart
 
 ### Option C: Bind-Mount the local Directory
 
-For permanent manual control over `DXVars.pm` and `Listeners.pm`, add this to `docker-compose.yml`:
+For permanent manual control over `DXVars.pm` and `Listeners.pm`, add this to `compose.yaml`:
 
 ```yaml
 volumes:
@@ -202,7 +202,7 @@ Then create `./local/DXVars.pm` on the host and edit it directly. Set `OVERWRITE
 
 ## Multi-Architecture Build Configuration
 
-The Dockerfile accepts these build arguments (passed via `docker-compose.yml` or `docker build --build-arg`):
+The Dockerfile accepts these build arguments (passed via `compose.yaml` or `docker build --build-arg`):
 
 | Build Arg | Default | Purpose |
 | :--- | :--- | :--- |

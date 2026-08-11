@@ -142,7 +142,7 @@ RUN apk add --no-cache \
 # =============================================================================
 #  Layer 2: Copy default configuration files into the image
 #
-#  These are FALLBACK DEFAULTS only. When running via docker-compose (or
+#  These are FALLBACK DEFAULTS only. When running via docker compose (or
 #  docker run with -v bind mounts), the host files override these copies
 #  at runtime. This means:
 #    - Rebuilding the image does NOT change your configuration

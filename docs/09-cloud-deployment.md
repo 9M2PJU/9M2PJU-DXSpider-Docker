@@ -51,7 +51,7 @@ A **static public IP** is strongly recommended. Partner nodes need to connect to
 3. **Connect and install Docker**:
    ```bash
    ssh -i your-key.pem ubuntu@<ec2-public-ip>
-   sudo apt update && sudo apt install -y docker.io docker-compose-v2 git
+   sudo apt update && sudo apt install -y docker.io docker compose-v2 git
    sudo usermod -aG docker ubuntu
    # Log out and back in for group change to take effect
    ```
