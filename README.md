@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/header.png" alt="9M2PJU DXSpider Docker Hero" width="100%" style="border-radius: 10px;" />
+<img src="assets/banner.png" alt="9M2PJU DXSpider Docker Banner" width="100%" style="border-radius: 10px;" />
 
 # 9M2PJU DXSpider Docker
 ### The **Ultimate** Modern DX Cluster Solution
@@ -182,6 +182,9 @@ docker compose up -d     # Start the cluster
 **You are live!** Access your node:
 - **Telnet**: `telnet localhost 7300` (users connect here)
 - **Web Console**: `http://localhost:8080` (use `WEB_USER` / `WEB_PASS` from `.env`)
+
+> [!WARNING]
+> A standalone DXSpider node **will not receive any DX spots** on its own! To get spots flowing, you must connect your node to a partner node on the DX Cluster network. You will need to find a partner to connect to. See [Connecting to Partners](docs/03-connecting-to-partners.md) for instructions.
 
 > [!IMPORTANT]
 > The container runs as UID 1000 internally. If your host directories are owned by a different UID, either:
