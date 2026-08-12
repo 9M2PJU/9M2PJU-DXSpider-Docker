@@ -140,7 +140,15 @@ graph TB
 - **An amateur radio callsign**: needed to identify your node
 - **Your Maidenhead grid square**: find it at https://grid.radio/
 
-### 3-Step Setup
+### Option A: Interactive Setup (Recommended)
+
+The easiest way to get started is using our interactive installation script. It will check dependencies, clone the repository, prompt you for the necessary configuration, and launch the cluster automatically.
+
+```bash
+curl -sSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
+```
+
+### Option B: Manual Setup
 
 > [!NOTE]
 > This guide uses `docker compose` (Docker Compose V2) which is the recommended method to manage the container and its configuration.
@@ -460,7 +468,7 @@ Windows users can run 9M2PJU DXSpider Docker easily using WSL2 or traditional vi
 1. Install **Docker Desktop** and enable the **WSL2 Backend**.
 2. Install a Linux distribution (e.g., Ubuntu) from the Microsoft Store.
 3. In Docker Desktop, enable **Settings > Resources > WSL Integration** for that distribution.
-4. Open the distribution's WSL terminal and run the [Quick Install command above](#option-a-quick-install-one-command).
+4. Open the distribution's WSL terminal and run the [Interactive Setup command above](#option-a-interactive-setup-recommended).
 5. Keep the installation inside the WSL2 filesystem (`~/dxspider`) rather than on the Windows C: drive.
 
 ### Hyper-V

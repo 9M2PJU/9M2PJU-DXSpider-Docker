@@ -32,7 +32,15 @@ Before you begin, you need:
 
 ## Installation
 
-### Manual Setup
+### Option A: Interactive Setup (Recommended)
+
+The easiest way to get started is using our interactive installation script. It will check dependencies, clone the repository, prompt you for the necessary configuration, and launch the cluster automatically.
+
+```bash
+curl -sSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
+```
+
+### Option B: Manual Setup
 
 #### Step 1: Get the Code
 
