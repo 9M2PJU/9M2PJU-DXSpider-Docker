@@ -138,14 +138,21 @@ if [ ! -f ${SPIDER_INSTALL_DIR}/local/DXVars.pm ] || [ "${OVERWRITE_CONFIG}" = "
             -e "s/\(\#\$dbuser[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_DBUSER}\";/" \
             -e "s/\(\#\$dbpass[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_DBPASS}\";/" \
             -i ${SPIDER_INSTALL_DIR}/local/DXVars.pm
-        # Uncomment the $dsn/$dbuser/$dbpass lines
-        sed -i "/\$dsn/s/^#*//g" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
-        sed -i "/\$dbuser/s/^#*//g" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
-        sed -i "/\$dbpass/s/^#*//g" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
+        # Uncomment ONLY the exact #$dsn / #$dbuser / #$dbpass assignment lines
+        # (never touch prose comments mentioning $dsn, e.g. in newer DXVars.pm.issue)
+        sed -i "s/^#\(\\\$dsn\)/\1/" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
+        sed -i "s/^#\(\\\$dbuser\)/\1/" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
+        sed -i "s/^#\(\\\$dbpass\)/\1/" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
     else
         echo "Database backend disabled (CLUSTER_DB_HOSTNAME not set) — using flat-file storage."
     fi
 fi
+
+# Ensure SQLite user DB DSN is present in DXVars.pm (required by Mojo >= SQLite migration)
+if ! grep -qE '^\s*our\s+\$userdsn\s*=' "${SPIDER_INSTALL_DIR}/local/DXVars.pm"; then
+    perl -0pi -e 's/\n1;\s*\z/\nour \$userdsn = "dbi:SQLite:dbname=\$root\/local_data\/dxusers.db";\n\n1;\n/ or die "DXVars.pm: final 1; not found\n"' "${SPIDER_INSTALL_DIR}/local/DXVars.pm"
+fi
+chown ${SPIDER_USERNAME}:${SPIDER_GROUP} "${SPIDER_INSTALL_DIR}/local/DXVars.pm" "${SPIDER_INSTALL_DIR}/local/Listeners.pm" 2>/dev/null || true
 
 # =============================================================================
 #  Step 7: Clean stale lock files from previous (crashed) runs
@@ -160,12 +167,22 @@ rm -f ${SPIDER_INSTALL_DIR}/local_data/cluster.lck 2>/dev/null || true
 cd ${SPIDER_INSTALL_DIR}/perl
 
 # =============================================================================
-#  Step 8: Create / update the sysop user in the DXSpider user database
+#  Step 8: Initialize the sysop user database ONLY on first boot
 #
-#  create_sysop.pl ensures the sysop callsign exists with admin privileges.
-#  Runs as the sysop user so the user database file is owned correctly.
+#  Never invoke create_sysop.pl on updates/restarts when an existing user DB
+#  is present: upstream create_sysop.pl deletes and recreates $mycall/$myalias
+#  records when legacy users.v2/v3 files are absent, wiping passwords and
+#  persistent attributes.
 # =============================================================================
-su-exec ${SPIDER_USERNAME} ./create_sysop.pl
+if [ ! -f "${SPIDER_INSTALL_DIR}/local_data/dxusers.db" ] && \
+   [ ! -f "${SPIDER_INSTALL_DIR}/local_data/users.v3j" ] && \
+   [ ! -f "${SPIDER_INSTALL_DIR}/local_data/users.v3" ] && \
+   [ ! -f "${SPIDER_INSTALL_DIR}/local_data/users.v2" ]; then
+    echo "Initializing new DXSpider user database..."
+    su-exec ${SPIDER_USERNAME} ./create_sysop.pl
+else
+    echo "Existing DXSpider user database found; skipping create_sysop.pl."
+fi
 
 # =============================================================================
 #  Step 9: Start the DXSpider cluster daemon

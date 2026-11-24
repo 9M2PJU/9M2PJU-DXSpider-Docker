@@ -1,6 +1,6 @@
 # =============================================================================
 #  9M2PJU DXSpider Docker — Alpine-based DX Cluster container
-#  Image version: 2.6.0-9M2PJU
+#  Image version: 2.7.0-9M2PJU
 #
 #  Packages DXSpider (https://github.com/EA3CV/dxspider) in a hardened
 #  Alpine container with a ttyd web console for remote administration.
@@ -19,8 +19,8 @@ ARG SPIDER_VERSION=mojo
 # Pin DXSpider to a specific commit SHA for reproducible builds.
 # This prevents supply-chain surprises from a moving branch HEAD.
 # Override with --build-arg SPIDER_GIT_REF=<sha> to bump.
-# Current mojo HEAD as of 2025-01-10:
-ARG SPIDER_GIT_REF=3e9b3621d94dd45c68702e4a0f896aac33f2a91d
+# Current mojo HEAD as of 2026-11-24 (v1.57 build 933):
+ARG SPIDER_GIT_REF=b9bc2369df47cfc8aee3c740e3dd42178605e9d3
 
 # --- OCI image labels (consumed by registries like GHCR) ---
 LABEL org.opencontainers.image.title="9M2PJU DXSpider Docker" \
@@ -28,7 +28,7 @@ LABEL org.opencontainers.image.title="9M2PJU DXSpider Docker" \
       org.opencontainers.image.authors="9M2PJU" \
       org.opencontainers.image.source="https://github.com/9M2PJU/9M2PJU-DXSpider-Docker" \
       org.opencontainers.image.licenses="GPL-3.0" \
-      org.opencontainers.image.version="2.6.0" \
+      org.opencontainers.image.version="2.7.0" \
       org.opencontainers.image.url="https://hamradio.my"
 
 # --- Persist build args as runtime env (consumed by entrypoint.sh) ---
@@ -84,16 +84,24 @@ RUN apk add --no-cache \
     perl-dbd-mysql \
     perl-dbd-sqlite \
     perl-dbi \
-    # --- Additional Perl modules used by DXSpider features ---
-    perl-net-cidr-lite \
-    perl-date-calc \
-    perl-list-moreutils \
-    perl-ev \
-    perl-json-xs \
-    perl-date-manip \
+    # --- Additional Perl modules used by DXSpider Mojo features ---
+    perl-archive-zip \
     perl-authen-sasl \
-    perl-net-mqtt-simple \
+    perl-date-calc \
+    perl-date-manip \
+    perl-ev \
     perl-file-copy-recursive \
+    perl-html-parser \
+    perl-io-socket-inet6 \
+    perl-io-tty \
+    perl-json-xs \
+    perl-libwww \
+    perl-list-moreutils \
+    perl-lwp-protocol-https \
+    perl-mailtools \
+    perl-net-cidr-lite \
+    perl-net-mqtt-simple \
+    perl-net-smtp-ssl \
     # --- Berkeley DB runtime (needed by DB_File, installed below) ---
     db \
     # --- MariaDB client (for optional DB backend connectivity) ---
@@ -114,10 +122,12 @@ RUN apk add --no-cache \
     # but NOT on 386/ppc64le/s390x. Try the Alpine package first (fast), then
     # fall back to building from CPAN (works everywhere, just slower).
     && (apk add --no-cache perl-db_file 2>/dev/null || cpanm --notest DB_File) \
-    # Install the CPAN module not available as an Alpine package.
+    # Install CPAN modules not available as Alpine packages.
     # Data::Structure::Util is a C extension (hence the build deps above).
     # --notest skips the test suite (test deps aren't installed on musl).
-    && cpanm --notest --no-wget Data::Structure::Util \
+    && cpanm --notest --no-wget Data::Structure::Util LWP::Parallel::UserAgent Email::Sender \
+    # Verify full EA3CV/DXSpider Mojo Perl dependency inventory at build time
+    && perl -e 'for my $m (qw(EV Mojolicious JSON JSON::XS Data::Structure::Util Math::Round Net::CIDR::Lite DBI DBD::SQLite Date::Parse HTML::Parser IO::Socket::INET6 Archive::Zip Curses Mail::Internet Digest::SHA LWP::UserAgent LWP::Parallel::UserAgent DB_File IO::Pty Authen::SASL Net::SMTP::SSL Email::Sender)) { eval "require $m; 1" or die "Missing required Perl module: $m\n"; } Mojolicious->VERSION(7.26);' \
     # --- Create the non-root sysop user ---
     && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     # --- Clone DXSpider at the pinned commit ---
@@ -127,6 +137,7 @@ RUN apk add --no-cache \
     && git clone --no-checkout -b ${SPIDER_VERSION} https://github.com/EA3CV/dxspider ${SPIDER_INSTALL_DIR} \
     && cd ${SPIDER_INSTALL_DIR} \
     && git checkout ${SPIDER_GIT_REF} \
+    && git rev-parse --short HEAD > ${SPIDER_INSTALL_DIR}/.version \
     # --- Create runtime directories ---
     && mkdir -p ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_cmd ${SPIDER_INSTALL_DIR}/local_data \
     # --- Set ownership and permissions ---

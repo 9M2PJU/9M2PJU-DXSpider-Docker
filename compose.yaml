@@ -31,8 +31,8 @@ services:
       args:
         # DXSpider git branch (mojo or master)
         - SPIDER_VERSION=${CLUSTER_DXSPIDER_BRANCH:-mojo}
-        # Pinned commit SHA for reproducible builds
-        - SPIDER_GIT_REF=${SPIDER_GIT_REF:-3e9b3621d94dd45c68702e4a0f896aac33f2a91d}
+        # Pinned commit SHA for reproducible builds (v1.57 build 933)
+        - SPIDER_GIT_REF=${SPIDER_GIT_REF:-b9bc2369df47cfc8aee3c740e3dd42178605e9d3}
         # Sysop user name and UID inside the container
         - SPIDER_USERNAME=${CLUSTER_DB_USER:-sysop}
         - SPIDER_UID=${SPIDER_UID:-1000}
