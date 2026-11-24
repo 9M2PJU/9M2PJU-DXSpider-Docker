@@ -21,6 +21,7 @@
 [![Repo Size](https://img.shields.io/github/repo-size/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&color=indigo)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
 [![Language](https://img.shields.io/badge/Written%20in-Perl-0073a1?style=for-the-badge&logo=perl&logoColor=white)](https://www.perl.org/)
 [![Base Image](https://img.shields.io/badge/Base-Alpine%203.23-0D597F?style=for-the-badge&logo=alpinelinux&logoColor=white)](https://alpinelinux.org/)
+[![DXSpider](https://img.shields.io/badge/DXSpider-v1.57%20build%20933%20(Mojo)-00a86b?style=for-the-badge)](https://github.com/EA3CV/dxspider)
 [![Security](https://img.shields.io/badge/Security-No--New--Privileges-green?style=for-the-badge&logo=shield.io)](#-security--hardening)
 
 <br/>
@@ -49,7 +50,8 @@ A **DX Cluster** is a network of servers that share real-time "spots", reports o
 | **Instant Launch** | Three lines of code and you are live. Literally. |
 | **Web Console** | Built-in web terminal (`ttyd`) for easy administration without SSH. |
 | **Hardened** | `cap_drop: ALL` + `no-new-privileges`, with only the minimal kernel capabilities needed. |
-| **Data Safety** | User database, spots, and logs are safe in persistent bind-mounted volumes. |
+| **Data Safety** | SQLite user database (`dxusers.db`), spots, and logs are preserved in bind-mounted volumes; `create_sysop.pl` is guarded to never overwrite existing user records on restarts or upgrades. |
+| **Full Mojo Parity** | Pinned to DXSpider Mojo `v1.57 build 933` (`b9bc2369`) with all 23 required Perl modules verified at build time. |
 | **Universal** | Multi-arch images: amd64, arm64, arm/v7, arm/v6, 386, ppc64le, s390x, from servers to Raspberry Pi Zero. |
 | **Automation** | Built-in Cron and Startup script support. |
 | **Optional DB** | Flat-file storage by default; optional MariaDB backend via compose profile. |
@@ -360,7 +362,7 @@ docker compose --profile with-db up -d --build
 | Variable | Description | Default |
 | :--- | :--- | :--- |
 | `CLUSTER_DXSPIDER_BRANCH` | DXSpider git branch (`mojo` or `master`). | `mojo` |
-| `SPIDER_GIT_REF` | Pin DXSpider to a specific commit SHA. | *(pinned default)* |
+| `SPIDER_GIT_REF` | Pin DXSpider to a specific commit SHA. | `b9bc2369` (`v1.57 build 933`) |
 | `SPIDER_UID` | UID for the sysop user inside the container. | `1000` |
 | `OVERWRITE_CONFIG` | Set to `yes` to force-regenerate `DXVars.pm` and `Listeners.pm` on every start. | `no` |
 
@@ -373,7 +375,7 @@ This container follows security best practices:
 | Measure | How |
 | :--- | :--- |
 | **No privileged mode** | `privileged: true` is **not** used. The container runs with normal Docker isolation. |
-| **Minimal capabilities** | `cap_drop: ALL` + only `CHOWN`, `FOWNER`, `SETUID`, `SETGID` added back. |
+| **Minimal capabilities** | `cap_drop: ALL` + only `CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETUID`, `SETGID` added back. |
 | **No new privileges** | `security_opt: no-new-privileges:true` prevents privilege escalation. |
 | **Non-root application** | `cluster.pl` and `console.pl` run as the `sysop` user (UID 1000) via `su-exec`. |
 | **Root only for setup** | The entrypoint starts as root only to fix volume permissions, then drops to `sysop`. |
@@ -507,15 +509,18 @@ docker compose exec dxspider sh
 <details>
 <summary><b>How do I update to the latest version?</b></summary>
 
-Simple. We built this to be easy.
+Follow this safe upgrade sequence (stops cleanly so SQLite `dxusers.db` flushes before backing up, and keeps optional MariaDB warm):
 ```bash
-git pull                  # Get latest docker configs
-docker compose pull       # Download the latest pre-built image from GHCR
-docker compose up -d      # Restart with the new image
+git pull                                                 # Get latest docker configs
+docker compose pull dxspider                             # Pre-pull latest GHCR image
+docker compose stop dxspider                             # Stop cleanly (flushes SQLite dxusers.db)
+tar czf "backup-local_data-$(date +%F).tar.gz" local_data/  # Quiescent backup
+docker compose up -d --no-deps dxspider                  # Recreate dxspider only
+docker compose exec dxspider cat /spider/.version        # Verify installed Mojo commit
 ```
-*Your data in `local_data/` will remain safe.*
+*Existing user databases (`dxusers.db` / `users.v3j`) are detected automatically — `create_sysop.pl` is skipped on updates so passwords and user attributes are never wiped.*
 
-> If you build locally instead of pulling, use `docker compose up -d --build` in place of the `pull` + `up` steps.
+> If you build locally instead of pulling, use `docker compose build --no-cache dxspider` in place of `docker compose pull dxspider`.
 </details>
 
 <details>
