@@ -29,7 +29,7 @@
 **Experience the future of Amateur Radio Networking.**
 *Deploy a professional-grade DX Cluster node in minutes, not hours.*
 
-[What is this?](#-what-is-a-dx-cluster) &bull; [Quick Start](#-quick-start) &bull; [Documentation](#-documentation) &bull; [Configuration](#-configuration-reference) &bull; [Architecture](#-architecture--flow) &bull; [Security](#-security--hardening) &bull; [FAQ](#-troubleshooting--faq)
+[What is this?](#-what-is-a-dx-cluster) &bull; [Quick Start](#-quick-start) &bull; [Upgrading](#upgrading) &bull; [Documentation](#-documentation) &bull; [Configuration](#-configuration-reference) &bull; [Architecture](#-architecture--flow) &bull; [Security](#-security--hardening) &bull; [FAQ](#-troubleshooting--faq)
 
 </div>
 
@@ -421,6 +421,148 @@ If you need to persist these too (e.g., you manually edit `DXVars.pm` inside the
 
 ---
 
+## Upgrading
+
+Because your user database, spots, logs, and node configuration are stored in host bind mounts, upgrading DXSpider is safe and preserves your station data.
+
+> [!NOTE]
+> **User database protection:** On startup, `entrypoint.sh` automatically detects existing user databases (`dxusers.db`, `users.v3j`, `users.v3`, or `users.v2`) and skips `create_sysop.pl`. User passwords, registrations, and attributes are never overwritten during upgrades.
+
+### Recommended Upgrade (Docker Compose + GHCR Image)
+
+This is the safest workflow for standard Docker Compose installations. It pre-pulls the new image before stopping the cluster to minimize downtime, stops cleanly so SQLite (`local_data/dxusers.db`) flushes to disk before backing up, and keeps the optional MariaDB service running.
+
+**1. Go to your installation directory and check for local edits**
+
+```bash
+cd ~/9M2PJU-DXSpider-Docker   # or your installation directory
+git status
+```
+
+> [!IMPORTANT]
+> Starter config files (`startup`, `motd`, `motd_nor`, and `local_cmd/crontab`) are tracked in git. If you customized them, stash your edits before running `git pull` and re-apply them afterward so `git pull` does not fail with a merge conflict:
+> ```bash
+> git stash push -m "local-node-config"
+> git pull
+> git stash pop
+> ```
+> Resolve any merge conflicts if prompted. Your `.env`, `local_data/`, and custom `connect/<partner>` files are gitignored and are never touched by `git pull`.
+
+**2. Pull repository updates and check `.env` for new variables**
+
+If you did not need to stash in step 1:
+```bash
+git pull
+```
+
+Compare `.env.example` against your `.env` to check whether any new environment variables were added:
+```bash
+diff -u .env.example .env || true
+```
+
+**3. Pre-pull the latest container image**
+
+```bash
+docker compose pull dxspider
+```
+
+*(If you use the optional MariaDB backend, pull both services with `docker compose --profile with-db pull`.)*
+
+**4. Stop DXSpider cleanly and take a quiescent backup**
+
+```bash
+docker compose stop dxspider
+tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ startup motd motd_nor msg/
+```
+
+*(The archive is saved in the parent directory to keep your git working tree clean.)*
+
+**5. Recreate and start the updated container**
+
+For standard flat-file / SQLite storage (default):
+```bash
+docker compose up -d --no-deps dxspider
+```
+
+For installations using the optional MariaDB backend (`with-db` profile):
+```bash
+docker compose --profile with-db up -d
+```
+
+**6. Verify the upgrade**
+
+```bash
+docker compose ps                                 # Confirm status is Up (healthy)
+docker compose logs --tail 50 dxspider            # Confirm clean boot with no Perl errors
+docker compose exec dxspider cat /spider/.version # Verify installed DXSpider Mojo commit
+```
+
+Then connect via Telnet (`telnet localhost 7300`) or the Web Console (`http://localhost:8080`) and run `sh/version` and `sh/configuration` to confirm the build version and partner node links.
+
+> [!TIP]
+> Once everything is verified, you can remove old unused images to reclaim disk space: `docker image prune -f`.
+
+### Upgrading with a Local Build (Custom or Pinned Commit)
+
+If you build the image locally instead of pulling from GHCR (or want to pin a custom DXSpider commit):
+
+```bash
+git pull
+docker compose build --no-cache dxspider
+docker compose stop dxspider
+tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ startup motd motd_nor msg/
+docker compose up -d --no-deps dxspider
+docker compose exec dxspider cat /spider/.version
+```
+
+To build against a specific upstream DXSpider commit without editing `Dockerfile`, set `SPIDER_GIT_REF=<commit-sha>` in `.env` (or pass `--build-arg SPIDER_GIT_REF=<commit-sha>` to `docker compose build`).
+
+### Upgrading a Standalone `docker run` Deployment
+
+If you run the container directly with `docker run` instead of Docker Compose:
+
+```bash
+# 1. Pull the latest image
+docker pull ghcr.io/9m2pju/9m2pju-dxspider-docker:main
+
+# 2. Stop the running container cleanly and back up your data
+docker stop dxspider
+tar czf "../dxspider-backup-$(date +%F).tar.gz" local_data/ connect/ local_cmd/ startup motd motd_nor msg/
+
+# 3. Remove the old container (your host bind mounts remain untouched)
+docker rm dxspider
+
+# 4. Recreate the container using your original `docker run` command
+#    (keep all -e environment variables and -v volume mounts identical)
+```
+
+Verify with `docker logs --tail 50 dxspider` and `docker exec dxspider cat /spider/.version`.
+
+### Notes When Upgrading from Older Releases
+
+- **Docker Compose V1 (`docker-compose.yml`) to Compose V2 (`compose.yaml`):** Older checkouts used `docker-compose.yml` and `docker-compose`. This repository now uses `compose.yaml` with `docker compose` (Docker Compose v2.20+ is required for `depends_on.db.required: false`). If an old `docker-compose.yml` still exists in your directory, migrate any custom edits into `compose.yaml` and remove `docker-compose.yml`.
+- **`DAC_OVERRIDE` capability:** Newer images require `DAC_OVERRIDE` under `cap_add` in `compose.yaml` so `entrypoint.sh` can manage permissions on sysop-owned bind mounts. Pulling the latest `compose.yaml` applies this automatically; if you maintain a custom compose file, ensure `DAC_OVERRIDE` is listed in `cap_add`.
+- **SQLite user database (`dxusers.db`):** Newer DXSpider Mojo builds require `our $userdsn` in `/spider/local/DXVars.pm`. Even if you bind-mount `./local:/spider/local` with `OVERWRITE_CONFIG=no`, `entrypoint.sh` automatically appends `$userdsn` if missing.
+- **Custom commands:** Keep custom commands in `local_cmd/` instead of editing files inside `cmd/`, which is tracked by git.
+
+### Rolling Back an Upgrade
+
+If an upgrade causes unexpected issues:
+
+1. **Stop the container:**
+   ```bash
+   docker compose stop dxspider
+   ```
+2. **Restore your backup** (if user data or configs were affected):
+   ```bash
+   tar xzf ../dxspider-backup-YYYY-MM-DD.tar.gz
+   ```
+3. **Switch back to the previous version:**
+   - **Pre-built GHCR image:** Pin a previous image tag or digest in `compose.yaml` (see available tags on the [GHCR packages page](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/pkgs/container/9m2pju-dxspider-docker)), then run `docker compose pull dxspider && docker compose up -d --no-deps dxspider`.
+   - **Local build:** Check out the previous git commit (`git log -n 5 --oneline` then `git checkout <previous-commit>`), rebuild with `docker compose build --no-cache dxspider`, and start with `docker compose up -d --no-deps dxspider`.
+
+---
+
 ## Connecting to Partner Nodes
 
 To join the global DX Cluster network, your node needs to link to at least one other node. This is both a **technical** and **social** process. You need the other sysop's permission.
@@ -509,18 +651,18 @@ docker compose exec dxspider sh
 <details>
 <summary><b>How do I update to the latest version?</b></summary>
 
-Follow this safe upgrade sequence (stops cleanly so SQLite `dxusers.db` flushes before backing up, and keeps optional MariaDB warm):
+Quick upgrade sequence for Docker Compose (stops cleanly so SQLite `dxusers.db` flushes before backing up, and keeps optional MariaDB warm):
 ```bash
-git pull                                                 # Get latest docker configs
-docker compose pull dxspider                             # Pre-pull latest GHCR image
-docker compose stop dxspider                             # Stop cleanly (flushes SQLite dxusers.db)
-tar czf "backup-local_data-$(date +%F).tar.gz" local_data/  # Quiescent backup
-docker compose up -d --no-deps dxspider                  # Recreate dxspider only
-docker compose exec dxspider cat /spider/.version        # Verify installed Mojo commit
+git pull                                                                                               # Get latest repo configs (stash local edits first if needed)
+docker compose pull dxspider                                                                           # Pre-pull latest GHCR image
+docker compose stop dxspider                                                                           # Stop cleanly (flushes SQLite dxusers.db)
+tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ startup motd motd_nor msg/  # Quiescent backup
+docker compose up -d --no-deps dxspider                                                                # Recreate dxspider only
+docker compose exec dxspider cat /spider/.version                                                      # Verify installed Mojo commit
 ```
-*Existing user databases (`dxusers.db` / `users.v3j`) are detected automatically — `create_sysop.pl` is skipped on updates so passwords and user attributes are never wiped.*
+*Existing user databases (`dxusers.db` / `users.v3j`) are detected automatically: `create_sysop.pl` is skipped on updates so passwords and user attributes are never wiped.*
 
-> If you build locally instead of pulling, use `docker compose build --no-cache dxspider` in place of `docker compose pull dxspider`.
+> See the full [Upgrading](#upgrading) section for handling customized git-tracked files, MariaDB (`with-db`) upgrades, local builds, standalone `docker run`, older-release migration notes, and rollback steps.
 </details>
 
 <details>
