@@ -51,7 +51,7 @@ A **static public IP** is strongly recommended. Partner nodes need to connect to
 3. **Connect and install Docker**:
    ```bash
    ssh -i your-key.pem ubuntu@<ec2-public-ip>
-   sudo apt update && sudo apt install -y docker.io docker compose-v2 git
+   sudo apt update && sudo apt install -y docker.io docker-compose-v2 git
    sudo usermod -aG docker ubuntu
    # Log out and back in for group change to take effect
    ```
@@ -147,8 +147,8 @@ These VPS providers are popular for DX Cluster nodes due to low cost and simplic
 ### Linode (Akamai)
 
 1. Create a Linode (Nanode 1 GB, $5/mo).
-3. Configure firewall (Cloud Firewall or iptables).
-4. SSH in and deploy.
+2. Configure firewall (Cloud Firewall or iptables).
+3. SSH in and deploy.
 
 ---
 
@@ -172,11 +172,10 @@ connect telnet cluster.yourdomain.com 7300
 All cloud deployments use the same bind-mount structure as local deployments. Your data persists on the VM's disk:
 
 ```
-./local_data/     # User databases, spots, logs
-./local/          # DXVars.pm, Listeners.pm
+./local_data/     # User databases, spots, logs, motd, motd_nor
+./local_cmd/      # Crontab, startup, and local command overrides
 ./connect/        # Partner connection scripts
-./startup/        # Startup commands
-./local_cmd/      # Crontab and local commands
+./msg/            # Bulletins and private messages
 ```
 
 ### Backing Up to Cloud Storage
@@ -218,7 +217,7 @@ This gives you:
 
 Use the built-in healthcheck:
 ```bash
-docker inspect dxspider --format '{{.State.Health.Status}}'
+docker inspect "$(docker compose ps -q dxspider)" --format '{{.State.Health.Status}}'
 ```
 
 ### Uptime Monitoring

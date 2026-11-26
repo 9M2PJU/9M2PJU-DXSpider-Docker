@@ -46,8 +46,10 @@ All configuration is done through the `.env` file (copy from `.env.example`). Th
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
+| `ENABLE_WEB_CONSOLE` | `yes` | Set to `no` to disable the `ttyd` web console entirely. |
+| `WEB_BIND_ADDRESS` | `127.0.0.1` | Host interface to bind the web console port. Defaults to localhost only; use an SSH tunnel or HTTPS reverse proxy, or set `0.0.0.0` behind a firewall. |
 | `WEB_USER` | `sysop` | Username for the web console (HTTP basic auth). |
-| `WEB_PASS` | `changeme-web` | Password for the web console. **Change this from the default!** |
+| `WEB_PASS` | `changeme-web` | Password for the web console. **Change this from the default!** (`install.sh` auto-generates a strong random password.) |
 
 ### Optional MariaDB Backend
 
@@ -95,11 +97,11 @@ The `entrypoint.sh` script reads the environment variables and generates two DXS
    1;
    ```
 
-2. **`/spider/local/DXVars.pm`** - The main DXSpider configuration file, generated from the upstream template (`DXVars.pm.issue`) by substituting your env values into the Perl variables:
+2. **`/spider/local/DXVars.pm`** - The main DXSpider configuration file, generated safely from the upstream template (`DXVars.pm.issue`) via Perl substitution (handling special characters like `/`, `&`, and `@` cleanly), with `our $userdsn` automatically ensured for SQLite (`dxusers.db`):
    ```perl
    $mycall = "N0CALL-2";
    $myalias = "9M2PJU";
-   $myname = "Piju";
+   $myname = "9M2PJU";
    $myqth = "Kuala Lumpur, Malaysia";
    $mylocator = "OJ03UD";
    $mylatitude = "+03.08";
@@ -210,7 +212,7 @@ The Dockerfile accepts these build arguments (passed via `compose.yaml` or `dock
 | `SPIDER_USERNAME` | `sysop` | Username for the non-root user. |
 | `SPIDER_UID` | `1000` | UID for the non-root user. |
 | `SPIDER_VERSION` | `mojo` | DXSpider git branch (`mojo` or `master`). |
-| `SPIDER_GIT_REF` | `3e9b3621...` | Pinned commit SHA for reproducible builds. |
+| `SPIDER_GIT_REF` | `b9bc2369...` | Pinned commit SHA for reproducible builds (`v1.57 build 933`). |
 
 To build with a different DXSpider version:
 

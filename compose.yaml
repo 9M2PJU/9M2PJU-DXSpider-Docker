@@ -1,11 +1,11 @@
 # =============================================================================
-#  9M2PJU DXSpider Docker — Docker Compose configuration
+#  9M2PJU DXSpider Docker - Docker Compose configuration
 #
 #  Defines the main dxspider service and an optional MariaDB backend.
 #  All configuration is driven by the .env file (see .env.example).
 #
 #  Usage:
-#    docker compose up -d --build              # start cluster only
+#    docker compose up -d                      # start cluster only
 #    docker compose --profile with-db up -d    # start cluster + MariaDB
 # =============================================================================
 
@@ -47,10 +47,13 @@ services:
       - CHOWN        # chown on bind-mounted volumes (entrypoint step 1)
       - DAC_OVERRIDE # required for root to write into sysop-owned directories
       - FOWNER       # chmod on files not owned by root
-      - SETUID       # su-exec privilege drop (root → sysop)
-      - SETGID       # su-exec privilege drop (root → sysop)
+      - SETUID       # su-exec privilege drop (root -> sysop)
+      - SETGID       # su-exec privilege drop (root -> sysop)
     security_opt:
       - no-new-privileges:true   # prevent any privilege escalation
+
+    # Give cluster.pl plenty of time to flush SQLite (dxusers.db) on stop
+    stop_grace_period: 30s
 
     # --- Environment variables (passed to entrypoint.sh) ---
     # Values are interpolated from .env at compose-up time.
@@ -82,6 +85,7 @@ services:
       - CLUSTER_DBPASS=${CLUSTER_DB_PASS:-}
       - CLUSTER_DB_HOSTNAME=${CLUSTER_DB_HOSTNAME:-}
       # --- Web Console (ttyd HTTP basic auth) ---
+      - ENABLE_WEB_CONSOLE=${ENABLE_WEB_CONSOLE:-yes}
       - WEB_USER=${WEB_USER:-sysop}
       - WEB_PASS=${WEB_PASS:-sysoppassword}
 
@@ -105,27 +109,23 @@ services:
 
     restart: always
 
-    # --- Bind-mounted volumes (persistent across rebuilds) ---
-    # These host directories are mounted into the container, overriding
-    # the default files COPY'd into the image at build time. This means
-    # rebuilding the image does NOT change your configuration — the host
-    # files always take precedence. See README "Persistence" section.
+    # --- Bind-mounted directories (persistent across rebuilds & upgrades) ---
+    # All runtime data and user-edited configs live in directory bind mounts
+    # (never shadowing upstream /spider/cmd). On first run, entrypoint.sh seeds
+    # local_cmd/crontab, local_cmd/startup, local_data/motd, and
+    # local_data/motd_nor from /spider/defaults if they do not yet exist.
     volumes:
-      - ./startup:/spider/scripts/startup:rw       # Boot-time commands
-      - ./local_cmd:/spider/local_cmd:rw           # Cron schedule + local command overrides
+      - ./local_data:/spider/local_data:rw         # CRITICAL: user DB, spots, logs, motd, motd_nor
+      - ./local_cmd:/spider/local_cmd:rw           # Cron schedule (crontab), startup, custom cmds
       - ./connect:/spider/connect:rw               # Partner node connection scripts
-      - ./motd:/spider/local_data/motd:rw          # Message of the day (registered users)
-      - ./motd_nor:/spider/local_data/motd_nor:rw  # Message of the day (non-registered users)
-      - ./local_data:/spider/local_data:rw         # CRITICAL: user DB, spots, logs, state
-      - ./cmd:/spider/cmd:rw                       # Custom user commands
       - ./msg:/spider/msg:rw                       # Bulletins and private messages
 
     # --- Port mappings (host:container) ---
-    # Both ports use the same CLUSTER_* variable for host and container,
-    # so changing the port in .env updates both sides consistently.
+    # Web Console binds to 127.0.0.1 by default for security (use SSH tunnel or
+    # HTTPS reverse proxy, or set WEB_BIND_ADDRESS=0.0.0.0 in .env if needed).
     ports:
-      - "${CLUSTER_PORT:-7300}:${CLUSTER_PORT:-7300}"            # Telnet (user-facing)
-      - "${CLUSTER_SYSOP_PORT:-8080}:${CLUSTER_SYSOP_PORT:-8080}" # Web Console (ttyd)
+      - "${CLUSTER_PORT:-7300}:${CLUSTER_PORT:-7300}"                                          # Telnet (user-facing)
+      - "${WEB_BIND_ADDRESS:-127.0.0.1}:${CLUSTER_SYSOP_PORT:-8080}:${CLUSTER_SYSOP_PORT:-8080}" # Web Console (ttyd)
     expose:
       - "${CLUSTER_PORT:-7300}"
       - "${CLUSTER_SYSOP_PORT:-8080}"
@@ -157,7 +157,7 @@ services:
       - MARIADB_PASSWORD=${CLUSTER_DB_PASS:-sysoppassword}
     volumes:
       - db_data:/var/lib/mysql
-    # Only exposed internally (not published to the host) — the dxspider
+    # Only exposed internally (not published to the host); the dxspider
     # container accesses it via the Docker network using hostname "db".
     expose:
       - "3306"

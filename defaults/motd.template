@@ -1,0 +1,15 @@
+================================================================================
+  Welcome to {{CLUSTER_CALLSIGN}} DXSpider Cluster Node
+  QTH: {{CLUSTER_QTH}}
+================================================================================
+
+  NOTICE: Registration is required to post DX spots on this node.
+  To register your callsign, contact the sysop at: {{CLUSTER_SYSOP_EMAIL}}
+
+  Guidelines:
+  - Post verified, accurate DX spots only.
+  - Avoid flood-spamming to keep the cluster network clean and stable.
+  - Type 'help' for available commands or 'sh/dx' for recent spots.
+
+  73 and Good DX!
+================================================================================

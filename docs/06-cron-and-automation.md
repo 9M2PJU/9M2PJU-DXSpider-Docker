@@ -6,13 +6,13 @@ DXSpider has a built-in cron scheduler that runs tasks on a schedule. Combined w
 
 ## The Startup File
 
-The `startup` file (on your host) contains DXSpider commands that run **once** when the cluster starts. It's bind-mounted into the container at `/spider/scripts/startup`.
+The `local_cmd/startup` file (on your host) contains DXSpider commands that run **once** when the cluster starts. On first boot, `entrypoint.sh` seeds it from `defaults/startup.example` if missing and symlinks `/spider/scripts/startup` inside the container to `/spider/local_cmd/startup`.
 
 ### Location
 
 ```
-./startup                    # On the host
-/spider/scripts/startup      # Inside the container
+./local_cmd/startup          # On the host
+/spider/scripts/startup      # Symlinked inside the container -> /spider/local_cmd/startup
 ```
 
 ### Example
@@ -95,8 +95,8 @@ Use `*` for "every", and comma-separated lists (e.g., `0,10,20,30,40,50`).
 0,10,20,30,40,50 * * * * start_connect('gb7mbc') unless connected('gb7mbc')
 
 # --- Bad IP / bad word list updates ---
-# Fetch updated lists from EA3CV's repo every hour
-30 * * * * spawn('cd /spider/local_data; wget -qN https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/badip.global')
+# Fetch updated lists atomically from EA3CV's repo every hour
+30 * * * * spawn('cd /spider/local_data && wget -q -T 20 -O badip.global.tmp https://raw.githubusercontent.com/EA3CV/dxspider_info/main/download/badip.global && mv badip.global.tmp badip.global')
 32 * * * * run_cmd('load/badip')
 
 # --- Maintenance ---
@@ -142,7 +142,9 @@ This project ships with default cron entries that:
 
 3. **Load the updated lists** into DXSpider 2 minutes after download.
 
-These protect your node from known abusers and are fetched using `raw.githubusercontent.com` (not the HTML `github.com/.../blob/...` URLs, which would download HTML instead of data).
+4. **Clean old debug logs** daily at 00:05 (`DXDebug::dbgclean()`) so disk space does not fill up over time.
+
+These protect your node from known abusers and are fetched atomically (via `.tmp` + `mv`) using `raw.githubusercontent.com` (not the HTML `github.com/.../blob/...` URLs, which would download HTML instead of data).
 
 ---
 
@@ -176,14 +178,15 @@ In `local_cmd/crontab`:
 0,10,20,30,40,50 * * * * start_connect('k1ttt') unless connected('k1ttt')
 ```
 
-### Daily User Database Backup
+### Daily User Database Export
 
 In `local_cmd/crontab`:
 ```bash
-# Backup user database daily at 02:00
+# Export user database daily at 02:00 (safe while cluster is running)
 0 2 * * * DXUser::export("$main::data/user_asc")
-0 2 * * * spawn('cp /spider/local_data/users.v3j /spider/local_data/users.v3j.bak')
 ```
+
+*(For full SQLite `dxusers.db` backups, stop the container cleanly first or run `./upgrade.sh`.)*
 
 ### Periodic Announcements
 
@@ -207,7 +210,7 @@ In `local_cmd/crontab`:
 
 You can set DXSpider internal variables at startup or via cron:
 
-In the `startup` file:
+In `local_cmd/startup`:
 ```
 set/var $Internet::allow = 1
 set/var $main::reqreg = 1

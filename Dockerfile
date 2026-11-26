@@ -1,9 +1,9 @@
 # =============================================================================
-#  9M2PJU DXSpider Docker — Alpine-based DX Cluster container
-#  Image version: 2.7.0-9M2PJU
+#  9M2PJU DXSpider Docker - Alpine-based DX Cluster container
+#  Image version: 2.8.0-9M2PJU
 #
 #  Packages DXSpider (https://github.com/EA3CV/dxspider) in a hardened
-#  Alpine container with a ttyd web console for remote administration.
+#  Alpine container with an optional ttyd web console for remote administration.
 #  The cluster runs as a non-root sysop user; root is only used during
 #  entrypoint to fix bind-mount permissions.
 # =============================================================================
@@ -28,7 +28,7 @@ LABEL org.opencontainers.image.title="9M2PJU DXSpider Docker" \
       org.opencontainers.image.authors="9M2PJU" \
       org.opencontainers.image.source="https://github.com/9M2PJU/9M2PJU-DXSpider-Docker" \
       org.opencontainers.image.licenses="GPL-3.0" \
-      org.opencontainers.image.version="2.7.0" \
+      org.opencontainers.image.version="2.8.0" \
       org.opencontainers.image.url="https://hamradio.my"
 
 # --- Persist build args as runtime env (consumed by entrypoint.sh) ---
@@ -46,6 +46,7 @@ ENV CLUSTER_QTH="DXSpider Node"
 ENV CLUSTER_LOCATOR=JO01aa
 ENV CLUSTER_PORT=7300
 ENV CLUSTER_SYSOP_PORT=8080
+ENV ENABLE_WEB_CONSOLE=yes
 # Set to "yes" at runtime to force-regenerate DXVars.pm and Listeners.pm
 ENV OVERWRITE_CONFIG=no
 
@@ -65,7 +66,7 @@ RUN apk add --no-cache \
     tini \
     su-exec \
     # --- Perl runtime modules (from Alpine packages, no CPAN needed) ---
-    # NOTE: perl-db_file is installed separately below — it is not packaged
+    # NOTE: perl-db_file is installed separately below because it is not packaged
     # for all architectures (e.g., linux/386, ppc64le, s390x).
     perl-digest-sha1 \
     perl-io-socket-ssl \
@@ -78,9 +79,9 @@ RUN apk add --no-cache \
     perl-math-round \
     perl-json \
     # --- Database drivers ---
-    # perl-dbd-mysql  → optional MariaDB backend for spot logging
-    # perl-dbd-sqlite → required for the user database (DXUser.pm) even
-    #                   in flat-file mode (default storage)
+    # perl-dbd-mysql  -> optional MariaDB backend for spot logging
+    # perl-dbd-sqlite -> required for the user database (DXUser.pm) even
+    #                    in flat-file mode (default storage)
     perl-dbd-mysql \
     perl-dbd-sqlite \
     perl-dbi \
@@ -131,15 +132,13 @@ RUN apk add --no-cache \
     # --- Create the non-root sysop user ---
     && adduser -D -u ${SPIDER_UID} -h ${SPIDER_INSTALL_DIR} ${SPIDER_USERNAME} \
     # --- Clone DXSpider at the pinned commit ---
-    # --no-checkout avoids checking out the default branch tip before
-    # we pin to the specific SHA via git checkout.
     && git config --global --add safe.directory ${SPIDER_INSTALL_DIR} \
     && git clone --no-checkout -b ${SPIDER_VERSION} https://github.com/EA3CV/dxspider ${SPIDER_INSTALL_DIR} \
     && cd ${SPIDER_INSTALL_DIR} \
     && git checkout ${SPIDER_GIT_REF} \
     && git rev-parse --short HEAD > ${SPIDER_INSTALL_DIR}/.version \
     # --- Create runtime directories ---
-    && mkdir -p ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_cmd ${SPIDER_INSTALL_DIR}/local_data \
+    && mkdir -p ${SPIDER_INSTALL_DIR}/local ${SPIDER_INSTALL_DIR}/local_cmd ${SPIDER_INSTALL_DIR}/local_data ${SPIDER_INSTALL_DIR}/defaults \
     # --- Set ownership and permissions ---
     # 2775 = setgid on directories (new files inherit group=sysop)
     # 775  = rwxrwxr-x on .pl scripts (sysop group can edit)
@@ -151,20 +150,14 @@ RUN apk add --no-cache \
     && rm -rf /root/.cpanm /var/cache/apk/*
 
 # =============================================================================
-#  Layer 2: Copy default configuration files into the image
+#  Layer 2: Copy starter templates & entrypoint into the image
 #
-#  These are FALLBACK DEFAULTS only. When running via docker compose (or
-#  docker run with -v bind mounts), the host files override these copies
-#  at runtime. This means:
-#    - Rebuilding the image does NOT change your configuration
-#    - Your host files (connect/, local_cmd/, startup, motd, etc.) are
-#      always the source of truth
-#    - These COPYs only matter for standalone `docker run` without mounts
+#  entrypoint.sh seeds local_cmd/crontab, local_cmd/startup, local_data/motd,
+#  and local_data/motd_nor from /spider/defaults on first boot if they do not
+#  already exist, never overwriting user-customized host files.
 # =============================================================================
 COPY ./connect ${SPIDER_INSTALL_DIR}/connect/
-COPY motd ${SPIDER_INSTALL_DIR}/data/
-COPY startup ${SPIDER_INSTALL_DIR}/scripts/
-COPY local_cmd/crontab ${SPIDER_INSTALL_DIR}/local_cmd/crontab
+COPY ./defaults ${SPIDER_INSTALL_DIR}/defaults/
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

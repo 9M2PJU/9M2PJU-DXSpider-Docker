@@ -122,18 +122,18 @@ You'll be prompted for your callsign:
 ```
 login: YOURCALL
 Hello YOURCALL, this is YOURCALL-2 in Your City, Country
-running DXSpider V1.57 build 686
+running DXSpider V1.57 build 933
 ```
 
 ### Web Console (Port 8080)
 
-Open a browser and go to:
+Open a browser on the host (or via an SSH tunnel) and go to:
 
 ```
-http://localhost:8080
+http://127.0.0.1:8080
 ```
 
-Enter the `WEB_USER` and `WEB_PASS` you set in `.env`. You'll get a web-based terminal connected to the DXSpider console - perfect for administration without SSH.
+Enter the `WEB_USER` and `WEB_PASS` you set in `.env` (or the auto-generated password printed by `install.sh`). By default, port `8080` binds to `127.0.0.1` for security; see [Security](08-security.md) for SSH tunneling or setting `WEB_BIND_ADDRESS`.
 
 > [!WARNING]
 > A standalone DXSpider node **will not receive any DX spots** on its own! To get spots flowing, you must connect your node to a partner node on the DX Cluster network. You will need to find a partner to connect to. See [Connecting to Partners](03-connecting-to-partners.md) for instructions.
@@ -182,24 +182,23 @@ The spot will be propagated to all connected nodes within seconds.
 
 ---
 
-## Stopping and Restarting
+## Stopping, Restarting, and Upgrading
 
 ```bash
-# Stop the cluster
-docker compose down
+# Stop the cluster gracefully (flushes SQLite user database)
+docker compose stop dxspider
 
 # Start it again (no rebuild needed)
 docker compose up -d
 
-# Update to the latest pre-built image
-docker compose pull
-docker compose up -d
+# Safely upgrade to the latest release (pulls, backs up, recreates, verifies)
+./upgrade.sh
 
 # Rebuild locally after custom modifications
-docker compose up -d --build
+./upgrade.sh --build
 ```
 
-Your data is safe - all user databases, spots, logs, and configuration are stored on the host filesystem, not inside the container. See [Persistence & Bind Mounts](../README.md#persistence--bind-mounts).
+Your data is safe - all user databases, spots, logs, and configuration are stored on the host filesystem, not inside the container. See [Persistence & Bind Mounts](../README.md#persistence--bind-mounts) and [Upgrading](../README.md#upgrading).
 
 ---
 

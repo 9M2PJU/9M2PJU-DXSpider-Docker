@@ -1,19 +1,17 @@
 #!/bin/bash
 # =============================================================================
-#  9M2PJU DXSpider Docker — Container Entrypoint
+#  9M2PJU DXSpider Docker - Container Entrypoint
 #
 #  Responsibilities (in order):
 #    1. Fix ownership of bind-mounted volumes (runs as root)
-#    2. Symlink internal data dirs to persistent local_data
+#    2. Symlink internal data dirs & seed default configs if missing
 #    3. Generate Listeners.pm (telnet listen address/port)
-#    4. Generate DXVars.pm (cluster identity, location, optional DB)
+#    4. Generate DXVars.pm safely via Perl (cluster identity, location, optional DB)
 #    5. Clean stale lock files from previous runs
-#    6. Create/update the sysop user in the DXSpider user database
+#    6. Initialize the sysop user DB ONLY on first boot (never overwrite existing DB)
 #    7. Start cluster.pl as the sysop user (via su-exec)
-#    8. Start the ttyd web console (drops to sysop UID for console.pl)
-#    9. Wait for children and forward signals for graceful shutdown
-#
-#  set -euo pipefail: fail on errors, undefined vars, and pipe failures
+#    8. Optionally start the ttyd web console (drops to sysop UID for console.pl)
+#    9. Supervise children (wait -n) and forward SIGTERM/SIGINT for clean flush
 # =============================================================================
 set -euo pipefail
 
@@ -22,48 +20,134 @@ SPIDER_INSTALL_DIR=${SPIDER_INSTALL_DIR:-/spider}
 SPIDER_USERNAME=${SPIDER_USERNAME:-sysop}
 SPIDER_UID=${SPIDER_UID:-1000}
 SPIDER_GROUP=${SPIDER_USERNAME}
+OVERWRITE_CONFIG=${OVERWRITE_CONFIG:-no}
+ENABLE_WEB_CONSOLE=${ENABLE_WEB_CONSOLE:-yes}
+
+CLUSTER_PID=""
+TTYD_PID=""
+SHUTTING_DOWN=0
+
+# =============================================================================
+#  Signal handler: Graceful shutdown on SIGTERM / SIGINT
+#
+#  Docker sends SIGTERM on `docker stop`. We forward SIGTERM directly to
+#  cluster.pl and wait for it to finish flushing SQLite (dxusers.db) before
+#  exiting so user records are never corrupted or truncated.
+# =============================================================================
+cleanup() {
+    SHUTTING_DOWN=1
+    echo "Stopping DXSpider Cluster gracefully..."
+    if [ -n "${TTYD_PID}" ] && kill -0 "${TTYD_PID}" 2>/dev/null; then
+        kill -TERM "${TTYD_PID}" 2>/dev/null || true
+    fi
+    # Signal cluster.pl as SPIDER_USERNAME so SIGTERM works even with CAP_KILL dropped
+    if [ -n "${CLUSTER_PID}" ] && su-exec "${SPIDER_USERNAME}" kill -0 "${CLUSTER_PID}" 2>/dev/null; then
+        su-exec "${SPIDER_USERNAME}" kill -TERM "${CLUSTER_PID}" 2>/dev/null || true
+        wait "${CLUSTER_PID}" 2>/dev/null || true
+    fi
+    if [ -n "${TTYD_PID}" ]; then
+        wait "${TTYD_PID}" 2>/dev/null || true
+    fi
+    exit 0
+}
+trap cleanup SIGTERM SIGINT
+
+# =============================================================================
+#  Normalize cluster identity values early (used by MOTD templates and DXVars.pm)
+# =============================================================================
+CLUSTER_CALLSIGN=$(printf '%s' "${CLUSTER_CALLSIGN:-N0CALL-2}" | tr 'a-z' 'A-Z')
+CLUSTER_SYSOP_CALLSIGN=$(printf '%s' "${CLUSTER_SYSOP_CALLSIGN:-9M2PJU}" | tr 'a-z' 'A-Z')
+CLUSTER_SYSOP_NAME=${CLUSTER_SYSOP_NAME:-"DXSpider Sysop"}
+CLUSTER_QTH=${CLUSTER_QTH:-"DXSpider Node"}
+CLUSTER_LOCATOR=$(printf '%s' "${CLUSTER_LOCATOR:-JO01aa}" | tr 'a-z' 'A-Z')
+CLUSTER_LATITUDE=${CLUSTER_LATITUDE:-0}
+CLUSTER_LONGITUDE=${CLUSTER_LONGITUDE:-0}
+CLUSTER_SYSOP_EMAIL=${CLUSTER_SYSOP_EMAIL:-"9m2pju@hamradio.my"}
+CLUSTER_SYSOP_BBS_ADDRESS=${CLUSTER_SYSOP_BBS_ADDRESS:-"bbs@localhost"}
+
+# Web Console credentials: fall back to DB creds, then to 'sysop' defaults.
+# Preserves backward compatibility with older .env files.
+WEB_USER=${WEB_USER:-${CLUSTER_DBUSER:-sysop}}
+WEB_PASS=${WEB_PASS:-${CLUSTER_DBPASS:-sysoppassword}}
+
+# Export normalized values so Perl substitution blocks read them cleanly via %ENV
+export CLUSTER_CALLSIGN CLUSTER_SYSOP_CALLSIGN CLUSTER_SYSOP_NAME CLUSTER_QTH \
+       CLUSTER_LOCATOR CLUSTER_LATITUDE CLUSTER_LONGITUDE \
+       CLUSTER_SYSOP_EMAIL CLUSTER_SYSOP_BBS_ADDRESS \
+       CLUSTER_DB_HOSTNAME CLUSTER_DSN CLUSTER_DBUSER CLUSTER_DBPASS
 
 # =============================================================================
 #  Step 1: Fix permissions on bind-mounted volumes
-#
-#  Bind mounts inherit the host's UID/GID, which may not match the sysop
-#  user inside the container. We chown them here (running as root) so
-#  the cluster can read/write its data after dropping privileges.
-#  Errors are non-fatal (e.g., read-only mounts).
 # =============================================================================
-chown -R ${SPIDER_USERNAME}:${SPIDER_GROUP} \
-    ${SPIDER_INSTALL_DIR}/local \
-    ${SPIDER_INSTALL_DIR}/local_data 2>/dev/null || true
+mkdir -p "${SPIDER_INSTALL_DIR}/local" \
+         "${SPIDER_INSTALL_DIR}/local_data" \
+         "${SPIDER_INSTALL_DIR}/local_cmd"
+
+chown -R "${SPIDER_USERNAME}:${SPIDER_GROUP}" \
+    "${SPIDER_INSTALL_DIR}/local" \
+    "${SPIDER_INSTALL_DIR}/local_data" \
+    "${SPIDER_INSTALL_DIR}/local_cmd" 2>/dev/null || true
 
 # =============================================================================
-#  Step 2: Symlink internal data dirs to persistent local_data
-#
-#  DXSpider writes logs, spots, and debug data to /spider/data/{log,spots,debug}.
-#  We redirect these to /spider/local_data/{log,spots,debug} (which is a
-#  bind-mounted volume) so the data survives container recreation.
-#  If the internal dir already has content (first run), copy it out first.
+#  Step 2: Symlink internal data dirs & seed default config files if missing
 # =============================================================================
 for dir in log spots debug; do
-    mkdir -p ${SPIDER_INSTALL_DIR}/local_data/${dir}
-    # If the internal data dir is a real directory (not yet a symlink),
-    # copy its contents to local_data before replacing it with a symlink
-    if [ -d ${SPIDER_INSTALL_DIR}/data/${dir} ] && [ ! -L ${SPIDER_INSTALL_DIR}/data/${dir} ]; then
-        cp -an ${SPIDER_INSTALL_DIR}/data/${dir}/. ${SPIDER_INSTALL_DIR}/local_data/${dir}/ 2>/dev/null || true
-        rm -rf ${SPIDER_INSTALL_DIR}/data/${dir}
+    mkdir -p "${SPIDER_INSTALL_DIR}/local_data/${dir}"
+    if [ -d "${SPIDER_INSTALL_DIR}/data/${dir}" ] && [ ! -L "${SPIDER_INSTALL_DIR}/data/${dir}" ]; then
+        cp -an "${SPIDER_INSTALL_DIR}/data/${dir}/." "${SPIDER_INSTALL_DIR}/local_data/${dir}/" 2>/dev/null || true
+        rm -rf "${SPIDER_INSTALL_DIR}/data/${dir}"
     fi
-    # Create the symlink: /spider/data/<dir> → /spider/local_data/<dir>
-    ln -sf ${SPIDER_INSTALL_DIR}/local_data/${dir} ${SPIDER_INSTALL_DIR}/data/${dir}
-    chown -R ${SPIDER_USERNAME}:${SPIDER_GROUP} ${SPIDER_INSTALL_DIR}/local_data/${dir}
+    ln -sf "${SPIDER_INSTALL_DIR}/local_data/${dir}" "${SPIDER_INSTALL_DIR}/data/${dir}"
+    chown -R "${SPIDER_USERNAME}:${SPIDER_GROUP}" "${SPIDER_INSTALL_DIR}/local_data/${dir}" 2>/dev/null || true
 done
+
+# Seed local_cmd/crontab on first run if absent
+if [ ! -f "${SPIDER_INSTALL_DIR}/local_cmd/crontab" ] && [ -f "${SPIDER_INSTALL_DIR}/defaults/crontab.example" ]; then
+    echo "Seeding default local_cmd/crontab..."
+    cp "${SPIDER_INSTALL_DIR}/defaults/crontab.example" "${SPIDER_INSTALL_DIR}/local_cmd/crontab"
+    chown "${SPIDER_USERNAME}:${SPIDER_GROUP}" "${SPIDER_INSTALL_DIR}/local_cmd/crontab" 2>/dev/null || true
+fi
+
+# Seed local_cmd/startup on first run if absent, and link /spider/scripts/startup to it
+# (unless /spider/scripts/startup was directly bind-mounted by the user)
+if ! mountpoint -q "${SPIDER_INSTALL_DIR}/scripts/startup" 2>/dev/null; then
+    if [ ! -f "${SPIDER_INSTALL_DIR}/local_cmd/startup" ] && [ -f "${SPIDER_INSTALL_DIR}/defaults/startup.example" ]; then
+        echo "Seeding default local_cmd/startup..."
+        cp "${SPIDER_INSTALL_DIR}/defaults/startup.example" "${SPIDER_INSTALL_DIR}/local_cmd/startup"
+        chown "${SPIDER_USERNAME}:${SPIDER_GROUP}" "${SPIDER_INSTALL_DIR}/local_cmd/startup" 2>/dev/null || true
+    fi
+    if [ -f "${SPIDER_INSTALL_DIR}/local_cmd/startup" ]; then
+        ln -sf "${SPIDER_INSTALL_DIR}/local_cmd/startup" "${SPIDER_INSTALL_DIR}/scripts/startup"
+    fi
+fi
+
+# Render default MOTD files into local_data/ on first run if absent
+render_template() {
+    local src="$1"
+    local dst="$2"
+    perl -pe '
+        s/\{\{CLUSTER_CALLSIGN\}\}/$ENV{CLUSTER_CALLSIGN}/ge;
+        s/\{\{CLUSTER_QTH\}\}/$ENV{CLUSTER_QTH}/ge;
+        s/\{\{CLUSTER_SYSOP_EMAIL\}\}/$ENV{CLUSTER_SYSOP_EMAIL}/ge;
+    ' "$src" > "$dst"
+    chown "${SPIDER_USERNAME}:${SPIDER_GROUP}" "$dst" 2>/dev/null || true
+}
+
+if [ ! -f "${SPIDER_INSTALL_DIR}/local_data/motd" ] && [ -f "${SPIDER_INSTALL_DIR}/defaults/motd.template" ]; then
+    echo "Seeding default local_data/motd for ${CLUSTER_CALLSIGN}..."
+    render_template "${SPIDER_INSTALL_DIR}/defaults/motd.template" "${SPIDER_INSTALL_DIR}/local_data/motd"
+fi
+
+if [ ! -f "${SPIDER_INSTALL_DIR}/local_data/motd_nor" ] && [ -f "${SPIDER_INSTALL_DIR}/defaults/motd_nor.template" ]; then
+    echo "Seeding default local_data/motd_nor for ${CLUSTER_CALLSIGN}..."
+    render_template "${SPIDER_INSTALL_DIR}/defaults/motd_nor.template" "${SPIDER_INSTALL_DIR}/local_data/motd_nor"
+fi
 
 # =============================================================================
 #  Step 3: Generate Listeners.pm (telnet listen configuration)
-#
-#  Only generated if missing, unless OVERWRITE_CONFIG=yes forces regeneration.
-#  This tells DXSpider which address/port to listen on for user telnet.
 # =============================================================================
-if [ ! -f ${SPIDER_INSTALL_DIR}/local/Listeners.pm ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
-cat << EOF > ${SPIDER_INSTALL_DIR}/local/Listeners.pm
+if [ ! -f "${SPIDER_INSTALL_DIR}/local/Listeners.pm" ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
+cat << EOF > "${SPIDER_INSTALL_DIR}/local/Listeners.pm"
 package main;
 use vars qw(@listen);
 @listen = (
@@ -74,77 +158,65 @@ EOF
 fi
 
 # =============================================================================
-#  Step 4 (signal handler): Graceful shutdown on SIGTERM / SIGINT
+#  Step 4: Generate DXVars.pm safely from upstream template via Perl
 #
-#  Docker sends SIGTERM on `docker stop`. We kill both the cluster and
-#  the web console so the container exits cleanly.
+#  Using Perl with %ENV avoids sed delimiter/escaping bugs when values
+#  contain '/', '&', '$', '@', '"', or '\'.
 # =============================================================================
-function cleanup() {
-    echo "Stopping DXSpider Cluster..."
-    pkill -f "cluster.pl" 2>/dev/null || true
-    pkill -f "ttyd" 2>/dev/null || true
-    exit 0
-}
-trap cleanup SIGTERM SIGINT
+if [ ! -f "${SPIDER_INSTALL_DIR}/local/DXVars.pm" ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
+    perl -e '
+        use strict;
+        use warnings;
 
-# =============================================================================
-#  Step 5: Normalize cluster identity values
-#
-#  Callsigns and grid locators must be uppercase for DXSpider.
-#  Email/BBS addresses need @ escaped for Perl string literals.
-#  All values fall back to upstream DXSpider defaults if unset.
-# =============================================================================
-CLUSTER_CALLSIGN=$(echo "${CLUSTER_CALLSIGN:-N0CALL-2}" | tr 'a-z' 'A-Z')
-CLUSTER_SYSOP_CALLSIGN=$(echo "${CLUSTER_SYSOP_CALLSIGN:-9M2PJU}" | tr 'a-z' 'A-Z')
-CLUSTER_SYSOP_NAME=${CLUSTER_SYSOP_NAME:-"DXSpider Sysop"}
-CLUSTER_QTH=${CLUSTER_QTH:-"DXSpider Node"}
-CLUSTER_LOCATOR=$(echo "${CLUSTER_LOCATOR:-JO01aa}" | tr 'a-z' 'A-Z')
-CLUSTER_SYSOP_EMAIL=$(echo "${CLUSTER_SYSOP_EMAIL:-9m2pju@hamradio.my}" | sed 's/@/\\@/g')
-CLUSTER_SYSOP_BBS_ADDRESS=$(echo "${CLUSTER_SYSOP_BBS_ADDRESS:-bbs@localhost}" | sed 's/@/\\@/g')
+        sub q_perl {
+            my ($v) = @_;
+            $v = "" unless defined $v;
+            $v =~ s/([\\"\$\@])/\\$1/g;
+            return qq{"$v"};
+        }
 
-# Web Console credentials: fall back to DB creds, then to 'sysop' defaults.
-# This preserves backward compatibility with older .env files.
-WEB_USER=${WEB_USER:-${CLUSTER_DBUSER:-sysop}}
-WEB_PASS=${WEB_PASS:-${CLUSTER_DBPASS:-sysoppassword}}
+        my %vars = (
+            mycall      => $ENV{CLUSTER_CALLSIGN},
+            myname      => $ENV{CLUSTER_SYSOP_NAME},
+            myalias     => $ENV{CLUSTER_SYSOP_CALLSIGN},
+            mylatitude  => $ENV{CLUSTER_LATITUDE},
+            mylongitude => $ENV{CLUSTER_LONGITUDE},
+            myqth       => $ENV{CLUSTER_QTH},
+            mylocator   => $ENV{CLUSTER_LOCATOR},
+            myemail     => $ENV{CLUSTER_SYSOP_EMAIL},
+            mybbsaddr   => $ENV{CLUSTER_SYSOP_BBS_ADDRESS},
+        );
 
-# =============================================================================
-#  Step 6: Generate DXVars.pm from the upstream template
-#
-#  We sed the upstream DXVars.pm.issue template, substituting our env values
-#  into the Perl variable assignments. Only generated if missing, unless
-#  OVERWRITE_CONFIG=yes.
-# =============================================================================
-if [ ! -f ${SPIDER_INSTALL_DIR}/local/DXVars.pm ] || [ "${OVERWRITE_CONFIG}" = "yes" ]; then
-    # Substitute identity, location, and contact fields
-    sed -e "s/\(\$mycall[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_CALLSIGN}\";/" \
-        -e "s/\(\$myname[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_SYSOP_NAME}\";/" \
-        -e "s/\(\$myalias[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_SYSOP_CALLSIGN}\";/" \
-        -e "s/\(\$mylatitude[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_LATITUDE:-0}\";/" \
-        -e "s/\(\$mylongitude[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_LONGITUDE:-0}\";/" \
-        -e "s/\(\$myqth[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_QTH}\";/" \
-        -e "s/\(\$mylocator[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_LOCATOR}\";/" \
-        -e "s/\(\$myemail[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_SYSOP_EMAIL}\";/" \
-        -e "s/\(\$mybbsaddr[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_SYSOP_BBS_ADDRESS}\";/" \
-        < ${SPIDER_INSTALL_DIR}/perl/DXVars.pm.issue > ${SPIDER_INSTALL_DIR}/local/DXVars.pm
+        my $db_enabled = defined($ENV{CLUSTER_DB_HOSTNAME}) && length($ENV{CLUSTER_DB_HOSTNAME}) > 0;
+        my %db_vars = (
+            dsn    => $ENV{CLUSTER_DSN},
+            dbuser => $ENV{CLUSTER_DBUSER},
+            dbpass => $ENV{CLUSTER_DBPASS},
+        );
 
-    # Database backend: only enable when CLUSTER_DB_HOSTNAME is set.
-    # In the template, $dsn/$dbuser/$dbpass are commented out (#$dsn=...).
-    # We substitute the values and then uncomment those lines.
-    # When no DB host is configured, DXSpider uses flat-file (DB_File/SQLite)
-    # storage, which is the default and sufficient for most nodes.
+        while (my $line = <STDIN>) {
+            for my $k (keys %vars) {
+                if ($line =~ /^(\s*(?:our\s+)?\$\Q$k\E\s*=\s*).*$/) {
+                    $line = $1 . q_perl($vars{$k}) . ";\n";
+                    last;
+                }
+            }
+            if ($db_enabled) {
+                for my $k (keys %db_vars) {
+                    if ($line =~ /^#?(\s*(?:our\s+)?\$\Q$k\E\s*=\s*).*$/) {
+                        $line = $1 . q_perl($db_vars{$k}) . ";\n";
+                        last;
+                    }
+                }
+            }
+            print $line;
+        }
+    ' < "${SPIDER_INSTALL_DIR}/perl/DXVars.pm.issue" > "${SPIDER_INSTALL_DIR}/local/DXVars.pm"
+
     if [ -n "${CLUSTER_DB_HOSTNAME:-}" ]; then
         echo "Database backend enabled: ${CLUSTER_DB_HOSTNAME}"
-        sed -e "s/\(\#\$dsn[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_DSN}\";/" \
-            -e "s/\(\#\$dbuser[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_DBUSER}\";/" \
-            -e "s/\(\#\$dbpass[[:space:]]*=[[:space:]]*\).*$/\1\"${CLUSTER_DBPASS}\";/" \
-            -i ${SPIDER_INSTALL_DIR}/local/DXVars.pm
-        # Uncomment ONLY the exact #$dsn / #$dbuser / #$dbpass assignment lines
-        # (never touch prose comments mentioning $dsn, e.g. in newer DXVars.pm.issue)
-        sed -i "s/^#\(\\\$dsn\)/\1/" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
-        sed -i "s/^#\(\\\$dbuser\)/\1/" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
-        sed -i "s/^#\(\\\$dbpass\)/\1/" ${SPIDER_INSTALL_DIR}/local/DXVars.pm
     else
-        echo "Database backend disabled (CLUSTER_DB_HOSTNAME not set) — using flat-file storage."
+        echo "Database backend disabled (CLUSTER_DB_HOSTNAME not set) - using flat-file storage."
     fi
 fi
 
@@ -152,22 +224,19 @@ fi
 if ! grep -qE '^\s*our\s+\$userdsn\s*=' "${SPIDER_INSTALL_DIR}/local/DXVars.pm"; then
     perl -0pi -e 's/\n1;\s*\z/\nour \$userdsn = "dbi:SQLite:dbname=\$root\/local_data\/dxusers.db";\n\n1;\n/ or die "DXVars.pm: final 1; not found\n"' "${SPIDER_INSTALL_DIR}/local/DXVars.pm"
 fi
-chown ${SPIDER_USERNAME}:${SPIDER_GROUP} "${SPIDER_INSTALL_DIR}/local/DXVars.pm" "${SPIDER_INSTALL_DIR}/local/Listeners.pm" 2>/dev/null || true
+chown "${SPIDER_USERNAME}:${SPIDER_GROUP}" "${SPIDER_INSTALL_DIR}/local/DXVars.pm" "${SPIDER_INSTALL_DIR}/local/Listeners.pm" 2>/dev/null || true
 
 # =============================================================================
-#  Step 7: Clean stale lock files from previous (crashed) runs
-#
-#  DXSpider creates cluster.lck while running. If the container was killed
-#  ungracefully, the lock file may persist and block startup.
+#  Step 5: Clean stale lock files from previous (crashed) runs
 # =============================================================================
-rm -f ${SPIDER_INSTALL_DIR}/local/cluster.lck 2>/dev/null || true
-rm -f ${SPIDER_INSTALL_DIR}/local_data/cluster.lck 2>/dev/null || true
+rm -f "${SPIDER_INSTALL_DIR}/local/cluster.lck" 2>/dev/null || true
+rm -f "${SPIDER_INSTALL_DIR}/local_data/cluster.lck" 2>/dev/null || true
 
 # Switch to the Perl directory (DXSpider expects to run from here)
-cd ${SPIDER_INSTALL_DIR}/perl
+cd "${SPIDER_INSTALL_DIR}/perl"
 
 # =============================================================================
-#  Step 8: Initialize the sysop user database ONLY on first boot
+#  Step 6: Initialize the sysop user database ONLY on first boot
 #
 #  Never invoke create_sysop.pl on updates/restarts when an existing user DB
 #  is present: upstream create_sysop.pl deletes and recreates $mycall/$myalias
@@ -179,53 +248,69 @@ if [ ! -f "${SPIDER_INSTALL_DIR}/local_data/dxusers.db" ] && \
    [ ! -f "${SPIDER_INSTALL_DIR}/local_data/users.v3" ] && \
    [ ! -f "${SPIDER_INSTALL_DIR}/local_data/users.v2" ]; then
     echo "Initializing new DXSpider user database..."
-    su-exec ${SPIDER_USERNAME} ./create_sysop.pl
+    su-exec "${SPIDER_USERNAME}" ./create_sysop.pl
 else
     echo "Existing DXSpider user database found; skipping create_sysop.pl."
 fi
 
 # =============================================================================
-#  Step 9: Start the DXSpider cluster daemon
-#
-#  cluster.pl is the main listener — it accepts telnet connections on
-#  CLUSTER_PORT and handles all DX spot/announce/routing logic.
-#  Runs in the background as the sysop user via su-exec.
+#  Step 7: Start the DXSpider cluster daemon
 # =============================================================================
 echo "Starting DXSpider Cluster..."
-su-exec ${SPIDER_USERNAME} ./cluster.pl &
+su-exec "${SPIDER_USERNAME}" ./cluster.pl &
+CLUSTER_PID=$!
 
-# Wait briefly and verify the cluster process is alive.
-# If it crashed (e.g., missing Perl module), exit with an error so
-# Docker's restart policy can handle it.
+# Verify the cluster process stayed alive after initial boot
+# Check as SPIDER_USERNAME because CAP_KILL is dropped under cap_drop: ALL
 sleep 5
-if ! pgrep -f "cluster.pl" > /dev/null; then
-    echo "FATAL: Cluster failed to start. Check your Perl dependencies." >&2
+if ! su-exec "${SPIDER_USERNAME}" kill -0 "${CLUSTER_PID}" 2>/dev/null; then
+    echo "FATAL: Cluster failed to start. Check your Perl dependencies and DXVars.pm." >&2
     exit 1
 fi
 
 # =============================================================================
-#  Step 10: Start the ttyd Web Console
-#
-#  ttyd provides a browser-based terminal connected to DXSpider's console.pl.
-#  -p   : listen port (CLUSTER_SYSOP_PORT, default 8080)
-#  -u   : drop to SPIDER_UID for the spawned console.pl process
-#  -t   : terminal font size
-#  -W   : allow write access (needed for interactive console)
-#  -c   : HTTP basic auth credentials (user:pass)
-#
-#  ttyd itself runs as root (to bind the port), but the child console.pl
-#  process runs as the sysop user via the -u flag.
+#  Step 8: Optionally start the ttyd Web Console
 # =============================================================================
-echo "Starting Web Console on port ${CLUSTER_SYSOP_PORT:-8080}..."
-ttyd -p ${CLUSTER_SYSOP_PORT:-8080} -u ${SPIDER_UID} -t fontSize=16 -W \
-    -c "${WEB_USER}:${WEB_PASS}" \
-    perl ${SPIDER_INSTALL_DIR}/perl/console.pl &
+case "$(printf '%s' "${ENABLE_WEB_CONSOLE}" | tr 'A-Z' 'a-z')" in
+    yes|true|1|on)
+        echo "Starting Web Console on port ${CLUSTER_SYSOP_PORT:-8080}..."
+        ttyd -p "${CLUSTER_SYSOP_PORT:-8080}" -u "${SPIDER_UID}" -t fontSize=16 -W \
+            -c "${WEB_USER}:${WEB_PASS}" \
+            perl "${SPIDER_INSTALL_DIR}/perl/console.pl" &
+        TTYD_PID=$!
+        ;;
+    *)
+        echo "Web Console disabled (ENABLE_WEB_CONSOLE=${ENABLE_WEB_CONSOLE})."
+        ;;
+esac
 
 # =============================================================================
-#  Step 11: Wait for child processes
+#  Step 9: Supervise child processes
 #
-#  `wait` blocks until both background processes exit. When a signal arrives
-#  (SIGTERM/SIGINT), the trap fires cleanup(), which kills both children
-#  and exits cleanly.
+#  If cluster.pl (or ttyd) exits unexpectedly, tear down cleanly and return
+#  non-zero so Docker's restart policy automatically recovers the container.
 # =============================================================================
-wait
+set +e
+if [ -n "${TTYD_PID}" ]; then
+    wait -n "${CLUSTER_PID}" "${TTYD_PID}"
+    EXIT_CODE=$?
+else
+    wait "${CLUSTER_PID}"
+    EXIT_CODE=$?
+fi
+set -e
+
+if [ "${SHUTTING_DOWN}" -eq 1 ]; then
+    exit 0
+fi
+
+echo "A managed process exited unexpectedly (code ${EXIT_CODE}); shutting down container..." >&2
+if [ -n "${TTYD_PID}" ] && kill -0 "${TTYD_PID}" 2>/dev/null; then
+    kill -TERM "${TTYD_PID}" 2>/dev/null || true
+    wait "${TTYD_PID}" 2>/dev/null || true
+fi
+if [ -n "${CLUSTER_PID}" ] && su-exec "${SPIDER_USERNAME}" kill -0 "${CLUSTER_PID}" 2>/dev/null; then
+    su-exec "${SPIDER_USERNAME}" kill -TERM "${CLUSTER_PID}" 2>/dev/null || true
+    wait "${CLUSTER_PID}" 2>/dev/null || true
+fi
+exit "${EXIT_CODE:-1}"

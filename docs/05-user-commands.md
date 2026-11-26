@@ -492,4 +492,4 @@ DXSpider supports command aliases. Common abbreviations:
 | `c` | `connect` |
 | `d` | `directory` |
 
-You can create custom aliases in the `cmd/Aliases` file (sysop only). Reload with `load/aliases`.
+You can create custom aliases in `local_cmd/Aliases` on the host (sysop only). Reload with `load/aliases`.

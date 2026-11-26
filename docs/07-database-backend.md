@@ -72,20 +72,20 @@ Database backend disabled (CLUSTER_DB_HOSTNAME not set) - using flat-file storag
 
 ## How It Works
 
-When `CLUSTER_DB_HOSTNAME` is set, `entrypoint.sh`:
+When `CLUSTER_DB_HOSTNAME` is set:
 
-1. Waits up to 30 seconds for MariaDB to be ready (TCP probe on port 3306).
-2. Generates `DXVars.pm` with the DBI DSN pointing to MariaDB:
+1. Docker Compose's `depends_on` (`condition: service_healthy`) waits for MariaDB to initialize before starting `dxspider`.
+2. `entrypoint.sh` generates `DXVars.pm` with the DBI DSN pointing to MariaDB:
    ```perl
-   $dsn = "DBI:mysql:database=spider;host=db;port=3306";
+   $dsn = "dbi:mysql:spider:db:3306";
    $dbuser = "sysop";
    $dbpass = "choose-a-strong-password";
    ```
-3. DXSpider uses this DSN for all database operations.
+3. DXSpider uses this DSN for spot logging while continuing to store user records in `local_data/dxusers.db` (SQLite).
 
 When `CLUSTER_DB_HOSTNAME` is **not** set (or empty), `entrypoint.sh`:
-1. Skips database configuration entirely.
-2. DXSpider falls back to flat-file storage (DB_File + SQLite).
+1. Skips MariaDB configuration entirely.
+2. DXSpider uses flat-file + SQLite (`dxusers.db`) storage by default.
 
 ---
 
@@ -95,21 +95,22 @@ The MariaDB service in `compose.yaml`:
 
 ```yaml
 db:
-  image: mariadb:11
-  restart: unless-stopped
   profiles: ["with-db"]
+  image: mariadb:11
+  restart: always
   environment:
-    MYSQL_ROOT_PASSWORD: ${CLUSTER_DB_ROOT_PWD:-changeme-root}
-    MYSQL_DATABASE: ${CLUSTER_DB_NAME:-spider}
-    MYSQL_USER: ${CLUSTER_DB_USER:-sysop}
-    MYSQL_PASSWORD: ${CLUSTER_DB_PASS:-sysoppassword}
+    - MARIADB_ROOT_PASSWORD=${CLUSTER_DB_ROOT_PWD:-changeme-root}
+    - MARIADB_DATABASE=${CLUSTER_DB_NAME:-spider}
+    - MARIADB_USER=${CLUSTER_DB_USER:-sysop}
+    - MARIADB_PASSWORD=${CLUSTER_DB_PASS:-sysoppassword}
   volumes:
     - db_data:/var/lib/mysql
   healthcheck:
-    test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+    test: ["CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized"]
     interval: 10s
-    timeout: 5s
-    retries: 5
+    start_period: 30s
+    retries: 10
+    timeout: 10s
 ```
 
 - **Image**: MariaDB 11 (latest stable)

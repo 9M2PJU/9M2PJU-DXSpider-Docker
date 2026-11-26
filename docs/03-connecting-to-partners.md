@@ -117,7 +117,7 @@ docker compose exec dxspider sh -c '/spider/perl/connect gb7mbc'
 
 ### Automatic Connection (On Startup)
 
-Edit the `startup` file on your host:
+Edit `local_cmd/startup` on your host:
 
 ```bash
 load/forward

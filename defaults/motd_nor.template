@@ -1,0 +1,15 @@
+================================================================================
+  Welcome to {{CLUSTER_CALLSIGN}} DXSpider Cluster Node (GUEST / READ-ONLY)
+  QTH: {{CLUSTER_QTH}}
+================================================================================
+
+  Your callsign is not yet registered on this node.
+  You can view incoming DX spots, but posting spots is restricted to
+  registered operators to prevent spam.
+
+  To request registration, email the sysop with your callsign:
+    {{CLUSTER_SYSOP_EMAIL}}
+
+  Type 'sh/dx' to view recent spots or 'help' for available commands.
+  73 and Good DX!
+================================================================================

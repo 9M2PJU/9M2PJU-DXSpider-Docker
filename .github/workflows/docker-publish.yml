@@ -1,17 +1,16 @@
 # =============================================================================
-#  DXSpider Docker — CI/CD Pipeline
+#  DXSpider Docker - CI/CD Pipeline
 #
 #  Triggers on:
 #    - Push to main branch
 #    - Version tags (v*.*.*)
 #    - Pull requests to main
+#    - Monthly schedule (picks up Alpine security patches)
+#    - Manual workflow_dispatch
 #
 #  Jobs:
-#    1. test  → Build amd64 image, run it, verify port 7300 is listening
-#    2. build → Multi-arch build (amd64/arm64/arm/v7/arm/v6) & push to GHCR
-#
-#  The build job only runs if the test job passes, preventing broken
-#  images from being published.
+#    1. test  -> Build amd64 image and run end-to-end smoke + persistence tests
+#    2. build -> Multi-arch build & push to GHCR (only if test passes)
 # =============================================================================
 name: Docker Publish
 
@@ -21,18 +20,26 @@ on:
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+    # Rebuild on the 1st of every month at 04:00 UTC for Alpine security updates
+    - cron: '0 4 1 * *'
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
   # ===========================================================================
-  #  Job 1: Smoke Test
+  #  Job 1: Comprehensive Smoke Test
   #
-  #  Builds the image for amd64 only (fast), runs it, and verifies the
-  #  DXSpider cluster starts and listens on port 7300 within 30 seconds.
-  #  This catches regressions (missing Perl modules, broken entrypoint, etc.)
-  #  before publishing to GHCR.
+  #  Verifies:
+  #    1. Image builds and passes the 23-module Perl dependency check
+  #    2. Fresh boot generates valid DXVars.pm (even with special chars),
+  #       seeds default crontab/startup/motd/motd_nor, creates dxusers.db,
+  #       answers telnet on 7300 with sh/version, and enforces HTTP 401/200 on 8080
+  #    3. Graceful stop flushes cleanly with exit code 0
+  #    4. Upgrade/restart boot skips create_sysop.pl and preserves dxusers.db + custom MOTD
+  #    5. ENABLE_WEB_CONSOLE=no disables ttyd while cluster.pl still serves telnet
   # ===========================================================================
   test:
     runs-on: ubuntu-latest
@@ -45,7 +52,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Build for amd64 only (no QEMU needed) and load into local Docker
       - name: Build image (amd64, no push)
         uses: docker/build-push-action@v5
         with:
@@ -58,41 +64,163 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
-      # Run the container and poll port 7300 for up to 30 seconds.
-      # Uses minimal env vars — just enough for the cluster to boot.
-      - name: Smoke test — cluster listens on 7300
+      - name: End-to-end smoke, security, and upgrade persistence tests
         run: |
           set -euo pipefail
+
+          TEST_DIR="$(mktemp -d)"
+          chmod 755 "${TEST_DIR}"
+          mkdir -p "${TEST_DIR}/local_data" "${TEST_DIR}/local_cmd" "${TEST_DIR}/connect" "${TEST_DIR}/msg"
+          trap 'docker rm -f dxspider-smoke dxspider-smoke-nocons >/dev/null 2>&1 || true; rm -rf "${TEST_DIR}" 2>/dev/null || sudo rm -rf "${TEST_DIR}" 2>/dev/null || true' EXIT
+
+          echo "=== Test 1: Fresh boot with special characters in QTH & email ==="
           docker run -d --name dxspider-smoke \
-            -e CLUSTER_CALLSIGN=TESTNODE \
-            -e CLUSTER_SYSOP_CALLSIGN=TESTSYSOP \
+            --cap-drop ALL \
+            --cap-add CHOWN --cap-add DAC_OVERRIDE --cap-add FOWNER --cap-add SETUID --cap-add SETGID \
+            --security-opt no-new-privileges:true \
+            -e CLUSTER_CALLSIGN=N0TEST-2 \
+            -e CLUSTER_SYSOP_CALLSIGN=N0TEST \
             -e CLUSTER_LOCATOR=JO01AA \
+            -e 'CLUSTER_QTH=Kuala Lumpur / Region & Test' \
+            -e 'CLUSTER_SYSOP_EMAIL=sysop+test@example.org' \
+            -e WEB_USER=sysop \
+            -e WEB_PASS=SuperSecretTestPass123 \
+            -v "${TEST_DIR}/local_data:/spider/local_data:rw" \
+            -v "${TEST_DIR}/local_cmd:/spider/local_cmd:rw" \
+            -v "${TEST_DIR}/connect:/spider/connect:rw" \
+            -v "${TEST_DIR}/msg:/spider/msg:rw" \
             -p 7300:7300 \
+            -p 127.0.0.1:8080:8080 \
             dxspider-test:latest
 
-          # Wait up to 30 seconds for the cluster to start listening
           for i in $(seq 1 30); do
-            if nc -z localhost 7300 2>/dev/null; then
-              echo "SUCCESS: DXSpider is listening on port 7300"
-              docker logs dxspider-smoke
-              docker stop dxspider-smoke
-              exit 0
+            if docker exec dxspider-smoke nc -z 127.0.0.1 7300 2>/dev/null && docker exec dxspider-smoke nc -z 127.0.0.1 8080 2>/dev/null; then
+              echo "PASS: DXSpider (7300) and ttyd (8080) listening inside container (${i}s)"
+              break
             fi
-            echo "Waiting for cluster to start... ($i/30)"
+            if [ "$i" -eq 30 ]; then
+              echo "FAIL: DXSpider did not start within 30 seconds"
+              docker logs dxspider-smoke
+              exit 1
+            fi
             sleep 1
           done
 
-          echo "FAIL: DXSpider did not start within 30 seconds"
-          docker logs dxspider-smoke
-          docker stop dxspider-smoke || true
-          exit 1
+          echo "=== Test 2: Verify DXVars.pm syntax, .version, seeded templates, and dxusers.db ==="
+          docker exec dxspider-smoke perl -c /spider/local/DXVars.pm
+          docker exec dxspider-smoke grep -q 'our \$userdsn' /spider/local/DXVars.pm
+          docker exec dxspider-smoke test -s /spider/.version
+          test -f "${TEST_DIR}/local_data/dxusers.db"
+          test -f "${TEST_DIR}/local_cmd/crontab"
+          test -f "${TEST_DIR}/local_cmd/startup"
+          grep -q "N0TEST-2" "${TEST_DIR}/local_data/motd"
+          grep -q "sysop+test@example.org" "${TEST_DIR}/local_data/motd"
+          ! grep -q "9M2PJU-2" "${TEST_DIR}/local_data/motd"
+          echo "PASS: Templates seeded with node identity and DXVars.pm compiles cleanly"
+
+          echo "=== Test 3: Verify telnet banner and sh/version response ==="
+          TELNET_OUT=$(docker exec dxspider-smoke perl -MIO::Socket::INET -e '
+            $SIG{PIPE} = "IGNORE";
+            my $s = IO::Socket::INET->new(PeerAddr => "127.0.0.1", PeerPort => 7300, Proto => "tcp", Timeout => 5) or die "connect failed: $!";
+            $s->autoflush(1);
+            my $out = "";
+            my $read_for = sub {
+              my ($sec) = @_;
+              my $end = time + $sec;
+              while (time < $end) {
+                my $rin = ""; vec($rin, fileno($s), 1) = 1;
+                if (select($rin, undef, undef, 0.25) > 0) {
+                  my $buf = "";
+                  my $n = sysread($s, $buf, 4096);
+                  last unless defined $n && $n > 0;
+                  $out .= $buf;
+                }
+              }
+            };
+            $read_for->(2);
+            print $s "N0TEST\r\n";
+            $read_for->(2);
+            print $s "sh/version\r\n";
+            $read_for->(2);
+            print $s "bye\r\n";
+            $read_for->(1);
+            print $out;
+          ')
+          printf '%s\n' "${TELNET_OUT}" | grep -qi "DXSpider"
+          printf '%s\n' "${TELNET_OUT}" | grep -qi "N0TEST-2"
+          echo "PASS: Telnet login and sh/version responded cleanly"
+
+          echo "=== Test 4: Verify Web Console HTTP basic auth (401 unauth / 200 auth) ==="
+          UNAUTH_CODE=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/)
+          AUTH_CODE=$(curl -s -o /dev/null -w '%{http_code}' -u 'sysop:SuperSecretTestPass123' http://127.0.0.1:8080/)
+          test "${UNAUTH_CODE}" = "401"
+          test "${AUTH_CODE}" = "200"
+          echo "PASS: Web Console returned ${UNAUTH_CODE} unauthenticated and ${AUTH_CODE} authenticated"
+
+          echo "=== Test 5: Graceful shutdown & upgrade persistence (create_sysop.pl skipped) ==="
+          docker exec -u sysop dxspider-smoke sh -c 'echo "CUSTOM_MOTD_MARKER" >> /spider/local_data/motd'
+          docker stop -t 20 dxspider-smoke
+          EXIT_CODE=$(docker inspect -f '{{.State.ExitCode}}' dxspider-smoke)
+          test "${EXIT_CODE}" = "0"
+          docker rm dxspider-smoke
+
+          docker run -d --name dxspider-smoke \
+            --cap-drop ALL \
+            --cap-add CHOWN --cap-add DAC_OVERRIDE --cap-add FOWNER --cap-add SETUID --cap-add SETGID \
+            --security-opt no-new-privileges:true \
+            -e CLUSTER_CALLSIGN=N0TEST-2 \
+            -e CLUSTER_SYSOP_CALLSIGN=N0TEST \
+            -e CLUSTER_LOCATOR=JO01AA \
+            -e WEB_USER=sysop \
+            -e WEB_PASS=SuperSecretTestPass123 \
+            -v "${TEST_DIR}/local_data:/spider/local_data:rw" \
+            -v "${TEST_DIR}/local_cmd:/spider/local_cmd:rw" \
+            -v "${TEST_DIR}/connect:/spider/connect:rw" \
+            -v "${TEST_DIR}/msg:/spider/msg:rw" \
+            -p 7300:7300 \
+            dxspider-test:latest
+
+          for i in $(seq 1 30); do
+            if docker exec dxspider-smoke nc -z 127.0.0.1 7300 2>/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          docker logs dxspider-smoke | grep -q "skipping create_sysop.pl"
+          grep -q "CUSTOM_MOTD_MARKER" "${TEST_DIR}/local_data/motd"
+          docker stop -t 20 dxspider-smoke
+          docker rm dxspider-smoke
+          echo "PASS: Upgrade persistence verified (create_sysop.pl skipped, custom MOTD preserved)"
+
+          echo "=== Test 6: Verify ENABLE_WEB_CONSOLE=no disables ttyd ==="
+          docker run -d --name dxspider-smoke-nocons \
+            --cap-drop ALL \
+            --cap-add CHOWN --cap-add DAC_OVERRIDE --cap-add FOWNER --cap-add SETUID --cap-add SETGID \
+            --security-opt no-new-privileges:true \
+            -e CLUSTER_CALLSIGN=N0TEST-2 \
+            -e CLUSTER_SYSOP_CALLSIGN=N0TEST \
+            -e CLUSTER_LOCATOR=JO01AA \
+            -e ENABLE_WEB_CONSOLE=no \
+            -p 7300:7300 \
+            dxspider-test:latest
+
+          for i in $(seq 1 30); do
+            if docker exec dxspider-smoke-nocons nc -z 127.0.0.1 7300 2>/dev/null && docker logs dxspider-smoke-nocons 2>&1 | grep -q "Web Console disabled"; then
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              echo "FAIL: ENABLE_WEB_CONSOLE=no container did not reach expected state"
+              docker logs dxspider-smoke-nocons
+              exit 1
+            fi
+            sleep 1
+          done
+          ! docker exec dxspider-smoke-nocons pgrep -x ttyd >/dev/null 2>&1
+          docker stop -t 20 dxspider-smoke-nocons
+          echo "PASS: ENABLE_WEB_CONSOLE=no verified"
 
   # ===========================================================================
   #  Job 2: Multi-arch Build & Push
-  #
-  #  Builds for all supported architectures and pushes to GHCR.
-  #  Only pushes on main pushes and version tags (not PRs).
-  #  Depends on the test job passing first.
   # ===========================================================================
   build:
     needs: test
@@ -105,15 +233,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # QEMU emulates non-amd64 architectures for the multi-arch build
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Authenticate to GHCR using the built-in GITHUB_TOKEN
-      # Skipped on PRs (we don't push images for PR builds)
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -122,18 +247,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # GHCR requires lowercase image names; GitHub repo names may have uppercase
       - name: Lowercase image name
         run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
-      # Generate image tags based on branch/tag/SHA
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=schedule
+            type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
@@ -141,9 +264,6 @@ jobs:
             type=semver,pattern={{major}}
             type=sha
 
-      # Build and push for all 4 architectures.
-      # Uses GitHub Actions cache for layer caching across runs.
-      # provenance/sbom disabled for simpler image metadata.
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5

@@ -29,7 +29,7 @@
 **Experience the future of Amateur Radio Networking.**
 *Deploy a professional-grade DX Cluster node in minutes, not hours.*
 
-[What is this?](#-what-is-a-dx-cluster) &bull; [Quick Start](#-quick-start) &bull; [Upgrading](#upgrading) &bull; [Documentation](#-documentation) &bull; [Configuration](#-configuration-reference) &bull; [Architecture](#-architecture--flow) &bull; [Security](#-security--hardening) &bull; [FAQ](#-troubleshooting--faq)
+[What is this?](#what-is-a-dx-cluster) &bull; [Quick Start](#quick-start) &bull; [Upgrading](#upgrading) &bull; [Documentation](#documentation) &bull; [Configuration](#configuration-reference) &bull; [Architecture](#architecture--flow) &bull; [Security](#security--hardening) &bull; [FAQ](#troubleshooting--faq)
 
 </div>
 
@@ -73,7 +73,7 @@ This project includes a complete `docs/` directory with beginner-friendly guides
 | [Cron & Automation](docs/06-cron-and-automation.md) | Scheduled tasks, auto-reconnect, startup scripts |
 | [Database Backend](docs/07-database-backend.md) | Optional MariaDB setup for spot logging |
 | [Security](docs/08-security.md) | Hardening guide, capabilities, best practices |
-
+| [Cloud Deployment](docs/09-cloud-deployment.md) | AWS, GCP, Azure, VPS, reverse proxy, and monitoring |
 | [Troubleshooting](docs/10-troubleshooting.md) | FAQ, debugging, common problems and solutions |
 
 > **New to DX Clusters?** Start with [Getting Started](docs/01-getting-started.md). It walks you through everything step by step.
@@ -86,20 +86,18 @@ This project includes a complete `docs/` directory with beginner-friendly guides
 graph TB
     subgraph Host["Your Station (Host Machine)"]
         Env[".env<br/>Configuration"]
-        LD["local_data/<br/>Users, Spots, Logs"]
+        LD["local_data/<br/>Users, Spots, Logs, MOTD"]
         Conn["connect/<br/>Partner Scripts"]
-        Cmd["cmd/<br/>Custom Commands"]
         Msg["msg/<br/>Bulletins"]
-        Cron["local_cmd/<br/>Crontab + Local Cmds"]
-        Startup["startup<br/>Boot Commands"]
+        Cron["local_cmd/<br/>Crontab, Startup, Local Cmds"]
     end
 
     subgraph Container["Docker Container (Alpine 3.23)"]
         direction TB
-        EP["entrypoint.sh<br/>(root: fix perms)"]
-        subgraph App["su-exec → sysop (UID 1000)"]
+        EP["entrypoint.sh<br/>(root: fix perms & seed defaults)"]
+        subgraph App["su-exec -> sysop (UID 1000)"]
             Cluster["cluster.pl<br/>DXSpider Core"]
-            Console["console.pl<br/>via ttyd"]
+            Console["console.pl<br/>via ttyd (optional)"]
         end
         DB{"DB enabled?"}
     end
@@ -111,16 +109,14 @@ graph TB
     subgraph External["Global Network"]
         World["DX Cluster Network<br/>(Partner Nodes)"]
         Users["Hams via Telnet<br/>:7300"]
-        Web["Sysop via Web<br/>:8080"]
+        Web["Sysop via Web<br/>127.0.0.1:8080"]
     end
 
     Env --> EP
     LD <--> App
     Conn --> Cluster
-    Cmd --> Cluster
     Msg --> Cluster
     Cron --> Cluster
-    Startup --> Cluster
     EP --> App
     Cluster --> DB
     DB -->|yes| MariaDB
@@ -191,7 +187,7 @@ docker compose up -d     # Start the cluster
 
 **You are live!** Access your node:
 - **Telnet**: `telnet localhost 7300` (users connect here)
-- **Web Console**: `http://localhost:8080` (use `WEB_USER` / `WEB_PASS` from `.env`)
+- **Web Console**: `http://127.0.0.1:8080` (use `WEB_USER` / `WEB_PASS` from `.env`; bound to localhost by default for security)
 
 > [!WARNING]
 > A standalone DXSpider node **will not receive any DX spots** on its own! To get spots flowing, you must connect your node to a partner node on the DX Cluster network. You will need to find a partner to connect to. See [Connecting to Partners](docs/03-connecting-to-partners.md) for instructions.
@@ -199,7 +195,7 @@ docker compose up -d     # Start the cluster
 > [!IMPORTANT]
 > The container runs as UID 1000 internally. If your host directories are owned by a different UID, either:
 > - Change `SPIDER_UID` in `.env` to match your host UID, or
-> - `chown -R 1000:1000 local_data connect cmd msg` on the host before starting.
+> - `chown -R 1000:1000 local_data local_cmd connect msg` on the host before starting.
 
 ### Your First Commands
 
@@ -255,28 +251,25 @@ If you prefer not to use Docker Compose, you can run the cluster with a single `
 docker run -d \
   --name dxspider \
   -p 7300:7300 \
-  -p 8080:8080 \
+  -p 127.0.0.1:8080:8080 \
   -e CLUSTER_CALLSIGN=N0CALL-2 \
   -e CLUSTER_SYSOP_CALLSIGN=9M2PJU \
   -e CLUSTER_LOCATOR=OJ03UD \
   -e CLUSTER_LATITUDE=+03.08 \
   -e CLUSTER_LONGITUDE=+101.41 \
   -e CLUSTER_QTH="Kuala Lumpur" \
+  -e CLUSTER_SYSOP_EMAIL="sysop@example.org" \
   -e WEB_USER=sysop \
   -e WEB_PASS=your-secure-password \
   -v $(pwd)/local_data:/spider/local_data \
-  -v $(pwd)/connect:/spider/connect \
   -v $(pwd)/local_cmd:/spider/local_cmd \
-  -v $(pwd)/cmd:/spider/cmd \
+  -v $(pwd)/connect:/spider/connect \
   -v $(pwd)/msg:/spider/msg \
-  -v $(pwd)/startup:/spider/scripts/startup \
-  -v $(pwd)/motd:/spider/local_data/motd \
-  -v $(pwd)/motd_nor:/spider/local_data/motd_nor \
   ghcr.io/9m2pju/9m2pju-dxspider-docker:main
 ```
 
 > [!TIP]
-> **Persistent Data**: Always mount all volumes. The `local_data` volume holds your user database and spots. The `connect`, `local_cmd`, `startup`, `motd`, and `motd_nor` volumes hold your node configuration. Without them, rebuilding the image would reset your settings to the defaults baked into the image.
+> **Persistent Data**: Always mount all four directories above. On first start, `entrypoint.sh` automatically seeds `local_cmd/crontab`, `local_cmd/startup`, `local_data/motd`, and `local_data/motd_nor` from templates (using your callsign, QTH, and email) without ever overwriting your existing files.
 
 ### Manual Multi-Arch Build (Advanced)
 
@@ -332,8 +325,10 @@ Edit these in your `.env` file (copy from `.env.example`). All variables have se
 
 | Variable | Description | Default |
 | :--- | :--- | :--- |
+| `ENABLE_WEB_CONSOLE` | Enable or disable the `ttyd` Web Console (`yes` or `no`). | `yes` |
+| `WEB_BIND_ADDRESS` | Host IP to bind the Web Console port (`127.0.0.1` for localhost/SSH tunnel, or `0.0.0.0` behind a firewall). | `127.0.0.1` |
 | `WEB_USER` | Username for the Web Console (HTTP basic auth). | `sysop` |
-| `WEB_PASS` | Password for the Web Console. | `changeme-web` |
+| `WEB_PASS` | Password for the Web Console (`install.sh` auto-generates a strong password). | `changeme-web` |
 
 ### Optional MariaDB Backend
 
@@ -396,15 +391,13 @@ All your node's configuration and data lives on the **host** filesystem, not ins
 
 ### What is persistent?
 
+All four bind-mounted directories are gitignored for user data so `git pull` never conflicts with your node settings. On first boot, `entrypoint.sh` seeds `local_cmd/crontab`, `local_cmd/startup`, `local_data/motd`, and `local_data/motd_nor` from `defaults/` if absent.
+
 | Host Directory | What's Stored There | Bind-Mounted? |
 | :--- | :--- | :--- |
-| `local_data/` | User database, spots, logs, debug data, filter lists | Yes |
+| `local_data/` | User database (`dxusers.db`), spots, logs, debug data, filter lists, `motd`, `motd_nor` | Yes |
+| `local_cmd/` | Cron schedule (`crontab`), boot commands (`startup`), and local command overrides | Yes |
 | `connect/` | Partner node connection scripts | Yes |
-| `local_cmd/` | Cron schedule (`crontab`) + local command overrides | Yes |
-| `startup` | Boot-time DXSpider commands | Yes |
-| `motd` | Message of the day (registered users) | Yes |
-| `motd_nor` | Message of the day (non-registered users) | Yes |
-| `cmd/` | Custom user commands | Yes |
 | `msg/` | Bulletins and private messages | Yes |
 
 ### What is NOT persistent (regenerated on each start)?
@@ -428,39 +421,32 @@ Because your user database, spots, logs, and node configuration are stored in ho
 > [!NOTE]
 > **User database protection:** On startup, `entrypoint.sh` automatically detects existing user databases (`dxusers.db`, `users.v3j`, `users.v3`, or `users.v2`) and skips `create_sysop.pl`. User passwords, registrations, and attributes are never overwritten during upgrades.
 
-### Recommended Upgrade (Docker Compose + GHCR Image)
+### Option A: Automated Upgrade Script (Recommended)
 
-This is the safest workflow for standard Docker Compose installations. It pre-pulls the new image before stopping the cluster to minimize downtime, stops cleanly so SQLite (`local_data/dxusers.db`) flushes to disk before backing up, and keeps the optional MariaDB service running.
-
-**1. Go to your installation directory and check for local edits**
+Run the bundled `upgrade.sh` helper from your installation directory. It automatically migrates any legacy root-level config files, pulls updates, pre-pulls the image while the cluster stays online, stops `dxspider` cleanly to flush SQLite, creates a timestamped backup in the parent directory, recreates the container, and waits for a healthy status:
 
 ```bash
-cd ~/9M2PJU-DXSpider-Docker   # or your installation directory
-git status
+cd ~/9M2PJU-DXSpider-Docker
+./upgrade.sh              # Standard GHCR image upgrade (auto-detects MariaDB if configured)
+./upgrade.sh --build      # Build image locally (--no-cache) instead of pulling from GHCR
+./upgrade.sh --with-db    # Explicitly include the optional MariaDB profile
 ```
 
-> [!IMPORTANT]
-> Starter config files (`startup`, `motd`, `motd_nor`, and `local_cmd/crontab`) are tracked in git. If you customized them, stash your edits before running `git pull` and re-apply them afterward so `git pull` does not fail with a merge conflict:
-> ```bash
-> git stash push -m "local-node-config"
-> git pull
-> git stash pop
-> ```
-> Resolve any merge conflicts if prompted. Your `.env`, `local_data/`, and custom `connect/<partner>` files are gitignored and are never touched by `git pull`.
+### Option B: Manual Upgrade (Docker Compose + GHCR Image)
 
-**2. Pull repository updates and check `.env` for new variables**
+If you prefer running each step manually:
 
-If you did not need to stash in step 1:
+**1. Pull repository updates and check `.env` for new variables**
+
 ```bash
+cd ~/9M2PJU-DXSpider-Docker
 git pull
-```
-
-Compare `.env.example` against your `.env` to check whether any new environment variables were added:
-```bash
 diff -u .env.example .env || true
 ```
 
-**3. Pre-pull the latest container image**
+*(If upgrading from an older checkout where `startup`, `motd`, `motd_nor`, or `local_cmd/crontab` were tracked in git, copy your customized files into `local_cmd/startup`, `local_data/motd`, `local_data/motd_nor`, and `local_cmd/crontab` or stash before `git pull`.)*
+
+**2. Pre-pull the latest container image**
 
 ```bash
 docker compose pull dxspider
@@ -468,16 +454,16 @@ docker compose pull dxspider
 
 *(If you use the optional MariaDB backend, pull both services with `docker compose --profile with-db pull`.)*
 
-**4. Stop DXSpider cleanly and take a quiescent backup**
+**3. Stop DXSpider cleanly and take a quiescent backup**
 
 ```bash
 docker compose stop dxspider
-tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ startup motd motd_nor msg/
+tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ msg/
 ```
 
 *(The archive is saved in the parent directory to keep your git working tree clean.)*
 
-**5. Recreate and start the updated container**
+**4. Recreate and start the updated container**
 
 For standard flat-file / SQLite storage (default):
 ```bash
@@ -489,7 +475,7 @@ For installations using the optional MariaDB backend (`with-db` profile):
 docker compose --profile with-db up -d
 ```
 
-**6. Verify the upgrade**
+**5. Verify the upgrade**
 
 ```bash
 docker compose ps                                 # Confirm status is Up (healthy)
@@ -497,7 +483,7 @@ docker compose logs --tail 50 dxspider            # Confirm clean boot with no P
 docker compose exec dxspider cat /spider/.version # Verify installed DXSpider Mojo commit
 ```
 
-Then connect via Telnet (`telnet localhost 7300`) or the Web Console (`http://localhost:8080`) and run `sh/version` and `sh/configuration` to confirm the build version and partner node links.
+Then connect via Telnet (`telnet localhost 7300`) or the Web Console (`http://127.0.0.1:8080`) and run `sh/version` and `sh/configuration` to confirm the build version and partner node links.
 
 > [!TIP]
 > Once everything is verified, you can remove old unused images to reclaim disk space: `docker image prune -f`.
@@ -510,7 +496,7 @@ If you build the image locally instead of pulling from GHCR (or want to pin a cu
 git pull
 docker compose build --no-cache dxspider
 docker compose stop dxspider
-tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ startup motd motd_nor msg/
+tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ msg/
 docker compose up -d --no-deps dxspider
 docker compose exec dxspider cat /spider/.version
 ```
@@ -527,7 +513,7 @@ docker pull ghcr.io/9m2pju/9m2pju-dxspider-docker:main
 
 # 2. Stop the running container cleanly and back up your data
 docker stop dxspider
-tar czf "../dxspider-backup-$(date +%F).tar.gz" local_data/ connect/ local_cmd/ startup motd motd_nor msg/
+tar czf "../dxspider-backup-$(date +%F).tar.gz" local_data/ connect/ local_cmd/ msg/
 
 # 3. Remove the old container (your host bind mounts remain untouched)
 docker rm dxspider
@@ -540,10 +526,12 @@ Verify with `docker logs --tail 50 dxspider` and `docker exec dxspider cat /spid
 
 ### Notes When Upgrading from Older Releases
 
+- **User config templates (`startup`, `motd`, `motd_nor`, `local_cmd/crontab`):** Starter configs now live in `defaults/` and are automatically seeded on first boot into `local_cmd/startup`, `local_cmd/crontab`, `local_data/motd`, and `local_data/motd_nor` so `git pull` never conflicts. If you are upgrading from an older version with root-level `startup`, `motd`, or `motd_nor`, running `./upgrade.sh` migrates them automatically (or move them manually into `local_cmd/startup`, `local_data/motd`, and `local_data/motd_nor`).
+- **Removal of `./cmd:/spider/cmd` bind mount:** Upstream DXSpider commands now come directly from the container image so upgrades always get the latest Mojo commands. Keep any custom commands in `local_cmd/`.
+- **Web Console default bind (`127.0.0.1`):** For security, port `8080` now binds to `127.0.0.1` by default (`WEB_BIND_ADDRESS=127.0.0.1`). Access it via SSH tunnel or an HTTPS reverse proxy, or set `WEB_BIND_ADDRESS=0.0.0.0` in `.env` if you intentionally expose it behind a firewall. Set `ENABLE_WEB_CONSOLE=no` to disable `ttyd` completely.
 - **Docker Compose V1 (`docker-compose.yml`) to Compose V2 (`compose.yaml`):** Older checkouts used `docker-compose.yml` and `docker-compose`. This repository now uses `compose.yaml` with `docker compose` (Docker Compose v2.20+ is required for `depends_on.db.required: false`). If an old `docker-compose.yml` still exists in your directory, migrate any custom edits into `compose.yaml` and remove `docker-compose.yml`.
 - **`DAC_OVERRIDE` capability:** Newer images require `DAC_OVERRIDE` under `cap_add` in `compose.yaml` so `entrypoint.sh` can manage permissions on sysop-owned bind mounts. Pulling the latest `compose.yaml` applies this automatically; if you maintain a custom compose file, ensure `DAC_OVERRIDE` is listed in `cap_add`.
 - **SQLite user database (`dxusers.db`):** Newer DXSpider Mojo builds require `our $userdsn` in `/spider/local/DXVars.pm`. Even if you bind-mount `./local:/spider/local` with `OVERWRITE_CONFIG=no`, `entrypoint.sh` automatically appends `$userdsn` if missing.
-- **Custom commands:** Keep custom commands in `local_cmd/` instead of editing files inside `cmd/`, which is tracked by git.
 
 ### Rolling Back an Upgrade
 
@@ -583,21 +571,21 @@ Quick steps:
 
 ## Automation (Cron & Startup)
 
-**Startup Tasks**: Edit the `startup` file. Commands here run every time the container boots:
+**Startup Tasks**: Edit `local_cmd/startup` (seeded automatically on first boot). Commands here run every time the container boots:
 ```bash
-# Example 'startup' file content:
+# Example 'local_cmd/startup' file content:
 load/forward
 set/spider gb7mbc
 connect gb7mbc
 ```
 
-**Scheduled Tasks (Cron)**: Edit `local_cmd/crontab`. Standard cron format, but commands are Perl expressions:
+**Scheduled Tasks (Cron)**: Edit `local_cmd/crontab` (seeded automatically on first boot). Standard cron format, but commands are Perl expressions:
 ```bash
 # Reconnect to GB7MBC every 10 mins if link dropped
 0,10,20,30,40,50 * * * * start_connect('gb7mbc') unless connected('gb7mbc')
 ```
 
-The default crontab also fetches bad-IP, bad-DX, bad-spotter, bad-node, and bad-word lists hourly from the [dxspider_info repo](https://github.com/EA3CV/dxspider_info) to keep your node protected from known abusers.
+The default crontab also fetches bad-IP, bad-DX, bad-spotter, bad-node, and bad-word lists atomically every hour from the [dxspider_info repo](https://github.com/EA3CV/dxspider_info) and cleans old debug logs daily (`DXDebug::dbgclean()`).
 
 > See [Cron & Automation](docs/06-cron-and-automation.md) for the complete guide.
 
@@ -651,18 +639,23 @@ docker compose exec dxspider sh
 <details>
 <summary><b>How do I update to the latest version?</b></summary>
 
-Quick upgrade sequence for Docker Compose (stops cleanly so SQLite `dxusers.db` flushes before backing up, and keeps optional MariaDB warm):
+Run the automated upgrade script:
 ```bash
-git pull                                                                                               # Get latest repo configs (stash local edits first if needed)
-docker compose pull dxspider                                                                           # Pre-pull latest GHCR image
-docker compose stop dxspider                                                                           # Stop cleanly (flushes SQLite dxusers.db)
-tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ startup motd motd_nor msg/  # Quiescent backup
-docker compose up -d --no-deps dxspider                                                                # Recreate dxspider only
-docker compose exec dxspider cat /spider/.version                                                      # Verify installed Mojo commit
+./upgrade.sh
+```
+
+Or run the manual sequence for Docker Compose:
+```bash
+git pull
+docker compose pull dxspider
+docker compose stop dxspider
+tar czf "../dxspider-backup-$(date +%F).tar.gz" .env local_data/ connect/ local_cmd/ msg/
+docker compose up -d --no-deps dxspider
+docker compose exec dxspider cat /spider/.version
 ```
 *Existing user databases (`dxusers.db` / `users.v3j`) are detected automatically: `create_sysop.pl` is skipped on updates so passwords and user attributes are never wiped.*
 
-> See the full [Upgrading](#upgrading) section for handling customized git-tracked files, MariaDB (`with-db`) upgrades, local builds, standalone `docker run`, older-release migration notes, and rollback steps.
+> See the full [Upgrading](#upgrading) section for MariaDB (`with-db`) upgrades, local builds, standalone `docker run`, older-release migration notes, and rollback steps.
 </details>
 
 <details>
@@ -670,7 +663,7 @@ docker compose exec dxspider cat /spider/.version                               
 
 The container expects bind-mounted directories to be writable by UID 1000. Fix with:
 ```bash
-chown -R 1000:1000 local_data connect cmd msg
+chown -R 1000:1000 local_data local_cmd connect msg
 ```
 Or set `SPIDER_UID` in `.env` to match your host user's UID.
 </details>
@@ -744,6 +737,8 @@ If you find this project useful, you can support its development:
 <a href="https://buymeacoffee.com/9m2pju"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
 &nbsp;&nbsp;
 <a href="https://wise.com/pay/me/faizulz13"><img src="https://img.shields.io/badge/Wise-%40faizulz13-006666?style=for-the-badge&logo=wise&logoColor=white" alt="Wise" height="50"></a>
+&nbsp;&nbsp;
+<a href="https://paypal.me/9M2PJU"><img src="https://img.shields.io/badge/Donate-PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="Donate with PayPal" height="50"></a>
 
 <br/><br/>
 
@@ -755,9 +750,3 @@ If you find this project useful, you can support its development:
 *73 and Good DX!*
 
 </div>
-
-## Support
-
-If you find this project useful, please consider supporting it:
-
-[![Donate with PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/9M2PJU)

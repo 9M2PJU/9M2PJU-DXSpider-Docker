@@ -89,28 +89,25 @@ sudo ufw allow from YOUR.IP.ADDRESS to any port 8080  # Web console (your IP onl
 sudo ufw enable
 ```
 
-### 3. Restrict the Web Console with SSH Tunneling
+### 3. Restrict or Disable the Web Console
 
-Instead of exposing port 8080, access it through SSH:
+By default, `compose.yaml` binds the Web Console to `127.0.0.1:8080` (`WEB_BIND_ADDRESS=127.0.0.1`), so it is NOT exposed to the public internet.
 
-1. Remove the `8080:8080` port mapping from `compose.yaml` (or bind it to localhost only):
-   ```yaml
-   ports:
-     - "127.0.0.1:8080:8080"
-   ```
+To access it securely from your local machine via an SSH tunnel:
 
-2. Connect via SSH tunnel from your local machine:
+1. Open an SSH tunnel to your server:
    ```bash
    ssh -L 8080:localhost:8080 user@your-server-ip
    ```
+2. Open `http://localhost:8080` in your browser.
 
-3. Open `http://localhost:8080` in your browser.
+To disable the Web Console process (`ttyd`) completely and use `docker compose exec dxspider /spider/perl/console.pl` instead, set `ENABLE_WEB_CONSOLE=no` in `.env`.
 
 ### 4. Enable User Registration Requirement
 
 Prevent anonymous users from posting spots or announcements:
 
-In the `startup` file:
+In `local_cmd/startup`:
 ```
 set/var $main::reqreg = 1
 ```
@@ -119,7 +116,7 @@ This requires the sysop to register each user with `set/register <call>` before 
 
 ### 5. Require Passwords for Login
 
-In the `startup` file:
+In `local_cmd/startup`:
 ```
 set/var $main::passwdreq = 1
 ```
@@ -140,14 +137,20 @@ Always agree on a password with partner node sysops. In your connect script (`co
 
 ### 7. Keep DXSpider Updated
 
-To update to the latest DXSpider commit:
+Use the bundled safe upgrade script to pull the latest image (which includes Alpine security patches and pinned DXSpider Mojo releases):
 
 ```bash
-# Check for the latest commit at https://github.com/EA3CV/dxspider
-# Then rebuild:
-docker compose build --build-arg SPIDER_GIT_REF=<latest-sha>
-docker compose up -d
+./upgrade.sh
 ```
+
+Or to build locally against a specific upstream commit (`SPIDER_GIT_REF`):
+
+```bash
+docker compose build --no-cache --build-arg SPIDER_GIT_REF=<latest-sha> dxspider
+./upgrade.sh --no-git-pull --build
+```
+
+See [Upgrading](../README.md#upgrading) for full upgrade and rollback instructions.
 
 ### 8. Monitor Logs
 
@@ -230,7 +233,7 @@ If you observe abuse from a connected user or node:
 
 To verify the running container's security settings:
 ```bash
-docker inspect dxspider --format '{{.HostConfig.Privileged}} {{.HostConfig.CapAdd}}'
+docker inspect "$(docker compose ps -q dxspider)" --format '{{.HostConfig.Privileged}} {{.HostConfig.CapAdd}}'
 ```
 
 Expected output:

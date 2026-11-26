@@ -16,13 +16,13 @@ docker compose ps
 docker compose logs --tail 50 dxspider
 
 # Is the healthcheck passing?
-docker inspect dxspider --format '{{.State.Health.Status}}'
+docker inspect "$(docker compose ps -q dxspider)" --format '{{.State.Health.Status}}'
 
 # Can you reach the telnet port?
 telnet localhost 7300
 
-# Can you reach the web console?
-curl -I http://localhost:8080
+# Can you reach the web console? (401 Unauthorized confirms ttyd basic auth is active)
+curl -I http://127.0.0.1:8080
 ```
 
 ---
@@ -42,7 +42,7 @@ docker compose logs dxspider
 
 | Log Message | Cause | Solution |
 | :--- | :--- | :--- |
-| `permission denied` on bind mount | Host directory owned by wrong UID | `sudo chown -R 1000:1000 local_data/ local/ connect/ startup/ local_cmd/` |
+| `permission denied` on bind mount | Host directory owned by wrong UID | `sudo chown -R 1000:1000 local_data/ local_cmd/ connect/ msg/` |
 | `DXVars.pm not found` | First-run config generation failed | Set `OVERWRITE_CONFIG=yes` in `.env`, restart |
 | `Address already in use` | Port 7300 or 8080 is in use | Change `CLUSTER_PORT` or `CLUSTER_SYSOP_PORT` in `.env` |
 | `cannot create user` | UID 1000 already exists in container | Set `SPIDER_UID` to a different value in `.env` |
@@ -54,7 +54,7 @@ docker compose logs dxspider
 **Diagnosis**:
 ```bash
 # Check healthcheck logs
-docker inspect --format '{{json .State.Health.Log}}' dxspider | jq
+docker inspect --format '{{json .State.Health.Log}}' "$(docker compose ps -q dxspider)" | jq
 
 # Check if DXSpider is listening
 docker compose exec dxspider sh -c 'netstat -tlnp 2>/dev/null || ss -tlnp'
