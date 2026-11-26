@@ -16,13 +16,14 @@
 <br/>
 [![GHCR Image](https://img.shields.io/badge/ghcr.io-9m2pju--dxspider--docker-blue?style=for-the-badge&logo=docker)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/pkgs/container/9m2pju-dxspider-docker)
 [![CI Smoke Test](https://img.shields.io/github/actions/workflow/status/9M2PJU/9M2PJU-DXSpider-Docker/docker-publish.yml?style=for-the-badge&label=CI&logo=githubactions)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker/actions/workflows/docker-publish.yml)
-[![Platform](https://img.shields.io/badge/Arch-amd64%20%7C%20arm64%20%7C%20arm%2Fv7%20%7C%20arm%2Fv6%20%7C%20386%20%7C%20ppc64le%20%7C%20s390x-blueviolet?style=for-the-badge&logo=docker)](#-multi-architecture-support)
+[![Platform](https://img.shields.io/badge/Arch-amd64%20%7C%20arm64%20%7C%20arm%2Fv7%20%7C%20arm%2Fv6%20%7C%20386%20%7C%20ppc64le%20%7C%20s390x-blueviolet?style=for-the-badge&logo=docker)](#multi-architecture-support)
 <br/>
 [![Repo Size](https://img.shields.io/github/repo-size/9M2PJU/9M2PJU-DXSpider-Docker?style=for-the-badge&color=indigo)](https://github.com/9M2PJU/9M2PJU-DXSpider-Docker)
 [![Language](https://img.shields.io/badge/Written%20in-Perl-0073a1?style=for-the-badge&logo=perl&logoColor=white)](https://www.perl.org/)
 [![Base Image](https://img.shields.io/badge/Base-Alpine%203.23-0D597F?style=for-the-badge&logo=alpinelinux&logoColor=white)](https://alpinelinux.org/)
 [![DXSpider](https://img.shields.io/badge/DXSpider-v1.57%20build%20933%20(Mojo)-00a86b?style=for-the-badge)](https://github.com/EA3CV/dxspider)
-[![Security](https://img.shields.io/badge/Security-No--New--Privileges-green?style=for-the-badge&logo=shield.io)](#-security--hardening)
+[![Image Version](https://img.shields.io/badge/Image-v2.8.0-2ea44f?style=for-the-badge&logo=docker)](Dockerfile)
+[![Security](https://img.shields.io/badge/Security-No--New--Privileges-green?style=for-the-badge&logo=shield.io)](#security--hardening)
 
 <br/>
 
@@ -47,15 +48,16 @@ A **DX Cluster** is a network of servers that share real-time "spots", reports o
 
 | Feature | Description |
 | :--- | :--- |
-| **Instant Launch** | Three lines of code and you are live. Literally. |
-| **Web Console** | Built-in web terminal (`ttyd`) for easy administration without SSH. |
-| **Hardened** | `cap_drop: ALL` + `no-new-privileges`, with only the minimal kernel capabilities needed. |
-| **Data Safety** | SQLite user database (`dxusers.db`), spots, and logs are preserved in bind-mounted volumes; `create_sysop.pl` is guarded to never overwrite existing user records on restarts or upgrades. |
+| **Instant Launch** | Interactive one-liner (`install.sh`) auto-generates a strong password, configures `.env`, and launches your node in minutes. |
+| **Safe Upgrades** | Bundled `./upgrade.sh` script pre-pulls images, flushes SQLite cleanly, takes a quiescent backup, and verifies health. |
+| **Web Console** | Optional web terminal (`ttyd`) bound to `127.0.0.1` by default with HTTP basic auth (or disable via `ENABLE_WEB_CONSOLE=no`). |
+| **Hardened** | `cap_drop: ALL` + `no-new-privileges`, non-root `sysop` execution, and graceful `SIGTERM` flushing without needing `CAP_KILL`. |
+| **Data Safety** | SQLite user database (`dxusers.db`), spots, logs, and auto-seeded configs live in 4 gitignored bind mounts; `create_sysop.pl` is skipped on restarts and upgrades. |
 | **Full Mojo Parity** | Pinned to DXSpider Mojo `v1.57 build 933` (`b9bc2369`) with all 23 required Perl modules verified at build time. |
 | **Universal** | Multi-arch images: amd64, arm64, arm/v7, arm/v6, 386, ppc64le, s390x, from servers to Raspberry Pi Zero. |
-| **Automation** | Built-in Cron and Startup script support. |
-| **Optional DB** | Flat-file storage by default; optional MariaDB backend via compose profile. |
-| **CI Tested** | Every commit is smoke-tested in GitHub Actions before publishing. |
+| **Automation** | Built-in Cron (atomic hourly blocklist updates + daily debug log cleanup) and Startup script support. |
+| **Optional DB** | Flat-file + SQLite storage by default; optional MariaDB 11 backend via compose profile (`with-db`). |
+| **CI Tested** | Every push and PR runs a 6-stage smoke test (telnet `sh/version`, HTTP auth, graceful stop, upgrade persistence) plus monthly Alpine security rebuilds. |
 
 ---
 
@@ -140,7 +142,7 @@ graph TB
 
 ### Option A: Interactive Setup (Recommended)
 
-The easiest way to get started is using our interactive installation script. It will check dependencies, clone the repository, prompt you for the necessary configuration, and launch the cluster automatically.
+The easiest way to get started is using our interactive installation script. It checks dependencies, clones the repository, prompts for your callsign, locator, QTH, and email, auto-generates a strong random Web Console password, locks down `.env` (`chmod 600`), and launches the cluster automatically.
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/9M2PJU/9M2PJU-DXSpider-Docker/main/install.sh | bash
@@ -234,10 +236,12 @@ This project supports a wide range of CPU architectures, making it compatible wi
 | `linux/s390x` | IBM Z / LinuxONE mainframes |
 
 
-Pre-built images are published automatically to GHCR on every push to `main`:
+Pre-built images are published automatically to GHCR on every push to `main` (tagged `:main`, `:latest`, and commit SHA) and rebuilt monthly for Alpine security updates:
 
 ```bash
 docker pull ghcr.io/9m2pju/9m2pju-dxspider-docker:main
+# or:
+docker pull ghcr.io/9m2pju/9m2pju-dxspider-docker:latest
 ```
 
 ### Standalone Docker Run
@@ -347,7 +351,7 @@ Leave `CLUSTER_DB_HOSTNAME` empty (default) to use flat-file storage. To enable 
 # Enable MariaDB:
 # 1. Uncomment the DB lines in .env
 # 2. Start with the with-db profile:
-docker compose --profile with-db up -d --build
+docker compose --profile with-db up -d
 ```
 
 > See [Database Backend](docs/07-database-backend.md) for full setup instructions.
@@ -373,9 +377,10 @@ This container follows security best practices:
 | **Minimal capabilities** | `cap_drop: ALL` + only `CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETUID`, `SETGID` added back. |
 | **No new privileges** | `security_opt: no-new-privileges:true` prevents privilege escalation. |
 | **Non-root application** | `cluster.pl` and `console.pl` run as the `sysop` user (UID 1000) via `su-exec`. |
-| **Root only for setup** | The entrypoint starts as root only to fix volume permissions, then drops to `sysop`. |
-| **tini as PID 1** | Proper zombie reaping and signal forwarding. |
-| **No secrets in git** | `.env` and `local_data/` are gitignored. Use `.env.example` as your template. |
+| **Root only for setup** | The entrypoint starts as root only to fix volume permissions and seed defaults, then drops to `sysop`. |
+| **Localhost Web Console** | `ttyd` binds to `127.0.0.1:8080` by default (`WEB_BIND_ADDRESS=127.0.0.1`) and can be disabled via `ENABLE_WEB_CONSOLE=no`. |
+| **Graceful shutdown** | `tini` as PID 1 + `stop_grace_period: 30s` forwards `SIGTERM` to `cluster.pl` as `sysop` so SQLite flushes cleanly without `CAP_KILL`. |
+| **No secrets in git** | `.env`, `local_data/`, `local_cmd/`, and custom `connect/` scripts are gitignored. Use `.env.example` and `defaults/` as templates. |
 
 > For a full hardening guide including firewall setup, SSH tunneling, and abuse reporting, see [Security](docs/08-security.md).
 
@@ -671,13 +676,12 @@ Or set `SPIDER_UID` in `.env` to match your host user's UID.
 <details>
 <summary><b>How do I force-regenerate the configuration?</b></summary>
 
-Set `OVERWRITE_CONFIG=yes` in your `.env` and restart:
+Set `OVERWRITE_CONFIG=yes` in your `.env` and recreate the `dxspider` container:
 ```bash
-docker compose down
-docker compose pull
-docker compose up -d
+docker compose stop dxspider
+docker compose up -d --no-deps dxspider
 ```
-Set it back to `no` afterward to preserve manual edits.
+Set `OVERWRITE_CONFIG=no` afterward to preserve manual edits (especially if you bind-mount `./local:/spider/local`).
 </details>
 
 > For more troubleshooting, see the [Troubleshooting Guide](docs/10-troubleshooting.md).
@@ -713,7 +717,7 @@ We love community involvement!
 5.  Create a Pull Request.
 
 > [!TIP]
-> Every PR is automatically smoke-tested by CI. The cluster must boot and listen on port 7300 before images are published.
+> Every PR is automatically verified by a 6-stage CI smoke test (fresh boot with hardened capabilities, Perl `DXVars.pm` syntax, live telnet `sh/version`, Web Console HTTP 401/200 auth, graceful shutdown + upgrade persistence, and `ENABLE_WEB_CONSOLE=no`) before images are published.
 
 ---
 
